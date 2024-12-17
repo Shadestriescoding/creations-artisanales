@@ -4,103 +4,146 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Boutique - Créations Artisanales</title>
-    <meta name="description" content="Découvrez notre collection complète de créations artisanales : objets crochetés, origamis, décorations.">
-    
-    <!-- Styles -->
     <link rel="stylesheet" href="assets/css/style.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- En-tête -->
     <header>
         <nav class="navbar">
-            <div class="logo">
-                <a href="index.html">
-                    <h1>Créations Artisanales</h1>
-                </a>
-            </div>
-            <ul class="nav-links">
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="boutique.html" class="active">Boutique</a></li>
-                <li><a href="about.html">À propos</a></li>
-                <li><a href="blog.html">Blog</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-            <div class="nav-icons">
-                <a href="#" class="search-toggle"><i class="fas fa-search"></i></a>
-                <a href="panier.html" class="cart-icon"><i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></a>
+            <div class="navbar-content">
+                <button class="hamburger">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="index.html" class="logo">Créations Artisanales</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="boutique.html" class="active">Boutique</a></li>
+                    <li><a href="about.html">À propos</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <div class="nav-icons">
+                    <a href="#" class="search-toggle">
+                        <i class="fas fa-search"></i>
+                    </a>
+                    <a href="panier.html" class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </a>
+                </div>
                 <div class="search-bar">
-                    <input type="text" placeholder="Rechercher...">
-                    <button><i class="fas fa-search"></i></button>
+                    <input type="search" placeholder="Rechercher un produit...">
+                    <button type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
                 </div>
             </div>
         </nav>
     </header>
 
-    <!-- Contenu principal -->
     <main class="shop-page">
-        <!-- Filtres -->
-        <aside class="shop-filters">
-            <h2>Filtres</h2>
-            <div class="filter-section">
-                <h3>Catégories</h3>
-                <ul class="filter-list">
-                    <li>
-                        <input type="checkbox" id="gourmandises" value="gourmandises">
-                        <label for="gourmandises">Gourmandises crochetées</label>
-                    </li>
-                    <li>
-                        <input type="checkbox" id="decorations" value="decorations">
-                        <label for="decorations">Décorations</label>
-                    </li>
-                    <li>
-                        <input type="checkbox" id="origami" value="origami">
-                        <label for="origami">Origamis</label>
-                    </li>
-                    <li>
-                        <input type="checkbox" id="potager" value="potager">
-                        <label for="potager">Mini potager</label>
-                    </li>
-                </ul>
-            </div>
-            <div class="filter-section">
-                <h3>Prix</h3>
-                <div class="price-range">
-                    <input type="range" id="price" min="0" max="100" step="5">
-                    <div class="price-inputs">
-                        <input type="number" id="min-price" placeholder="Min">
-                        <span>-</span>
-                        <input type="number" id="max-price" placeholder="Max">
-                        <button class="apply-price">Appliquer</button>
+        <div class="shop-container">
+            <!-- Filtres -->
+            <aside class="shop-filters">
+                <h2>Filtres</h2>
+                
+                <div class="filter-section">
+                    <h3>Catégories</h3>
+                    <div class="filter-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="category" value="gourmandises">
+                            Gourmandises crochetées
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="category" value="decorations">
+                            Décorations
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="category" value="origami">
+                            Origami
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="category" value="potager">
+                            Mini potager
+                        </label>
                     </div>
                 </div>
-            </div>
-        </aside>
 
-        <!-- Produits -->
-        <section class="shop-products">
-            <div class="shop-header">
-                <h1>Nos Créations</h1>
-                <div class="shop-controls">
-                    <select class="sort-select">
-                        <option value="featured">Produits mis en avant</option>
-                        <option value="price-asc">Prix croissant</option>
-                        <option value="price-desc">Prix décroissant</option>
-                        <option value="name-asc">A à Z</option>
-                        <option value="name-desc">Z à A</option>
-                    </select>
+                <div class="filter-section">
+                    <h3>Prix</h3>
+                    <div class="price-range">
+                        <div class="range-inputs">
+                            <input type="range" id="price-range" min="0" max="100" step="5">
+                        </div>
+                        <div class="price-inputs">
+                            <input type="number" id="min-price" placeholder="Min">
+                            <span>-</span>
+                            <input type="number" id="max-price" placeholder="Max">
+                        </div>
+                        <button class="button button-secondary apply-price">Appliquer</button>
+                    </div>
                 </div>
-            </div>
-            <div class="product-grid">
-                <!-- Les produits seront ajoutés dynamiquement via JavaScript -->
-            </div>
-        </section>
+
+                <div class="filter-section">
+                    <h3>Disponibilité</h3>
+                    <div class="filter-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="availability" value="in-stock">
+                            En stock
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="availability" value="pre-order">
+                            Pré-commande
+                        </label>
+                    </div>
+                </div>
+
+                <button class="button button-primary reset-filters">Réinitialiser les filtres</button>
+            </aside>
+
+            <!-- Produits -->
+            <section class="shop-products">
+                <div class="shop-header">
+                    <h1>Nos Créations</h1>
+                    <div class="shop-controls">
+                        <select class="sort-select">
+                            <option value="featured">Produits mis en avant</option>
+                            <option value="price-asc">Prix croissant</option>
+                            <option value="price-desc">Prix décroissant</option>
+                            <option value="newest">Plus récents</option>
+                        </select>
+                        <div class="view-options">
+                            <button class="view-grid active">
+                                <i class="fas fa-th"></i>
+                            </button>
+                            <button class="view-list">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-grid">
+                    <!-- Les produits seront ajoutés dynamiquement via JavaScript -->
+                </div>
+
+                <div class="pagination">
+                    <button class="prev-page" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="page-numbers">
+                        <button class="active">1</button>
+                        <button>2</button>
+                        <button>3</button>
+                    </div>
+                    <button class="next-page">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </section>
+        </div>
     </main>
 
-    <!-- Pied de page -->
     <footer>
         <div class="footer-content">
             <div class="footer-section">
@@ -134,7 +177,6 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
-    <script src="assets/js/main.js"></script>
+    <script type="module" src="assets/js/main.js"></script>
 </body>
 </html> 
