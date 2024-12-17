@@ -20,10 +20,20 @@
 
         <template id="cart-item-template">
             <div class="cart-item">
-                <img class="cart-item-image" src="" alt="">
-                <div class="cart-item-details">
-                    <h3 class="cart-item-name"></h3>
-                    <p class="cart-item-price"></p>
+                <div class="product-info">
+                    <img class="cart-item-image" src="" alt="">
+                    <div class="cart-item-details">
+                        <h3 class="cart-item-name"></h3>
+                        <p class="cart-item-price"></p>
+                    </div>
+                </div>
+                <div class="quantity-controls">
+                    <button class="quantity-btn decrease">-</button>
+                    <input type="number" class="quantity-input" value="1" min="1">
+                    <button class="quantity-btn increase">+</button>
+                </div>
+                <div class="stock-status">
+                    <!-- Indicateur de stock dynamique -->
                 </div>
                 <button class="cart-button remove">Retirer</button>
             </div>

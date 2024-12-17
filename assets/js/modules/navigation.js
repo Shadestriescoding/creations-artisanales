@@ -109,4 +109,27 @@ export function handleMobileNav() {
             searchBar.classList.add('active');
         });
     }
+}
+
+// Ajouter une navigation plus fluide
+export const initSmoothNavigation = () => {
+    // Améliorer la transition entre les pages
+    const links = document.querySelectorAll('nav a');
+    links.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = e.target.getAttribute('href');
+            smoothTransition(target);
+        });
+    });
+}
+
+// Ajouter un indicateur de chargement
+export const loadingIndicator = {
+    show() {
+        // Animation de chargement élégante
+    },
+    hide() {
+        // Transition douce
+    }
 } 

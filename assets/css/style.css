@@ -375,14 +375,14 @@ img {
     border-radius: 15px;
     overflow: hidden;
     box-shadow: var(--shadow-md);
-    transition: transform var(--transition-normal);
+    transition: transform 0.3s ease-in-out;
     display: flex;
     flex-direction: column;
 }
 
 .product-card:hover {
     transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .product-image {
@@ -1100,5 +1100,17 @@ body.menu-open {
     .search-bar.active {
         transform: translateY(0);
     }
+}
+
+/* Amélioration du contraste et de la lisibilité */
+.product-title {
+    color: #2c3e50;
+    font-family: 'Votre-Police-Manuscrite', cursive;
+    margin-bottom: 1rem;
+}
+
+.price {
+    font-weight: 600;
+    color: #34495e;
 }
   

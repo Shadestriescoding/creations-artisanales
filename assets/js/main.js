@@ -15,25 +15,31 @@ initErrorTracking();
 const products = [
     {
         id: 1,
-        name: "Croissant au Crochet",
-        description: "Un croissant moelleux fait main, parfait pour la décoration",
-        price: 15.99,
-        image: "assets/images/deco_sapin_crochet_paindepice.jpg",
-        imageAlt: "assets/images/deco_sapin_crochet.jpg",
-        category: "gourmandises",
-        availability: "in-stock",
-        date: "2024-01-15"
+        name: "Ensemble Pâtisserie au Crochet",
+        description: "Un ensemble de pâtisseries décoratives fait main",
+        price: 29.99,
+        image: "assets/images/ensemble_patisserie_crochet.jpg",
+        category: "patisseries",
+        availability: "in-stock"
     },
     {
         id: 2,
-        name: "Pain au Chocolat Crocheté",
-        description: "Un classique français réinventé en version crochet",
-        price: 17.99,
-        image: "assets/images/deco_sapin_crochet.jpg",
-        imageAlt: "assets/images/deco_sapin_crochet_paindepice.jpg",
-        category: "gourmandises",
-        availability: "in-stock",
-        date: "2024-01-14"
+        name: "Décoration Sapin Pain d'Épice",
+        description: "Une décoration de Noël en forme de pain d'épice au crochet",
+        price: 15.99,
+        image: "assets/images/deco_sapin_crochet_paindepice.jpg",
+        category: "decorations",
+        availability: "in-stock"
+    },
+    {
+        id: 3,
+        name: "Suspension en Bois et Crochet",
+        description: "Une belle suspension décorative mêlant bois et crochet",
+        price: 24.99,
+        image: "assets/images/suspension_bois_crochet.jpg",
+        imageAlt: "assets/images/suspension_bois_crochet_2.jpg",
+        category: "decorations",
+        availability: "in-stock"
     }
 ];
 
