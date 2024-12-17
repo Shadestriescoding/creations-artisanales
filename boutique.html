@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boutique - Créations Artisanales</title>
+    <meta name="description" content="Découvrez notre collection complète de créations artisanales : objets crochetés, origamis, décorations.">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- En-tête -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <a href="index.html">
+                    <h1>Créations Artisanales</h1>
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="boutique.html" class="active">Boutique</a></li>
+                <li><a href="about.html">À propos</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-icons">
+                <a href="#" class="search-toggle"><i class="fas fa-search"></i></a>
+                <a href="panier.html" class="cart-icon"><i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></a>
+                <div class="search-bar">
+                    <input type="text" placeholder="Rechercher...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="shop-page">
+        <!-- Filtres -->
+        <aside class="shop-filters">
+            <h2>Filtres</h2>
+            <div class="filter-section">
+                <h3>Catégories</h3>
+                <ul class="filter-list">
+                    <li>
+                        <input type="checkbox" id="gourmandises" value="gourmandises">
+                        <label for="gourmandises">Gourmandises crochetées</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="decorations" value="decorations">
+                        <label for="decorations">Décorations</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="origami" value="origami">
+                        <label for="origami">Origamis</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="potager" value="potager">
+                        <label for="potager">Mini potager</label>
+                    </li>
+                </ul>
+            </div>
+            <div class="filter-section">
+                <h3>Prix</h3>
+                <div class="price-range">
+                    <input type="range" id="price" min="0" max="100" step="5">
+                    <div class="price-inputs">
+                        <input type="number" id="min-price" placeholder="Min">
+                        <span>-</span>
+                        <input type="number" id="max-price" placeholder="Max">
+                        <button class="apply-price">Appliquer</button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Produits -->
+        <section class="shop-products">
+            <div class="shop-header">
+                <h1>Nos Créations</h1>
+                <div class="shop-controls">
+                    <select class="sort-select">
+                        <option value="featured">Produits mis en avant</option>
+                        <option value="price-asc">Prix croissant</option>
+                        <option value="price-desc">Prix décroissant</option>
+                        <option value="name-asc">A à Z</option>
+                        <option value="name-desc">Z à A</option>
+                    </select>
+                </div>
+            </div>
+            <div class="product-grid">
+                <!-- Les produits seront ajoutés dynamiquement via JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Pied de page -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p>Email : contact@creations-artisanales.fr</p>
+                <div class="social-links">
+                    <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-facebook"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-pinterest"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Navigation</h3>
+                <ul>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="boutique.html">Boutique</a></li>
+                    <li><a href="about.html">À propos</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Newsletter</h3>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Votre email" required>
+                    <button type="submit">S'abonner</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Créations Artisanales. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="assets/js/main.js"></script>
+</body>
+</html> 
