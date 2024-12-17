@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Panier - La cabane D'éva</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/components/cart.css">
+</head>
+<body>
+    <div class="cart-container">
+        <div class="cart-header">
+            <h2>Mon Panier</h2>
+            <span class="cart-count">0</span>
+        </div>
+
+        <div class="cart-items">
+            <!-- Les articles seront injectés ici dynamiquement -->
+        </div>
+
+        <template id="cart-item-template">
+            <div class="cart-item">
+                <img class="cart-item-image" src="" alt="">
+                <div class="cart-item-details">
+                    <h3 class="cart-item-name"></h3>
+                    <p class="cart-item-price"></p>
+                </div>
+                <button class="cart-button remove">Retirer</button>
+            </div>
+        </template>
+
+        <div class="cart-empty" style="display: none;">
+            Votre panier est vide
+        </div>
+
+        <div class="cart-total">
+            <span class="cart-total-label">Total</span>
+            <span class="cart-total-amount">0,00 €</span>
+        </div>
+
+        <div style="text-align: center; margin-top: 1.5rem;">
+            <button class="cart-button">Passer la commande</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { cartModule } from '/assets/js/modules/cart.js';
+        
+        // Initialisation du panier
+        document.addEventListener('DOMContentLoaded', () => {
+            cartModule.init();
+            updateCartDisplay();
+        });
+
+        function updateCartDisplay() {
+            const cartItems = cartModule.cart;
+            const cartItemsContainer = document.querySelector('.cart-items');
+            const cartEmpty = document.querySelector('.cart-empty');
+            const template = document.getElementById('cart-item-template');
+
+            // Vider le conteneur
+            cartItemsContainer.innerHTML = '';
+
+            if (cartItems.length === 0) {
+                cartEmpty.style.display = 'block';
+                return;
+            }
+
+            cartEmpty.style.display = 'none';
+
+            // Ajouter chaque article
+            cartItems.forEach((item, index) => {
+                const cartItem = template.content.cloneNode(true);
+                
+                const image = cartItem.querySelector('.cart-item-image');
+                image.src = item.image;
+                image.alt = item.name;
+
+                cartItem.querySelector('.cart-item-name').textContent = item.name;
+                cartItem.querySelector('.cart-item-price').textContent = `${item.price.toFixed(2)} €`;
+
+                const removeButton = cartItem.querySelector('.cart-button.remove');
+                removeButton.addEventListener('click', () => {
+                    cartModule.removeFromCart(index);
+                    updateCartDisplay();
+                });
+
+                cartItemsContainer.appendChild(cartItem);
+            });
+
+            // Mettre à jour le total
+            const total = cartModule.calculateCartTotal();
+            document.querySelector('.cart-total-amount').textContent = `${total.toFixed(2)} €`;
+        }
+    </script>
+</body>
+</html> 

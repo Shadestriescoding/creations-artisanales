@@ -1,0 +1,190 @@
+/* Styles du panier - La cabane D'éva */
+
+:root {
+    --color-primary: #F2D1D1;    /* Rose poudré */
+    --color-secondary: #C2D3C1;  /* Vert sauge clair */
+    --color-neutral: #F7F7F7;    /* Gris clair */
+    --color-accent: #8E7A5F;     /* Marron doux */
+    --color-white: #FFFFFF;      /* Blanc */
+}
+
+/* Conteneur du panier */
+.cart-container {
+    background-color: var(--color-white);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(142, 122, 95, 0.1);
+    padding: 1.5rem;
+    margin: 1rem 0;
+}
+
+/* En-tête du panier */
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--color-primary);
+    margin-bottom: 1.5rem;
+}
+
+.cart-header h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--color-accent);
+    margin: 0;
+}
+
+/* Compteur du panier */
+.cart-count {
+    background-color: var(--color-secondary);
+    color: var(--color-accent);
+    font-family: 'Lato', sans-serif;
+    font-weight: bold;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+    transition: all 0.3s ease;
+}
+
+/* Liste des articles */
+.cart-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--color-neutral);
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.cart-item-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 1rem;
+}
+
+.cart-item-details {
+    flex-grow: 1;
+}
+
+.cart-item-name {
+    font-family: 'Lato', sans-serif;
+    font-weight: bold;
+    color: var(--color-accent);
+    margin: 0 0 0.5rem 0;
+}
+
+.cart-item-price {
+    font-family: 'Lato', sans-serif;
+    color: var(--color-accent);
+    font-weight: bold;
+}
+
+/* Boutons */
+.cart-button {
+    background-color: var(--color-secondary);
+    color: var(--color-accent);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-family: 'Lato', sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cart-button:hover {
+    background-color: #b1c5b0;
+    transform: translateY(-1px);
+}
+
+.cart-button.remove {
+    background-color: var(--color-primary);
+    padding: 0.25rem 0.75rem;
+    font-size: 0.9rem;
+}
+
+.cart-button.remove:hover {
+    background-color: #e8c4c4;
+}
+
+/* Total du panier */
+.cart-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.5rem;
+    margin-top: 1.5rem;
+    border-top: 2px solid var(--color-primary);
+}
+
+.cart-total-label {
+    font-family: 'Playfair Display', serif;
+    color: var(--color-accent);
+    font-size: 1.2rem;
+}
+
+.cart-total-amount {
+    font-family: 'Lato', sans-serif;
+    color: var(--color-accent);
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* Panier vide */
+.cart-empty {
+    text-align: center;
+    padding: 2rem;
+    color: var(--color-accent);
+    font-family: 'Lato', sans-serif;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.cart-item {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cart-container {
+        padding: 1rem;
+    }
+
+    .cart-item {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .cart-item-image {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+
+    .cart-total {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+} 
