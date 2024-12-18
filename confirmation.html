@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panier - La cabane d'Eva</title>
-    <meta name="description" content="Votre panier d'achats de créations artisanales au crochet.">
+    <title>Confirmation de commande - La cabane d'Eva</title>
+    <meta name="description" content="Confirmation de votre commande de créations artisanales.">
     
     <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
@@ -42,7 +42,7 @@
                     <a href="#" class="search-toggle" aria-label="Rechercher">
                         <i class="fas fa-search"></i>
                     </a>
-                    <a href="panier.html" class="cart-icon active" aria-label="Panier">
+                    <a href="panier.html" class="cart-icon" aria-label="Panier">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-count">0</span>
                     </a>
@@ -58,76 +58,113 @@
     </header>
 
     <!-- Contenu principal -->
-    <main id="main-content" class="cart-page">
-        <div class="cart-container">
-            <h1>Votre Panier</h1>
-
-            <!-- Étapes du processus -->
-            <div class="cart-steps">
-                <div class="step active">
-                    <span class="step-number">1</span>
-                    <span class="step-label">Panier</span>
+    <main id="main-content" class="confirmation-page">
+        <div class="confirmation-container">
+            <div class="confirmation-header">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
                 </div>
-                <div class="step">
-                    <span class="step-number">2</span>
-                    <span class="step-label">Livraison</span>
-                </div>
-                <div class="step">
-                    <span class="step-number">3</span>
-                    <span class="step-label">Paiement</span>
-                </div>
+                <h1>Merci pour votre commande !</h1>
+                <p class="order-number">Commande #<span class="order-id">123456</span></p>
             </div>
 
-            <div class="cart-content">
-                <!-- Liste des produits -->
-                <div class="cart-items">
-                    <!-- Les articles seront injectés ici par JavaScript -->
-                </div>
-
+            <div class="confirmation-content">
                 <!-- Résumé de la commande -->
-                <div class="cart-summary">
-                    <h2>Résumé de la commande</h2>
-                    <div class="summary-details">
+                <section class="order-details">
+                    <h2>Détails de la commande</h2>
+                    <div class="order-items">
+                        <!-- Les articles seront injectés ici par JavaScript -->
+                    </div>
+                    <div class="order-summary">
                         <div class="summary-line">
                             <span>Sous-total</span>
                             <span class="subtotal">0,00 €</span>
                         </div>
                         <div class="summary-line">
-                            <span>Frais de livraison</span>
-                            <span class="shipping">Calculés à l'étape suivante</span>
+                            <span>Livraison</span>
+                            <span class="shipping">0,00 €</span>
                         </div>
                         <div class="summary-line total">
                             <span>Total</span>
                             <span class="total-amount">0,00 €</span>
                         </div>
                     </div>
-                    <button type="button" class="button button-primary proceed-button" disabled>
-                        Passer à la livraison
-                    </button>
-                    <a href="boutique.html" class="button button-secondary continue-shopping">
+                </section>
+
+                <!-- Informations de livraison -->
+                <section class="delivery-details">
+                    <h2>Informations de livraison</h2>
+                    <div class="details-grid">
+                        <div class="details-card">
+                            <h3>Adresse de livraison</h3>
+                            <p class="delivery-address">
+                                <!-- L'adresse sera injectée ici par JavaScript -->
+                            </p>
+                        </div>
+                        <div class="details-card">
+                            <h3>Mode de livraison</h3>
+                            <p class="shipping-method">
+                                <!-- Le mode de livraison sera injecté ici par JavaScript -->
+                            </p>
+                            <p class="estimated-delivery">
+                                Livraison estimée : <span class="delivery-date">
+                                    <!-- La date sera injectée ici par JavaScript -->
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Prochaines étapes -->
+                <section class="next-steps">
+                    <h2>Prochaines étapes</h2>
+                    <div class="steps-grid">
+                        <div class="step-card">
+                            <i class="fas fa-envelope"></i>
+                            <h3>Email de confirmation</h3>
+                            <p>Un email de confirmation a été envoyé à votre adresse.</p>
+                        </div>
+                        <div class="step-card">
+                            <i class="fas fa-box"></i>
+                            <h3>Préparation de commande</h3>
+                            <p>Nous préparons votre commande avec soin.</p>
+                        </div>
+                        <div class="step-card">
+                            <i class="fas fa-truck"></i>
+                            <h3>Expédition</h3>
+                            <p>Vous recevrez un email avec le numéro de suivi.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Actions -->
+                <div class="confirmation-actions">
+                    <a href="boutique.html" class="button button-primary">
                         Continuer mes achats
                     </a>
+                    <button type="button" class="button button-secondary" onclick="window.print()">
+                        <i class="fas fa-print"></i> Imprimer la confirmation
+                    </button>
                 </div>
-            </div>
 
-            <!-- Panier vide -->
-            <div class="empty-cart hidden">
-                <i class="fas fa-shopping-cart"></i>
-                <h2>Votre panier est vide</h2>
-                <p>Découvrez nos créations artisanales dans notre boutique.</p>
-                <a href="boutique.html" class="button button-primary">
-                    Voir la boutique
-                </a>
+                <!-- Newsletter -->
+                <section class="post-purchase">
+                    <div class="newsletter-signup">
+                        <h2>Restez informé</h2>
+                        <p>Inscrivez-vous à notre newsletter pour suivre nos nouveautés et offres spéciales.</p>
+                        <form class="newsletter-form">
+                            <div class="form-group">
+                                <input type="email" id="newsletter-email" 
+                                       placeholder="Votre email" required>
+                                <button type="submit" class="button button-primary">
+                                    S'abonner
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
             </div>
         </div>
-
-        <!-- Produits suggérés -->
-        <section class="suggested-products">
-            <h2>Vous aimerez aussi</h2>
-            <div class="product-grid">
-                <!-- Les produits suggérés seront injectés ici par JavaScript -->
-            </div>
-        </section>
 
         <!-- Notification -->
         <div class="notification-container"></div>

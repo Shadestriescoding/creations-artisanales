@@ -1,0 +1,105 @@
+{
+    "products": [
+        {
+            "id": "1",
+            "name": "Ensemble Pâtisserie au Crochet",
+            "description": "Un ensemble complet de pâtisseries décoratives fait main, comprenant des gâteaux, des cookies et des viennoiseries au crochet.",
+            "price": 29.99,
+            "image": "assets/images/ensemble_patisserie_crochet.jpg",
+            "category": "patisseries",
+            "availability": "in-stock",
+            "featured": true,
+            "badge": "nouveau",
+            "details": {
+                "dimensions": "Variable selon les pièces",
+                "materiaux": ["Fil coton", "Rembourrage hypoallergénique"],
+                "entretien": "Lavable à la main",
+                "pieces": "6 pièces assorties"
+            }
+        },
+        {
+            "id": "2",
+            "name": "Décoration Sapin Pain d'Épice",
+            "description": "Une adorable décoration de Noël en forme de pain d'épice au crochet, parfaite pour votre sapin ou votre décoration de fêtes.",
+            "price": 15.99,
+            "image": "assets/images/deco_sapin_crochet_paindepice.jpg",
+            "category": "decorations",
+            "availability": "in-stock",
+            "featured": true,
+            "details": {
+                "dimensions": "10 x 8 cm",
+                "materiaux": ["Fil coton", "Rembourrage hypoallergénique", "Ruban"],
+                "entretien": "Lavable à la main",
+                "pieces": "1 pièce"
+            }
+        },
+        {
+            "id": "3",
+            "name": "Suspension en Bois et Crochet",
+            "description": "Une élégante suspension décorative mêlant bois naturel et crochet délicat, idéale pour une décoration bohème.",
+            "price": 24.99,
+            "image": "assets/images/suspension_bois_crochet.jpg",
+            "imageAlt": "assets/images/suspension_bois_crochet_2.jpg",
+            "category": "decorations",
+            "availability": "in-stock",
+            "featured": true,
+            "details": {
+                "dimensions": "30 cm de longueur",
+                "materiaux": ["Bois naturel", "Fil coton", "Perles en bois"],
+                "entretien": "Dépoussiérer délicatement",
+                "pieces": "1 pièce"
+            }
+        },
+        {
+            "id": "4",
+            "name": "Légumes au Crochet",
+            "description": "Un assortiment coloré de légumes au crochet, parfait pour le jeu ou la décoration d'une cuisine.",
+            "price": 19.99,
+            "image": "assets/images/legumes_crochet.jpg",
+            "category": "jouets",
+            "availability": "in-stock",
+            "featured": false,
+            "details": {
+                "dimensions": "Variable selon les pièces",
+                "materiaux": ["Fil coton", "Rembourrage hypoallergénique"],
+                "entretien": "Lavable à la main",
+                "pieces": "4 légumes assortis"
+            }
+        },
+        {
+            "id": "5",
+            "name": "Mobile Origami et Crochet",
+            "description": "Un mobile délicat combinant origami et crochet, parfait pour une chambre d'enfant ou un coin lecture.",
+            "price": 34.99,
+            "image": "assets/images/mobile_origamis.jpg",
+            "imageAlt": "assets/images/mobile_origamis_2.jpg",
+            "category": "decorations",
+            "availability": "made-to-order",
+            "featured": true,
+            "badge": "personnalisable",
+            "details": {
+                "dimensions": "40 cm de diamètre",
+                "materiaux": ["Papier origami", "Fil coton", "Cerceau en bois"],
+                "entretien": "Éviter l'humidité",
+                "pieces": "1 mobile complet"
+            }
+        }
+    ],
+    "categories": [
+        {
+            "id": "patisseries",
+            "name": "Pâtisseries",
+            "description": "Créations gourmandes au crochet"
+        },
+        {
+            "id": "decorations",
+            "name": "Décorations",
+            "description": "Éléments décoratifs pour votre intérieur"
+        },
+        {
+            "id": "jouets",
+            "name": "Jouets",
+            "description": "Jouets éducatifs et créatifs au crochet"
+        }
+    ]
+} 
