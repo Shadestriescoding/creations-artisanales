@@ -1,25 +1,27 @@
 module.exports = {
     testEnvironment: 'jsdom',
+    setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
     moduleNameMapper: {
-        '\\.(css|less|scss|sass)$': 'identity-obj-proxy'
+        '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+        '\\.(gif|ttf|eot|svg|png|jpg|webp)$': '<rootDir>/__mocks__/fileMock.js'
     },
-    setupFilesAfterEnv: [
-        '<rootDir>/__tests__/setup.js'
-    ],
-    transform: {
-        '^.+\\.js$': ['babel-jest', { configFile: './.babelrc' }]
-    },
-    moduleFileExtensions: ['js', 'json'],
-    testPathIgnorePatterns: ['/node_modules/'],
+    testPathIgnorePatterns: ['/node_modules/', '/dist/'],
     collectCoverageFrom: [
         'assets/js/**/*.js',
-        '!assets/js/vendor/**'
+        '!assets/js/vendor/**/*.js',
+        '!**/node_modules/**'
     ],
+    coverageThreshold: {
+        global: {
+            branches: 80,
+            functions: 80,
+            lines: 80,
+            statements: 80
+        }
+    },
     verbose: true,
-    testMatch: [
-        '**/__tests__/**/*.js'
-    ],
-    transformIgnorePatterns: [
-        '/node_modules/(?!(@testing-library)/)'
-    ]
+    testMatch: ['**/__tests__/**/*.js', '**/?(*.)+(spec|test).js'],
+    transform: {
+        '^.+\\.js$': 'babel-jest'
+    }
 }; 

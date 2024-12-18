@@ -67,8 +67,58 @@
         }
         checkModuleSupport();
     </script>
+    <!-- Preload des ressources critiques -->
+    <link rel="preload" href="assets/css/style.css" as="style">
+    <link rel="preload" href="assets/js/main.js" as="script">
+    <link rel="preload" href="assets/fonts/playfair-display-v30-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+    
+    <!-- Preconnect pour les ressources externes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Polices Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Styles pour les éléments décoratifs */
+        .decorative-line {
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+            margin: 2rem auto;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(rgba(253, 245, 230, 0.9), rgba(253, 245, 230, 0.9)),
+                url('assets/images/texture-paper.png');
+            z-index: -1;
+        }
+
+        .premium-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+    </style>
 </head>
 <body>
+    <!-- Skip link pour l'accessibilité -->
+    <a href="#main-content" class="skip-link">Aller au contenu principal</a>
+    
     <header>
         <nav class="navbar" role="navigation" aria-label="Navigation principale">
             <div class="navbar-content">
@@ -101,83 +151,225 @@
         </nav>
     </header>
 
-    <main role="main">
-        <section class="hero" aria-labelledby="hero-title">
+    <main id="main-content" role="main">
+        <section class="hero fade-in" aria-labelledby="hero-title">
             <div class="hero-content">
                 <h1 id="hero-title">La cabane d'Eva</h1>
+                <div class="decorative-line"></div>
                 <p>Des créations gourmandes au crochet pour égayer votre intérieur</p>
-                <a href="boutique.html" class="button button-primary" role="button">Découvrir nos créations</a>
+                <a href="boutique.html" class="button button-primary" role="button">
+                    Découvrir nos créations
+                    <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                </a>
             </div>
         </section>
 
-        <section id="categories" class="section" aria-labelledby="categories-title">
-            <h2 id="categories-title" class="section-title">Nos Créations Gourmandes</h2>
-            <div class="category-grid" role="list">
-                <div class="category-card" role="listitem">
-                    <img src="assets/images/ensemble_patisserie_crochet.jpg" alt="Pâtisseries au crochet" loading="lazy">
-                    <h3>Pâtisseries</h3>
-                </div>
-                <div class="category-card">
-                    <img src="assets/images/deco_sapin_crochet_paindepice.jpg" alt="Décorations de Noël au crochet">
-                    <h3>Décorations de Noël</h3>
-                </div>
-                <div class="category-card">
-                    <img src="assets/images/suspension_bois_crochet.jpg" alt="Suspensions décoratives">
-                    <h3>Suspensions</h3>
-                </div>
-                <div class="category-card">
-                    <img src="assets/images/legumes_crochet.jpg" alt="Légumes au crochet">
-                    <h3>Légumes</h3>
-                </div>
-            </div>
-        </section>
-
-        <section class="newsletter" aria-labelledby="newsletter-title">
+        <section id="categories" class="section fade-in" aria-labelledby="categories-title">
             <div class="container">
-                <h2 id="newsletter-title">Restez informé</h2>
+                <h2 id="categories-title" class="section-title">Nos Créations Gourmandes</h2>
+                <div class="grid grid-auto-fit category-grid" role="list">
+                    <div class="category-card shadow-hover" role="listitem">
+                        <span class="premium-badge">Premium</span>
+                        <img src="assets/images/ensemble_patisserie_crochet.jpg" 
+                             alt="Pâtisseries au crochet" 
+                             loading="lazy"
+                             width="300"
+                             height="300">
+                        <h3>Pâtisseries</h3>
+                    </div>
+                    <div class="category-card shadow-hover">
+                        <img src="assets/images/deco_sapin_crochet_paindepice.jpg" alt="Décorations de Noël au crochet">
+                        <h3>Décorations de Noël</h3>
+                    </div>
+                    <div class="category-card shadow-hover">
+                        <img src="assets/images/suspension_bois_crochet.jpg" alt="Suspensions décoratives">
+                        <h3>Suspensions</h3>
+                    </div>
+                    <div class="category-card shadow-hover">
+                        <img src="assets/images/legumes_crochet.jpg" alt="Légumes au crochet">
+                        <h3>Légumes</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="newsletter section fade-in" aria-labelledby="newsletter-title">
+            <div class="container">
+                <h2 id="newsletter-title" class="section-title">Restez informé</h2>
+                <div class="decorative-line"></div>
                 <p>Inscrivez-vous à notre newsletter pour recevoir nos dernières créations et offres spéciales</p>
                 <form class="newsletter-form" role="form" aria-label="Inscription à la newsletter">
-                    <input type="email" placeholder="Votre email" required aria-label="Votre adresse email">
-                    <button type="submit" class="button button-primary">S'abonner</button>
+                    <div class="form-group">
+                        <label for="newsletter-email" class="form-label">Votre email</label>
+                        <input type="email" 
+                               id="newsletter-email"
+                               class="form-input"
+                               placeholder="Votre email" 
+                               required 
+                               aria-required="true"
+                               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                        <span class="form-error">Veuillez entrer une adresse email valide</span>
+                    </div>
+                    <button type="submit" class="button button-primary" data-tooltip="Recevez nos actualités">
+                        <span>S'abonner</span>
+                        <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                    </button>
                 </form>
             </div>
         </section>
     </main>
 
     <footer role="contentinfo">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Contact</h3>
-                <p>Email : contact@lacabanedeva.fr</p>
-                <div class="social-links">
-                    <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
-                    <a href="#" target="_blank"><i class="fab fa-facebook"></i></a>
-                    <a href="#" target="_blank"><i class="fab fa-pinterest"></i></a>
+        <div class="container">
+            <div class="footer-content grid grid-auto-fit">
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <p>Email : contact@lacabanedeva.fr</p>
+                    <div class="social-links">
+                        <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-facebook"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Navigation</h3>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="boutique.html">Boutique</a></li>
+                        <li><a href="about.html">À propos</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Newsletter</h3>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Votre email" required>
+                        <button type="submit">S'abonner</button>
+                    </form>
                 </div>
             </div>
-            <div class="footer-section">
-                <h3>Navigation</h3>
-                <ul>
-                    <li><a href="index.html">Accueil</a></li>
-                    <li><a href="boutique.html">Boutique</a></li>
-                    <li><a href="about.html">À propos</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                </ul>
+            <div class="footer-bottom">
+                <p>&copy; 2024 La cabane d'Eva. Tous droits réservés.</p>
             </div>
-            <div class="footer-section">
-                <h3>Newsletter</h3>
-                <form class="newsletter-form">
-                    <input type="email" placeholder="Votre email" required>
-                    <button type="submit">S'abonner</button>
-                </form>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 La cabane d'Eva. Tous droits réservés.</p>
         </div>
     </footer>
 
+    <!-- Container pour les notifications -->
+    <div class="notification-container" id="notification-container"></div>
+
+    <!-- Scripts -->
     <script type="module" src="assets/js/main.js"></script>
+    <script>
+        // Gestion du chargement progressif des images
+        document.addEventListener('DOMContentLoaded', () => {
+            const images = document.querySelectorAll('img[loading="lazy"]');
+            images.forEach(img => {
+                img.classList.add('lazy-image');
+                img.addEventListener('load', () => {
+                    img.classList.add('loaded');
+                });
+            });
+        });
+
+        // Système de notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 
+                               type === 'error' ? 'fa-exclamation-circle' : 
+                               type === 'warning' ? 'fa-exclamation-triangle' : 
+                               'fa-info-circle'}"></i>
+                <div class="notification-content">
+                    <p>${message}</p>
+                </div>
+            `;
+            
+            document.getElementById('notification-container').appendChild(notification);
+            
+            // Animation d'entrée
+            setTimeout(() => notification.classList.add('show'), 10);
+            
+            // Auto-suppression après 5 secondes
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+
+        // Gestion des animations au scroll
+        const observeElements = () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+        };
+
+        // Gestion du menu mobile amélioré
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        
+        hamburger?.addEventListener('click', () => {
+            const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+            hamburger.setAttribute('aria-expanded', !isExpanded);
+            navLinks.classList.toggle('active');
+            document.body.classList.toggle('menu-open');
+        });
+
+        // Gestion des formulaires avec feedback
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const submitButton = form.querySelector('button[type="submit"]');
+                submitButton.classList.add('loading');
+
+                try {
+                    // Simulation d'envoi (à remplacer par votre logique)
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    showNotification('Merci pour votre inscription !', 'success');
+                    form.reset();
+                } catch (error) {
+                    showNotification('Une erreur est survenue. Veuillez réessayer.', 'error');
+                } finally {
+                    submitButton.classList.remove('loading');
+                }
+            });
+        });
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            observeElements();
+        });
+    </script>
+    <script>
+        // Ajout de la détection de support des fonctionnalités modernes
+        if (!('IntersectionObserver' in window)) {
+            document.documentElement.classList.add('no-intersection-observer');
+        }
+        
+        // Gestion du formulaire
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const submitButton = form.querySelector('button[type="submit"]');
+                submitButton.classList.add('loading');
+                // Simulation d'envoi (à remplacer par votre logique)
+                setTimeout(() => {
+                    submitButton.classList.remove('loading');
+                    alert('Merci pour votre inscription !');
+                    form.reset();
+                }, 1000);
+            });
+        });
+    </script>
     <script>
         // Enregistrement du Service Worker
         if ('serviceWorker' in navigator) {

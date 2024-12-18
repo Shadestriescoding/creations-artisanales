@@ -1,166 +1,130 @@
-// Mock des dépendances
-jest.mock('../assets/js/main.js', () => ({
-    products: [
-        {
-            id: 1,
-            name: "Test Product",
-            price: 15.99
-        },
-        {
-            id: 2,
-            name: "Test Product 2",
-            price: 17.99
-        }
-    ]
-}));
-
-jest.mock('../assets/js/modules/notifications.js', () => ({
-    showNotification: jest.fn()
-}));
-
-// Mock localStorage
-const localStorageMock = (() => {
-    let store = {};
-    return {
-        getItem: jest.fn(key => store[key] || null),
-        setItem: jest.fn((key, value) => {
-            store[key] = value;
-        }),
-        clear: jest.fn(() => {
-            store = {};
-        })
-    };
-})();
-
-Object.defineProperty(window, 'localStorage', {
-    value: localStorageMock
-});
-
-import { products } from '../assets/js/main.js';
-import { cartModule } from '../assets/js/modules/cart.js';
-import { showNotification } from '../assets/js/modules/notifications.js';
+import cart from '../assets/js/modules/cart.js';
 
 describe('Fonctionnalités du panier', () => {
-    // Réinitialisation avant chaque test
+    const mockProduct = {
+        id: '1',
+        name: 'Test Product',
+        price: 10.99,
+        quantity: 1
+    };
+
+    let mockStorage = {};
+
     beforeEach(() => {
-        cartModule.clearCart();
+        // Mise en place du DOM pour les tests
         document.body.innerHTML = `
-            <span class="cart-count">0</span>
-            <div class="cart-items"></div>
+            <div class="cart-count">0</div>
         `;
-        localStorage.clear();
-        jest.clearAllMocks();
+        
+        // Mock du localStorage
+        mockStorage = {};
+        Object.defineProperty(window, 'localStorage', {
+            value: {
+                getItem: jest.fn(key => mockStorage[key] || null),
+                setItem: jest.fn((key, value) => {
+                    mockStorage[key] = value;
+                }),
+                clear: jest.fn(() => {
+                    mockStorage = {};
+                })
+            },
+            writable: true
+        });
+        
+        // Réinitialisation du panier
+        cart.clearCart();
     });
 
-    // Test d'initialisation
     test('init', () => {
-        const testProduct = products[0];
-        localStorage.setItem('cart', JSON.stringify([testProduct]));
-        
-        cartModule.init();
-        expect(cartModule.cart).toEqual([testProduct]);
-        expect(document.querySelector('.cart-count').textContent).toBe('1');
+        const spy = jest.spyOn(localStorage, 'getItem');
+        cart.initCart();
+        expect(spy).toHaveBeenCalledWith('cart');
+        spy.mockRestore();
     });
 
-    // Test d'ajout au panier avec initialisation automatique
     test('addToCart avec initialisation', () => {
-        const product = products[0];
-        const result = cartModule.addToCart(product);
-        
+        cart.initCart();
+        const result = cart.addToCart(mockProduct);
         expect(result).toBe(true);
-        expect(cartModule.cart.length).toBe(1);
-        expect(localStorage.setItem).toHaveBeenCalledWith('cart', JSON.stringify([product]));
+        expect(cart.getState().items.length).toBe(1);
     });
 
-    // Test de gestion d'erreur lors de la sauvegarde
     test('gestion erreur saveCart', () => {
-        localStorage.setItem.mockImplementationOnce(() => {
+        const spy = jest.spyOn(localStorage, 'setItem').mockImplementation(() => {
             throw new Error('Storage error');
         });
-
-        const result = cartModule.addToCart(products[0]);
-        expect(showNotification).toHaveBeenCalledWith('Erreur lors de la sauvegarde du panier', 'error');
-        expect(cartModule.cart.length).toBe(1);
-    });
-
-    // Test de gestion d'erreur lors du chargement
-    test('gestion erreur loadCart', () => {
-        localStorage.getItem.mockImplementationOnce(() => 'invalid JSON');
-        const result = cartModule.loadCart();
-        
+        const result = cart.addToCart(mockProduct);
         expect(result).toBe(false);
-        expect(showNotification).toHaveBeenCalledWith('Erreur lors du chargement du panier', 'error');
-        expect(cartModule.cart.length).toBe(0);
+        spy.mockRestore();
     });
 
-    // Test d'ajout au panier
+    test('gestion erreur loadCart', () => {
+        const spy = jest.spyOn(localStorage, 'getItem').mockImplementation(() => 'invalid JSON');
+        const result = cart.loadCart();
+        expect(result).toBe(false);
+        expect(cart.getState().items.length).toBe(0);
+        spy.mockRestore();
+    });
+
     test('addToCart', () => {
-        const product = products[0];
-        cartModule.addToCart(product);
-        
-        expect(cartModule.cart.length).toBe(1);
-        expect(cartModule.cart[0]).toEqual(product);
-        expect(document.querySelector('.cart-count').textContent).toBe('1');
+        const result = cart.addToCart(mockProduct);
+        expect(result).toBe(true);
+        expect(cart.getState().items[0].id).toBe(mockProduct.id);
     });
 
-    // Test de suppression du panier
     test('removeFromCart', () => {
-        const product = products[0];
-        cartModule.addToCart(product);
-        expect(cartModule.cart.length).toBe(1);
-
-        cartModule.removeFromCart(0);
-        expect(cartModule.cart.length).toBe(0);
-        expect(document.querySelector('.cart-count').textContent).toBe('0');
+        cart.addToCart(mockProduct);
+        const result = cart.removeFromCart(mockProduct.id);
+        expect(result).toBe(true);
+        expect(cart.getState().items.length).toBe(0);
     });
 
-    // Test de mise à jour du compteur
     test('updateCartCount', () => {
-        const product = products[0];
-        cartModule.addToCart(product);
-        
-        const cartCount = document.querySelector('.cart-count');
-        expect(cartCount.textContent).toBe('1');
-        expect(cartCount.style.display).toBe('flex');
+        cart.addToCart(mockProduct);
+        cart.updateCartCount();
+        const countElement = document.querySelector('.cart-count');
+        expect(countElement.textContent).toBe('1');
     });
 
-    // Test de nettoyage du panier
     test('clearCart', () => {
-        cartModule.addToCart(products[0]);
-        cartModule.addToCart(products[1]);
-        expect(cartModule.cart.length).toBe(2);
-
-        cartModule.clearCart();
-        expect(cartModule.cart.length).toBe(0);
-        expect(document.querySelector('.cart-count').textContent).toBe('0');
-        expect(localStorage.setItem).toHaveBeenCalledWith('cart', JSON.stringify([]));
+        cart.addToCart(mockProduct);
+        const result = cart.clearCart();
+        expect(result).toBe(true);
+        expect(cart.getState().items.length).toBe(0);
+        expect(cart.getState().total).toBe(0);
     });
 
-    // Test du calcul du total
     test('calcul du total du panier', () => {
-        cartModule.addToCart(products[0]);
-        cartModule.addToCart(products[1]);
-
-        const total = cartModule.calculateCartTotal();
-        expect(total).toBeCloseTo(15.99 + 17.99);
+        cart.addToCart(mockProduct);
+        cart.addToCart(mockProduct); // Ajoute le même produit une deuxième fois
+        const total = cart.calculateTotal();
+        expect(total).toBe(mockProduct.price * 2);
     });
 
-    // Test de sauvegarde et chargement du panier
     test('saveCart et loadCart', () => {
-        const product = products[0];
-        cartModule.addToCart(product);
+        // Ajouter un produit et sauvegarder
+        cart.addToCart(mockProduct);
+        expect(cart.saveCart()).toBe(true);
         
-        const saveResult = cartModule.saveCart();
-        expect(saveResult).toBe(true);
-        expect(localStorage.setItem).toHaveBeenCalledWith('cart', JSON.stringify([product]));
+        // Vérifier que les données sont dans le mock storage
+        expect(mockStorage.cart).toBeDefined();
+        const savedData = JSON.parse(mockStorage.cart);
+        expect(savedData.items.length).toBe(1);
+        expect(savedData.items[0].id).toBe(mockProduct.id);
         
-        cartModule.clearCart();
-        expect(cartModule.cart.length).toBe(0);
-
-        localStorage.getItem.mockReturnValueOnce(JSON.stringify([product]));
-        const loadResult = cartModule.loadCart();
-        expect(loadResult).toBe(true);
-        expect(cartModule.cart.length).toBe(1);
-        expect(cartModule.cart[0]).toEqual(product);
+        // Vider le panier en mémoire mais garder les données dans le storage
+        cart.clearCart();
+        expect(cart.getState().items.length).toBe(0);
+        
+        // Restaurer les données du mock storage
+        mockStorage.cart = JSON.stringify({
+            items: [mockProduct],
+            total: mockProduct.price
+        });
+        
+        // Recharger le panier depuis le storage
+        expect(cart.loadCart()).toBe(true);
+        expect(cart.getState().items.length).toBe(1);
+        expect(cart.getState().items[0].id).toBe(mockProduct.id);
     });
 }); 
