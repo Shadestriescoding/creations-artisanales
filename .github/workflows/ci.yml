@@ -1,0 +1,105 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies (Client)
+      run: |
+        cd client
+        npm ci
+        
+    - name: Install dependencies (Server)
+      run: |
+        cd server
+        npm ci
+
+    - name: Run ESLint
+      run: |
+        cd client
+        npm run lint
+        cd ../server
+        npm run lint
+
+    - name: Run tests (Client)
+      run: |
+        cd client
+        npm test -- --coverage
+        
+    - name: Run tests (Server)
+      run: |
+        cd server
+        npm test -- --coverage
+
+    - name: Build client
+      run: |
+        cd client
+        npm run build
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Security audit (Client)
+      run: |
+        cd client
+        npm audit
+
+    - name: Security audit (Server)
+      run: |
+        cd server
+        npm audit
+
+    - name: Run Snyk to check for vulnerabilities
+      uses: snyk/actions/node@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  deploy:
+    needs: [test, security]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-west-3
+
+    - name: Build and push Docker images
+      run: |
+        docker build -t lacabanedeva-client ./client
+        docker build -t lacabanedeva-server ./server
+        aws ecr get-login-password --region eu-west-3 | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_REGISTRY }}
+        docker tag lacabanedeva-client:latest ${{ secrets.AWS_ECR_REGISTRY }}/lacabanedeva-client:latest
+        docker tag lacabanedeva-server:latest ${{ secrets.AWS_ECR_REGISTRY }}/lacabanedeva-server:latest
+        docker push ${{ secrets.AWS_ECR_REGISTRY }}/lacabanedeva-client:latest
+        docker push ${{ secrets.AWS_ECR_REGISTRY }}/lacabanedeva-server:latest
+
+    - name: Deploy to ECS
+      run: |
+        aws ecs update-service --cluster lacabanedeva --service lacabanedeva-service --force-new-deployment 
