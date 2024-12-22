@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { AdminLayout } from './components/AdminLayout';
 import { Dashboard } from './pages/Dashboard';
 import { Products } from './pages/Products';
+import { Categories } from './pages/Categories';
 import { Orders } from './pages/Orders';
 import { Customers } from './pages/Customers';
 import { Stats } from './pages/Stats';
@@ -34,6 +35,7 @@ export const AdminRoutes = () => {
       }>
         <Route index element={<Dashboard />} />
         <Route path="products" element={<Products />} />
+        <Route path="categories" element={<Categories />} />
         <Route path="orders" element={<Orders />} />
         <Route path="customers" element={<Customers />} />
         <Route path="stats" element={<Stats />} />

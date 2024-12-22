@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
+import { settingsService } from '../../services/settingsService';
 
 const SettingsContainer = styled.div`
   padding: ${({ theme }) => theme.spacing.xl};
@@ -123,22 +124,58 @@ export const Settings = () => {
   const { user } = useAuth();
   const { showToast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   
   const [settings, setSettings] = useState({
-    siteName: "La Cabane d'Eva",
-    email: "contact@lacabanedeva.fr",
+    siteName: "",
+    email: "",
     phone: "",
     address: "",
     notificationsEnabled: true,
-    maintenanceMode: false
+    maintenanceMode: false,
+    socialMedia: {
+      instagram: "",
+      facebook: "",
+      pinterest: ""
+    },
+    seo: {
+      metaDescription: "",
+      keywords: ""
+    }
   });
+
+  useEffect(() => {
+    loadSettings();
+  }, []);
+
+  const loadSettings = async () => {
+    try {
+      const data = await settingsService.getSettings();
+      setSettings(data);
+    } catch (error) {
+      showToast('Erreur lors du chargement des paramètres', 'error');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setSettings(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
+    if (name.includes('.')) {
+      const [section, key] = name.split('.');
+      setSettings(prev => ({
+        ...prev,
+        [section]: {
+          ...prev[section],
+          [key]: value
+        }
+      }));
+    } else {
+      setSettings(prev => ({
+        ...prev,
+        [name]: type === 'checkbox' ? checked : value
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -146,15 +183,23 @@ export const Settings = () => {
     setIsSubmitting(true);
 
     try {
-      // TODO: Appel API pour sauvegarder les paramètres
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await settingsService.updateSettings(settings);
       showToast('Paramètres sauvegardés avec succès', 'success');
+      
+      if (settings.maintenanceMode) {
+        await settingsService.toggleMaintenanceMode(true);
+        showToast('Mode maintenance activé', 'info');
+      }
     } catch (error) {
       showToast('Erreur lors de la sauvegarde des paramètres', 'error');
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  if (isLoading) {
+    return <div>Chargement...</div>;
+  }
 
   return (
     <SettingsContainer>
@@ -169,6 +214,7 @@ export const Settings = () => {
               name="siteName"
               value={settings.siteName}
               onChange={handleChange}
+              required
             />
           </FormGroup>
 
@@ -180,6 +226,7 @@ export const Settings = () => {
               name="email"
               value={settings.email}
               onChange={handleChange}
+              required
             />
           </FormGroup>
 
@@ -234,6 +281,72 @@ export const Settings = () => {
               {' '}Mode maintenance
             </Label>
           </FormGroup>
+
+          <Section>
+            <Title>Réseaux sociaux</Title>
+            <FormGroup>
+              <Label htmlFor="instagram">Instagram</Label>
+              <Input
+                type="url"
+                id="instagram"
+                name="socialMedia.instagram"
+                value={settings.socialMedia.instagram}
+                onChange={handleChange}
+                placeholder="https://instagram.com/..."
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="facebook">Facebook</Label>
+              <Input
+                type="url"
+                id="facebook"
+                name="socialMedia.facebook"
+                value={settings.socialMedia.facebook}
+                onChange={handleChange}
+                placeholder="https://facebook.com/..."
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="pinterest">Pinterest</Label>
+              <Input
+                type="url"
+                id="pinterest"
+                name="socialMedia.pinterest"
+                value={settings.socialMedia.pinterest}
+                onChange={handleChange}
+                placeholder="https://pinterest.com/..."
+              />
+            </FormGroup>
+          </Section>
+
+          <Section>
+            <Title>SEO</Title>
+            <FormGroup>
+              <Label htmlFor="metaDescription">Description meta</Label>
+              <Input
+                as="textarea"
+                id="metaDescription"
+                name="seo.metaDescription"
+                value={settings.seo.metaDescription}
+                onChange={handleChange}
+                placeholder="Description pour les moteurs de recherche..."
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="keywords">Mots-clés</Label>
+              <Input
+                type="text"
+                id="keywords"
+                name="seo.keywords"
+                value={settings.seo.keywords}
+                onChange={handleChange}
+                placeholder="mot-clé1, mot-clé2, ..."
+              />
+            </FormGroup>
+          </Section>
 
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? 'Sauvegarde...' : 'Sauvegarder'}

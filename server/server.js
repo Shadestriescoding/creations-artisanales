@@ -197,6 +197,16 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Une erreur est survenue !' });
 });
 
+const pdfRoutes = require('./routes/pdfRoutes');
+
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/pdf', pdfRoutes);
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Serveur démarré sur le port ${PORT}`);
