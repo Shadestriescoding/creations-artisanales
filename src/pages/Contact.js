@@ -298,7 +298,7 @@ const Contact = () => {
 
           <h3>Suivez-moi sur les réseaux sociaux</h3>
           <SocialLinks>
-            <a href="https://www.instagram.com/yunevalden" target="_blank" rel="noopener noreferrer" title="Instagram">
+            <a href="https://www.instagram.com/yunevalden?igsh=dGdyZW8zM2w0dGJo" target="_blank" rel="noopener noreferrer" title="Instagram">
               📸
             </a>
             <a href="https://www.linkedin.com/in/eva-beguet-14841894" target="_blank" rel="noopener noreferrer" title="LinkedIn">

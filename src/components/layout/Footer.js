@@ -124,7 +124,7 @@ const Footer = () => {
           <h3>La Cabane d'Eva</h3>
           <p>Créations artisanales au crochet par Eva Beguet, artiste passionnée spécialisée dans les amigurumis et décorations au crochet.</p>
           <SocialLinks>
-            <a href="https://www.instagram.com/yunevalden" target="_blank" rel="noopener noreferrer" title="Instagram">📸</a>
+            <a href="https://www.instagram.com/yunevalden?igsh=dGdyZW8zM2w0dGJo" target="_blank" rel="noopener noreferrer" title="Instagram">📸</a>
             <a href="https://www.linkedin.com/in/eva-beguet-14841894" target="_blank" rel="noopener noreferrer" title="LinkedIn">💼</a>
           </SocialLinks>
         </FooterSection>
