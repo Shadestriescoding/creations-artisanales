@@ -1,57 +1,41 @@
 export const theme = {
   colors: {
-    primary: '#E8B4B8', // Rose poudré plus doux
-    primaryLight: '#F5D6D9', // Version claire du rose
-    primaryDark: '#D49599', // Version foncée du rose
-    secondary: '#A7C4BC', // Vert sauge plus doux
-    secondaryLight: '#C2D8D2', // Version claire du vert
-    accent: '#967A6D', // Marron doux
-    accentLight: '#B39C92', // Version claire du marron
-    background: '#FAF7F7', // Fond légèrement rosé
-    backgroundAlt: '#F0E9E9', // Fond alternatif
-    text: '#4A4A4A', // Texte principal
-    textLight: '#6E6E6E', // Texte secondaire
-    white: '#FFFFFF',
-    error: '#E57373',
-    success: '#81C784',
-    warning: '#FFD54F',
+    primary: '#e4a7b9', // Rose poudré plus doux
+    secondary: '#a7c4bc', // Vert sauge plus doux
+    accent: '#d88c9a', // Rose vintage
+    background: '#fdf6f8', // Fond très légèrement rosé
+    backgroundAlt: '#f8f1f3',
+    text: '#2c2c2c',
+    textLight: '#666666',
+    white: '#ffffff',
+    error: '#e57373',
+    success: '#81c784',
   },
+  
   typography: {
-    titleFont: "'Cormorant Garamond', serif", // Police plus élégante pour les titres
+    titleFont: "'Playfair Display', serif", // Police élégante pour les titres
     bodyFont: "'Lato', sans-serif", // Police moderne pour le texte
     h1: {
-      fontSize: '2.5rem',
-      fontWeight: '600',
-      letterSpacing: '-0.5px',
+      fontSize: '2.8rem',
+      lineHeight: 1.2,
+      fontWeight: 700,
     },
     h2: {
-      fontSize: '2rem',
-      fontWeight: '500',
-      letterSpacing: '-0.3px',
+      fontSize: '2.2rem',
+      lineHeight: 1.3,
+      fontWeight: 600,
     },
     h3: {
-      fontSize: '1.3rem',
-      fontWeight: '500',
-      letterSpacing: '-0.2px',
+      fontSize: '1.6rem',
+      lineHeight: 1.4,
+      fontWeight: 500,
     },
     body: {
       fontSize: '1rem',
-      lineHeight: '1.6',
+      lineHeight: 1.6,
     },
   },
-  shadows: {
-    small: '0 2px 8px rgba(0,0,0,0.1)',
-    medium: '0 4px 12px rgba(0,0,0,0.1)',
-    large: '0 8px 24px rgba(0,0,0,0.1)',
-    hover: '0 6px 16px rgba(0,0,0,0.1)',
-  },
-  borderRadius: {
-    small: '4px',
-    medium: '8px',
-    large: '12px',
-    xl: '16px',
-    round: '50%',
-  },
+  
   spacing: {
     xs: '0.25rem',
     sm: '0.5rem',
@@ -60,15 +44,36 @@ export const theme = {
     xl: '2rem',
     xxl: '3rem',
   },
+  
+  borderRadius: {
+    small: '4px',
+    medium: '8px',
+    large: '12px',
+    round: '50%',
+  },
+  
+  shadows: {
+    small: '0 2px 4px rgba(0,0,0,0.1)',
+    medium: '0 4px 6px rgba(0,0,0,0.1)',
+    large: '0 8px 16px rgba(0,0,0,0.1)',
+    hover: '0 8px 20px rgba(0,0,0,0.15)',
+  },
+  
   transitions: {
     fast: 'all 0.2s ease',
     medium: 'all 0.3s ease',
-    slow: 'all 0.4s ease',
+    slow: 'all 0.5s ease',
   },
+  
   breakpoints: {
-    mobile: '320px',
+    mobile: '576px',
     tablet: '768px',
     desktop: '1024px',
-    wide: '1400px',
-  }
+    wide: '1200px',
+  },
+  
+  container: {
+    padding: '0 1rem',
+    maxWidth: '1200px',
+  },
 }; 

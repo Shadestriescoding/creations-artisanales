@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import ProductModal from './shop/ProductModal';
 
 const GalleryContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: ${props => props.theme.spacing.xl};
-  padding: ${props => props.theme.spacing.xl};
-  max-width: ${props => props.theme.breakpoints.wide};
+  padding: ${props => props.theme.spacing.xl} 0;
+  max-width: ${props => props.theme.container.maxWidth};
   margin: 0 auto;
   
   @media (max-width: ${props => props.theme.breakpoints.mobile}) {
@@ -26,6 +27,7 @@ const ProductCard = styled.div`
   flex-direction: column;
   height: 100%;
   position: relative;
+  cursor: pointer;
   
   &:hover {
     transform: translateY(-5px);
@@ -79,17 +81,26 @@ const ProductInfo = styled.div`
     ${props => props.theme.colors.white} 0%,
     ${props => props.theme.colors.backgroundAlt} 100%
   );
-  
-  h3 {
-    font-size: ${props => props.theme.typography.h3.fontSize};
-    color: ${props => props.theme.colors.text};
-    line-height: 1.4;
-    margin-bottom: ${props => props.theme.spacing.sm};
-    font-family: ${props => props.theme.typography.titleFont};
-  }
 `;
 
-const PriceTag = styled.p`
+const ProductName = styled.h3`
+  font-size: ${props => props.theme.typography.h3.fontSize};
+  color: ${props => props.theme.colors.text};
+  margin-bottom: ${props => props.theme.spacing.sm};
+  font-family: ${props => props.theme.typography.titleFont};
+`;
+
+const ProductDescription = styled.p`
+  color: ${props => props.theme.colors.textLight};
+  font-size: 0.9rem;
+  margin-bottom: ${props => props.theme.spacing.md};
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+`;
+
+const PriceTag = styled.div`
   font-size: 1.3rem;
   font-weight: bold;
   color: ${props => props.theme.colors.accent};
@@ -97,82 +108,50 @@ const PriceTag = styled.p`
   font-family: ${props => props.theme.typography.titleFont};
 `;
 
-const FilterSection = styled.div`
-  display: flex;
-  gap: ${props => props.theme.spacing.md};
-  margin: ${props => props.theme.spacing.xl} auto;
-  padding: 0 ${props => props.theme.spacing.xl};
-  flex-wrap: wrap;
-  justify-content: center;
-  max-width: ${props => props.theme.breakpoints.wide};
+const StockBadge = styled.div`
+  position: absolute;
+  top: ${props => props.theme.spacing.md};
+  right: ${props => props.theme.spacing.md};
+  padding: ${props => props.theme.spacing.xs} ${props => props.theme.spacing.sm};
+  border-radius: ${props => props.theme.borderRadius.medium};
+  font-size: 0.8rem;
+  font-weight: 600;
+  z-index: 1;
   
-  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
-    flex-direction: column;
-    padding: 0 ${props => props.theme.spacing.md};
-    gap: ${props => props.theme.spacing.sm};
+  &.in-stock {
+    background-color: ${props => props.theme.colors.success}20;
+    color: ${props => props.theme.colors.success};
   }
   
-  select {
-    padding: ${props => props.theme.spacing.sm} ${props => props.theme.spacing.lg};
-    border-radius: ${props => props.theme.borderRadius.medium};
-    border: 2px solid ${props => props.theme.colors.primary};
-    background-color: ${props => props.theme.colors.white};
-    cursor: pointer;
-    min-width: 200px;
-    font-size: ${props => props.theme.typography.body.fontSize};
-    color: ${props => props.theme.colors.text};
-    appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 1em;
-    padding-right: 2.5rem;
-    transition: ${props => props.theme.transitions.fast};
-    
-    &:hover {
-      border-color: ${props => props.theme.colors.accent};
-      background-color: ${props => props.theme.colors.backgroundAlt};
-    }
-    
-    &:focus {
-      outline: none;
-      border-color: ${props => props.theme.colors.accent};
-      box-shadow: 0 0 0 3px ${props => props.theme.colors.primary}33;
-    }
+  &.out-of-stock {
+    background-color: ${props => props.theme.colors.error}20;
+    color: ${props => props.theme.colors.error};
   }
 `;
 
 const AddToCartButton = styled.button`
+  width: 100%;
+  padding: ${props => props.theme.spacing.sm} ${props => props.theme.spacing.md};
   background-color: ${props => props.theme.colors.primary};
   color: ${props => props.theme.colors.white};
   border: none;
-  padding: ${props => props.theme.spacing.sm} ${props => props.theme.spacing.md};
   border-radius: ${props => props.theme.borderRadius.medium};
+  font-weight: 600;
   cursor: pointer;
   transition: ${props => props.theme.transitions.medium};
-  font-weight: 600;
-  width: 100%;
+  margin-top: auto;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: ${props => props.theme.spacing.sm};
-  margin-top: auto;
-  font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 
   &:hover {
     background-color: ${props => props.theme.colors.accent};
-    transform: translateY(-2px);
   }
 
-  &:active {
-    transform: translateY(0);
-  }
-
-  &::before {
-    content: '🛒';
-    font-size: 1.1rem;
+  &:disabled {
+    background-color: ${props => props.theme.colors.textLight};
+    cursor: not-allowed;
   }
 `;
 
@@ -183,66 +162,63 @@ const NoProductsMessage = styled.div`
   font-style: italic;
   grid-column: 1 / -1;
   font-size: ${props => props.theme.typography.h3.fontSize};
-  font-family: ${props => props.theme.typography.titleFont};
 `;
 
 export const ProductGallery = ({ products, onAddToCart }) => {
-  const [sortBy, setSortBy] = useState('default');
-  const [filterCategory, setFilterCategory] = useState('all');
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
-  const categories = ['all', ...new Set(products.map(product => product.category))];
+  const handleProductClick = (product) => {
+    setSelectedProduct(product);
+  };
 
-  const filteredProducts = products
-    .filter(product => filterCategory === 'all' || product.category === filterCategory)
-    .sort((a, b) => {
-      if (sortBy === 'price-asc') return a.price - b.price;
-      if (sortBy === 'price-desc') return b.price - a.price;
-      return 0;
-    });
+  const handleCloseModal = () => {
+    setSelectedProduct(null);
+  };
 
   return (
     <>
-      <FilterSection>
-        <select onChange={(e) => setSortBy(e.target.value)} value={sortBy}>
-          <option value="default">Trier par...</option>
-          <option value="price-asc">Prix croissant</option>
-          <option value="price-desc">Prix décroissant</option>
-        </select>
-        
-        <select 
-          value={filterCategory}
-          onChange={(e) => setFilterCategory(e.target.value)}
-        >
-          {categories.map(category => (
-            <option key={category} value={category}>
-              {category === 'all' ? 'Toutes les catégories' : category.charAt(0).toUpperCase() + category.slice(1)}
-            </option>
-          ))}
-        </select>
-      </FilterSection>
-
       <GalleryContainer>
-        {filteredProducts.length === 0 ? (
+        {products.length === 0 ? (
           <NoProductsMessage>
             Aucun produit ne correspond à vos critères
           </NoProductsMessage>
         ) : (
-          filteredProducts.map(product => (
-            <ProductCard key={product.id}>
+          products.map(product => (
+            <ProductCard key={product.id} onClick={() => handleProductClick(product)}>
+              <StockBadge className={product.inStock ? 'in-stock' : 'out-of-stock'}>
+                {product.inStock ? 'En stock' : 'Rupture de stock'}
+              </StockBadge>
+              
               <ProductImage>
                 <img src={product.image} alt={product.name} loading="lazy" />
               </ProductImage>
+              
               <ProductInfo>
-                <h3>{product.name}</h3>
-                <PriceTag>{product.price.toFixed(2)}€</PriceTag>
-                <AddToCartButton onClick={() => onAddToCart(product)}>
-                  Ajouter au panier
+                <ProductName>{product.name}</ProductName>
+                <ProductDescription>{product.description}</ProductDescription>
+                <PriceTag>{product.price.toFixed(2)} €</PriceTag>
+                <AddToCartButton
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onAddToCart(product);
+                  }}
+                  disabled={!product.inStock}
+                >
+                  🧶 {product.inStock ? 'Ajouter au panier' : 'Indisponible'}
                 </AddToCartButton>
               </ProductInfo>
             </ProductCard>
           ))
         )}
       </GalleryContainer>
+
+      {selectedProduct && (
+        <ProductModal
+          product={selectedProduct}
+          onClose={handleCloseModal}
+          onAddToCart={onAddToCart}
+        />
+      )}
     </>
   );
 }; 
