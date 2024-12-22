@@ -1,108 +1,129 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useLocation } from 'react-router-dom';
-import { ProductGallery } from '../components/ProductGallery';
 import ShopFilters from '../components/shop/ShopFilters';
+import ShopGrid from '../components/shop/ShopGrid';
+import { useCart } from '../contexts/CartContext';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const ShopContainer = styled.div`
-  max-width: ${props => props.theme.container.maxWidth};
+  max-width: ${props => props.theme.layout.maxWidth};
   margin: 0 auto;
-  padding: ${props => props.theme.spacing.xl} ${props => props.theme.spacing.md};
+  padding: ${props => props.theme.spacing.xxl} ${props => props.theme.spacing.xl};
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: ${props => props.theme.spacing.xl} ${props => props.theme.spacing.lg};
+  }
 `;
 
-const ShopHeader = styled.div`
+const ShopHeader = styled(motion.div)`
   text-align: center;
   margin-bottom: ${props => props.theme.spacing.xxl};
 `;
 
 const Title = styled.h1`
+  font-size: ${props => props.theme.typography.h1};
   color: ${props => props.theme.colors.text};
-  margin-bottom: ${props => props.theme.spacing.lg};
-  
-  span {
-    color: ${props => props.theme.colors.primary};
-  }
+  margin-bottom: ${props => props.theme.spacing.md};
+  font-weight: 700;
 `;
 
 const Subtitle = styled.p`
+  font-size: ${props => props.theme.typography.h4};
   color: ${props => props.theme.colors.textLight};
-  font-size: 1.2rem;
-  max-width: 700px;
+  max-width: 600px;
   margin: 0 auto;
+  line-height: 1.6;
 `;
 
-// Données temporaires pour les tests
-const tempProducts = [
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  color: ${props => props.theme.colors.textLight};
+  font-size: ${props => props.theme.typography.h3};
+`;
+
+// Simulated product data - replace with actual API call
+const PRODUCTS = [
   {
     id: 1,
-    name: "Amigurumi Lapin Rose",
-    price: 35.00,
-    image: "/images/products/lapin-rose.jpg",
-    category: "amigurumis",
-    description: "Un adorable lapin rose au crochet, parfait pour décorer une chambre d'enfant.",
+    name: "Bougie Lavande",
+    category: "bougies",
+    price: 24.99,
+    image: "/images/products/bougie-lavande.jpg",
     inStock: true
   },
   {
     id: 2,
-    name: "Guirlande Étoiles",
-    price: 28.00,
-    image: "/images/products/guirlande-etoiles.jpg",
-    category: "decorations",
-    description: "Une guirlande décorative composée d'étoiles au crochet.",
+    name: "Diffuseur d'Huiles Essentielles",
+    category: "diffuseurs",
+    price: 49.99,
+    image: "/images/products/diffuseur.jpg",
     inStock: true
   },
-  {
-    id: 3,
-    name: "Panier de Rangement",
-    price: 42.00,
-    image: "/images/products/panier.jpg",
-    category: "accessoires",
-    description: "Un panier de rangement élégant et pratique au crochet.",
-    inStock: false
-  },
-  // Ajoutez d'autres produits ici
+  // Add more products...
 ];
 
 const Shop = () => {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const initialCategory = queryParams.get('category') || 'all';
-
-  const [products] = useState(tempProducts);
-  const [filteredProducts, setFilteredProducts] = useState(products);
-  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
+  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('default');
   const [searchQuery, setSearchQuery] = useState('');
   const [priceRange, setPriceRange] = useState({ min: 0, max: 0 });
+  
+  const { addToCart } = useCart();
+  const navigate = useNavigate();
 
-  const categories = [...new Set(products.map(product => product.category))];
+  // Simulate API call
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        // Replace with actual API call
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        setProducts(PRODUCTS);
+        setFilteredProducts(PRODUCTS);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchProducts();
+  }, []);
+
+  // Filter and sort products
   useEffect(() => {
     let result = [...products];
 
-    // Filtre par catégorie
+    // Apply category filter
     if (selectedCategory !== 'all') {
       result = result.filter(product => product.category === selectedCategory);
     }
 
-    // Filtre par recherche
+    // Apply search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       result = result.filter(product => 
         product.name.toLowerCase().includes(query) ||
-        product.description.toLowerCase().includes(query)
+        product.category.toLowerCase().includes(query)
       );
     }
 
-    // Filtre par prix
-    if (priceRange.min > 0) {
-      result = result.filter(product => product.price >= priceRange.min);
-    }
-    if (priceRange.max > 0) {
-      result = result.filter(product => product.price <= priceRange.max);
+    // Apply price range filter
+    if (priceRange.min > 0 || priceRange.max > 0) {
+      result = result.filter(product => {
+        if (priceRange.min > 0 && product.price < priceRange.min) return false;
+        if (priceRange.max > 0 && product.price > priceRange.max) return false;
+        return true;
+      });
     }
 
-    // Tri
+    // Apply sorting
     switch (sortBy) {
       case 'price-asc':
         result.sort((a, b) => a.price - b.price);
@@ -123,19 +144,32 @@ const Shop = () => {
     setFilteredProducts(result);
   }, [products, selectedCategory, sortBy, searchQuery, priceRange]);
 
-  const handleAddToCart = (product) => {
-    console.log('Ajouter au panier:', product);
-    // TODO: Implémenter l'ajout au panier
+  const handleProductClick = (product) => {
+    navigate(`/shop/product/${product.id}`);
   };
+
+  const categories = [...new Set(products.map(product => product.category))];
+
+  if (loading) {
+    return (
+      <ShopContainer>
+        <LoadingContainer>
+          Chargement des produits...
+        </LoadingContainer>
+      </ShopContainer>
+    );
+  }
 
   return (
     <ShopContainer>
-      <ShopHeader>
-        <Title>
-          La <span>Boutique</span>
-        </Title>
+      <ShopHeader
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <Title>Notre Boutique</Title>
         <Subtitle>
-          Découvrez mes créations uniques au crochet, faites main avec amour et passion
+          Découvrez notre sélection de produits artisanaux pour créer une ambiance chaleureuse et apaisante chez vous
         </Subtitle>
       </ShopHeader>
 
@@ -151,9 +185,10 @@ const Shop = () => {
         onPriceRangeChange={setPriceRange}
       />
 
-      <ProductGallery 
+      <ShopGrid
         products={filteredProducts}
-        onAddToCart={handleAddToCart}
+        onProductClick={handleProductClick}
+        onAddToCart={addToCart}
       />
     </ShopContainer>
   );

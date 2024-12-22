@@ -8,7 +8,6 @@ import { ToastProvider } from './contexts/ToastContext';
 // Composants de mise en page
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
-import Navigation from './components/layout/Navigation';
 import ScrollToTop from './components/common/ScrollToTop';
 import LoadingSpinner from './components/common/LoadingSpinner';
 
@@ -29,7 +28,6 @@ function App() {
         <Router>
           <div className="app">
             <Header />
-            <Navigation />
             <main>
               <Suspense fallback={<LoadingSpinner text="Chargement..." />}>
                 <Routes>

@@ -1,19 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import OptimizedImage from '../components/common/OptimizedImage';
+import ImageModal from '../components/common/ImageModal';
+import ProgressDots from '../components/common/ProgressDots';
+import useOptimizedAnimation from '../hooks/useOptimizedAnimation';
+import { Helmet } from 'react-helmet';
 
 const AboutContainer = styled.div`
-  max-width: ${props => props.theme.container.maxWidth};
+  max-width: ${props => props.theme.layout.maxWidth};
   margin: 0 auto;
+  padding: ${props => props.theme.spacing.xxl} ${props => props.theme.spacing.xl};
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: ${props => props.theme.spacing.xl} ${props => props.theme.spacing.lg};
+  }
 `;
 
-const HeroSection = styled.section`
-  position: relative;
-  background-color: ${props => props.theme.colors.backgroundAlt};
-  padding: ${props => props.theme.spacing.xxxl} 0;
+const Header = styled(motion.div)`
   text-align: center;
-  overflow: hidden;
-
+  margin-bottom: ${props => props.theme.spacing.xxl};
+  position: relative;
+  padding: ${props => props.theme.spacing.xxl} 0;
+  
   &::before {
     content: '';
     position: absolute;
@@ -21,214 +32,165 @@ const HeroSection = styled.section`
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('/images/about/pattern.png') repeat;
-    opacity: 0.1;
-    z-index: 1;
+    background: url('/images/pattern.png') repeat;
+    opacity: 0.05;
+    z-index: -1;
   }
 `;
 
-const HeroContent = styled.div`
-  position: relative;
-  z-index: 2;
-  padding: 0 ${props => props.theme.spacing.xl};
-`;
-
 const Title = styled.h1`
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
   color: ${props => props.theme.colors.text};
   margin-bottom: ${props => props.theme.spacing.lg};
-  font-family: ${props => props.theme.typography.titleFont};
   
   span {
     color: ${props => props.theme.colors.primary};
+    display: inline-block;
   }
 `;
 
 const Subtitle = styled.p`
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
   color: ${props => props.theme.colors.textLight};
-  font-size: 1.2rem;
-  max-width: 700px;
-  margin: 0 auto ${props => props.theme.spacing.xl};
+  max-width: 800px;
+  margin: 0 auto;
   line-height: 1.8;
-  font-weight: 300;
 `;
 
-const StorySection = styled.section`
-  padding: ${props => props.theme.spacing.xxxl} 0;
-  background-color: ${props => props.theme.colors.white};
-`;
-
-const StoryGrid = styled.div`
+const Section = styled(motion.section)`
+  margin-bottom: ${props => props.theme.spacing.xxxl};
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: ${props => props.theme.spacing.xxl};
-  max-width: ${props => props.theme.container.maxWidth};
-  margin: 0 auto;
-  padding: 0 ${props => props.theme.spacing.xl};
-  
+  gap: ${props => props.theme.spacing.xl};
+  align-items: center;
+
+  &:nth-child(odd) {
+    direction: rtl;
+    
+    > * {
+      direction: ltr;
+    }
+  }
+
   @media (max-width: ${props => props.theme.breakpoints.tablet}) {
     grid-template-columns: 1fr;
     gap: ${props => props.theme.spacing.xl};
+    
+    &:nth-child(odd) {
+      direction: ltr;
+    }
   }
 `;
 
-const StoryImage = styled.div`
-  position: relative;
+const Content = styled.div`
+  h2 {
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    color: ${props => props.theme.colors.text};
+    margin-bottom: ${props => props.theme.spacing.lg};
+    position: relative;
+    padding-bottom: ${props => props.theme.spacing.md};
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background-color: ${props => props.theme.colors.primary};
+    }
+  }
+
+  p {
+    color: ${props => props.theme.colors.textLight};
+    line-height: 1.8;
+    margin-bottom: ${props => props.theme.spacing.md};
+    font-size: 1.1rem;
+  }
+`;
+
+const ImageWrapper = styled.div`
   border-radius: ${props => props.theme.borderRadius.large};
   overflow: hidden;
-  aspect-ratio: 4/5;
-
+  box-shadow: ${props => props.theme.shadows.large};
+  
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: ${props => props.theme.transitions.slow};
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(
-      to bottom,
-      transparent 0%,
-      ${props => props.theme.colors.backgroundDark}40 100%
-    );
-  }
-
-  &:hover img {
-    transform: scale(1.05);
-  }
-`;
-
-const StoryContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: ${props => props.theme.spacing.xl} 0;
-
-  h2 {
-    color: ${props => props.theme.colors.text};
-    margin-bottom: ${props => props.theme.spacing.xl};
-    font-family: ${props => props.theme.typography.titleFont};
-    position: relative;
-
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -${props => props.theme.spacing.sm};
-      left: 0;
-      width: 60px;
-      height: 2px;
-      background-color: ${props => props.theme.colors.primary};
+    aspect-ratio: 4/3;
+    transition: transform 0.6s ease;
+    
+    &:hover {
+      transform: scale(1.05);
     }
   }
-  
-  p {
-    color: ${props => props.theme.colors.textLight};
-    margin-bottom: ${props => props.theme.spacing.lg};
-    line-height: 1.8;
-    font-weight: 300;
-  }
 `;
 
-const ValuesSection = styled.section`
-  background-color: ${props => props.theme.colors.backgroundAlt};
-  padding: ${props => props.theme.spacing.xxxl} 0;
-`;
-
-const ValuesContainer = styled.div`
-  max-width: ${props => props.theme.container.maxWidth};
-  margin: 0 auto;
-  padding: 0 ${props => props.theme.spacing.xl};
-`;
-
-const ValuesTitle = styled.h2`
-  text-align: center;
-  margin-bottom: ${props => props.theme.spacing.xxl};
-  color: ${props => props.theme.colors.text};
-  font-family: ${props => props.theme.typography.titleFont};
-  position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -${props => props.theme.spacing.sm};
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 2px;
-    background-color: ${props => props.theme.colors.primary};
-  }
-`;
-
-const ValuesGrid = styled.div`
+const ProcessSteps = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: ${props => props.theme.spacing.xl};
+  margin-top: ${props => props.theme.spacing.xxl};
 `;
 
-const ValueCard = styled.div`
+const Step = styled(motion.div)`
   background-color: ${props => props.theme.colors.white};
-  border-radius: ${props => props.theme.borderRadius.large};
   padding: ${props => props.theme.spacing.xl};
+  border-radius: ${props => props.theme.borderRadius.large};
+  box-shadow: ${props => props.theme.shadows.medium};
   text-align: center;
-  transition: ${props => props.theme.transitions.medium};
-  box-shadow: ${props => props.theme.shadows.card};
+  position: relative;
   
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: ${props => props.theme.shadows.hover};
+  &::before {
+    content: '${props => props.number}';
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    background-color: ${props => props.theme.colors.primary};
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
   }
 
-  .emoji {
-    font-size: 2.5rem;
-    margin-bottom: ${props => props.theme.spacing.md};
-    display: inline-block;
-    transition: ${props => props.theme.transitions.bounce};
-
-    ${props => props.theme.hover} {
-      transform: scale(1.2);
-    }
-  }
-  
   h3 {
-    color: ${props => props.theme.colors.primary};
-    margin: ${props => props.theme.spacing.md} 0;
-    font-family: ${props => props.theme.typography.titleFont};
+    font-size: ${props => props.theme.typography.h4};
+    color: ${props => props.theme.colors.text};
+    margin: ${props => props.theme.spacing.lg} 0 ${props => props.theme.spacing.md};
   }
-  
+
   p {
     color: ${props => props.theme.colors.textLight};
-    font-size: 0.95rem;
     line-height: 1.6;
   }
 `;
 
-const CTASection = styled.section`
+const CTASection = styled(motion.section)`
   text-align: center;
-  padding: ${props => props.theme.spacing.xxxl} 0;
-  background-color: ${props => props.theme.colors.white};
+  margin-top: ${props => props.theme.spacing.xxxl};
+  padding: ${props => props.theme.spacing.xxl} 0;
+  background-color: ${props => props.theme.colors.backgroundAlt};
+  border-radius: ${props => props.theme.borderRadius.large};
 `;
 
-const CTAContent = styled.div`
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 0 ${props => props.theme.spacing.xl};
+const CTATitle = styled.h2`
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  color: ${props => props.theme.colors.text};
+  margin-bottom: ${props => props.theme.spacing.lg};
+`;
 
-  h2 {
-    color: ${props => props.theme.colors.text};
-    margin-bottom: ${props => props.theme.spacing.lg};
-    font-family: ${props => props.theme.typography.titleFont};
-  }
-
-  p {
-    color: ${props => props.theme.colors.textLight};
-    margin-bottom: ${props => props.theme.spacing.xl};
-    font-size: 1.1rem;
-  }
+const CTAText = styled.p`
+  color: ${props => props.theme.colors.textLight};
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto ${props => props.theme.spacing.xl};
+  line-height: 1.6;
 `;
 
 const CTAButton = styled(Link)`
@@ -237,105 +199,564 @@ const CTAButton = styled(Link)`
   background-color: ${props => props.theme.colors.primary};
   color: ${props => props.theme.colors.white};
   border-radius: ${props => props.theme.borderRadius.medium};
-  font-weight: 500;
-  text-transform: none;
-  letter-spacing: 0.02em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   transition: ${props => props.theme.transitions.medium};
-  box-shadow: ${props => props.theme.shadows.button};
   
   &:hover {
-    background-color: ${props => props.theme.colors.accent};
-    transform: translateY(-2px);
-    box-shadow: ${props => props.theme.shadows.hover};
-    color: ${props => props.theme.colors.white};
+    background-color: ${props => props.theme.colors.primaryDark};
+    transform: translateY(-3px);
+    box-shadow: ${props => props.theme.shadows.medium};
   }
 `;
 
+const ContactSection = styled(motion.section)`
+  margin-top: ${props => props.theme.spacing.xxxl};
+  text-align: center;
+`;
+
+const ContactTitle = styled.h2`
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  color: ${props => props.theme.colors.text};
+  margin-bottom: ${props => props.theme.spacing.xl};
+`;
+
+const ContactInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: ${props => props.theme.spacing.md};
+  
+  a {
+    color: ${props => props.theme.colors.primary};
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+    
+    &:hover {
+      color: ${props => props.theme.colors.primaryDark};
+    }
+  }
+`;
+
+const TestimonialsSection = styled(motion.section)`
+  margin-top: ${props => props.theme.spacing.xxxl};
+  padding: ${props => props.theme.spacing.xxl} 0;
+  background-color: ${props => props.theme.colors.backgroundAlt};
+  border-radius: ${props => props.theme.borderRadius.large};
+  overflow: hidden;
+  position: relative;
+`;
+
+const TestimonialsTitle = styled.h2`
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  color: ${props => props.theme.colors.text};
+  text-align: center;
+  margin-bottom: ${props => props.theme.spacing.xl};
+`;
+
+const TestimonialsContainer = styled.div`
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 ${props => props.theme.spacing.xl};
+`;
+
+const Testimonial = styled(motion.div)`
+  text-align: center;
+  padding: ${props => props.theme.spacing.xl};
+`;
+
+const TestimonialText = styled.p`
+  font-size: 1.2rem;
+  color: ${props => props.theme.colors.text};
+  line-height: 1.8;
+  font-style: italic;
+  margin-bottom: ${props => props.theme.spacing.lg};
+  
+  &::before, &::after {
+    content: '"';
+    color: ${props => props.theme.colors.primary};
+    font-size: 1.5em;
+  }
+`;
+
+const TestimonialAuthor = styled.div`
+  font-weight: 600;
+  color: ${props => props.theme.colors.primary};
+  margin-bottom: ${props => props.theme.spacing.sm};
+`;
+
+const TestimonialLocation = styled.div`
+  font-size: 0.9rem;
+  color: ${props => props.theme.colors.textLight};
+`;
+
+const NavigationButton = styled.button`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: ${props => props.theme.colors.white};
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: ${props => props.theme.shadows.medium};
+  transition: all 0.3s ease;
+  z-index: 2;
+  
+  &:hover {
+    background: ${props => props.theme.colors.primary};
+    color: ${props => props.theme.colors.white};
+    transform: translateY(-50%) scale(1.1);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  &.prev {
+    left: ${props => props.theme.spacing.lg};
+  }
+  
+  &.next {
+    right: ${props => props.theme.spacing.lg};
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    width: 32px;
+    height: 32px;
+    
+    &.prev {
+      left: ${props => props.theme.spacing.sm};
+    }
+    
+    &.next {
+      right: ${props => props.theme.spacing.sm};
+    }
+  }
+`;
+
+const GallerySection = styled(motion.section)`
+  margin-top: ${props => props.theme.spacing.xxxl};
+  text-align: center;
+`;
+
+const GalleryTitle = styled.h2`
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  color: ${props => props.theme.colors.text};
+  margin-bottom: ${props => props.theme.spacing.xl};
+`;
+
+const GalleryGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: ${props => props.theme.spacing.lg};
+  margin-top: ${props => props.theme.spacing.xl};
+`;
+
+const GalleryItem = styled(motion.div)`
+  position: relative;
+  border-radius: ${props => props.theme.borderRadius.medium};
+  overflow: hidden;
+  cursor: pointer;
+  
+  &::before {
+    content: '';
+    display: block;
+    padding-top: 100%;
+  }
+  
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  
+  &:hover img {
+    transform: scale(1.1);
+  }
+`;
+
+const testimonials = [
+  {
+    id: 1,
+    text: "Les créations d'Eva sont tout simplement magnifiques ! J'ai commandé une guirlande personnalisée pour la chambre de ma fille, et le résultat dépasse toutes mes attentes. Chaque détail est parfait !",
+    author: "Marie L.",
+    location: "Paris"
+  },
+  {
+    id: 2,
+    text: "Un grand merci pour ce merveilleux mobile pour bébé. La qualité est exceptionnelle, et les couleurs sont exactement comme je les souhaitais. Je recommande vivement !",
+    author: "Sophie M.",
+    location: "Lyon"
+  },
+  {
+    id: 3,
+    text: "Eva a su parfaitement comprendre mes envies pour créer un panier de rangement unique. Son professionnalisme et sa créativité sont remarquables. Je suis enchantée !",
+    author: "Claire D.",
+    location: "Bordeaux"
+  }
+];
+
+const galleryImages = [
+  { id: 1, src: "/images/gallery/creation1.jpg", alt: "Guirlande décorative" },
+  { id: 2, src: "/images/gallery/creation2.jpg", alt: "Mobile bébé" },
+  { id: 3, src: "/images/gallery/creation3.jpg", alt: "Panier de rangement" },
+  { id: 4, src: "/images/gallery/creation4.jpg", alt: "Décoration murale" },
+  { id: 5, src: "/images/gallery/creation5.jpg", alt: "Set de table" },
+  { id: 6, src: "/images/gallery/creation6.jpg", alt: "Suspension macramé" }
+];
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { 
+    opacity: 0,
+    y: 20
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut"
+    }
+  }
+};
+
 const About = () => {
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [modalImage, setModalImage] = useState(null);
+  
+  const {
+    setRef: headerRef,
+    getAnimationProps: getHeaderAnimationProps
+  } = useOptimizedAnimation();
+
+  const {
+    setRef: contentRef,
+    getAnimationProps: getContentAnimationProps
+  } = useOptimizedAnimation({
+    threshold: 0.2
+  });
+
+  const nextTestimonial = () => {
+    setCurrentTestimonial((prev) => 
+      prev === testimonials.length - 1 ? 0 : prev + 1
+    );
+  };
+
+  const prevTestimonial = () => {
+    setCurrentTestimonial((prev) => 
+      prev === 0 ? testimonials.length - 1 : prev - 1
+    );
+  };
+
+  const handleImageClick = (index) => {
+    setModalImage(index);
+  };
+
+  const handleCloseModal = () => {
+    setModalImage(null);
+  };
+
+  const handlePreviousImage = () => {
+    setModalImage((prev) => 
+      prev === 0 ? galleryImages.length - 1 : prev - 1
+    );
+  };
+
+  const handleNextImage = () => {
+    setModalImage((prev) => 
+      prev === galleryImages.length - 1 ? 0 : prev + 1
+    );
+  };
+
   return (
-    <AboutContainer>
-      <HeroSection>
-        <HeroContent>
-          <Title>
-            Bienvenue dans <span>La Cabane d'Eva</span>
-          </Title>
-          <Subtitle>
-            Découvrez l'univers chaleureux et créatif d'une passionnée du crochet, 
-            où chaque pièce raconte une histoire unique et artisanale
+    <>
+      <Helmet>
+        <title>À propos - La Cabane d'Eva</title>
+        <meta 
+          name="description" 
+          content="Découvrez l'histoire de La Cabane d'Eva, un univers créatif où le crochet rencontre la passion. Créations artisanales uniques et fait-main avec amour."
+        />
+        <meta property="og:title" content="À propos - La Cabane d'Eva" />
+        <meta 
+          property="og:description" 
+          content="Découvrez l'histoire de La Cabane d'Eva, un univers créatif où le crochet rencontre la passion."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="/images/about/atelier.jpg" />
+        <link rel="canonical" href="https://lacabanedeva.fr/a-propos" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "AboutPage",
+            "mainEntity": {
+              "@type": "LocalBusiness",
+              "name": "La Cabane d'Eva",
+              "description": "Créations artisanales au crochet, faites main avec amour. Spécialisée dans les amigurumis, décorations et accessoires personnalisés.",
+              "image": "/images/about/atelier.jpg",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "FR"
+              },
+              "telephone": "+33612345678",
+              "email": "contact@lacabanedeva.fr",
+              "priceRange": "€€",
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "5",
+                "reviewCount": testimonials.length
+              },
+              "review": testimonials.map(testimonial => ({
+                "@type": "Review",
+                "author": testimonial.author,
+                "reviewBody": testimonial.text,
+                "reviewRating": {
+                  "@type": "Rating",
+                  "ratingValue": "5"
+                }
+              }))
+            }
+          })}
+        </script>
+      </Helmet>
+
+      <AboutContainer itemScope itemType="https://schema.org/AboutPage">
+        <Header
+          ref={headerRef}
+          {...getHeaderAnimationProps()}
+        >
+          <Title itemProp="name">Bienvenue dans <span>La Cabane d'Eva</span></Title>
+          <Subtitle itemProp="description">
+            Bonjour ! Je m'appelle Eva, et derrière chaque création que vous voyez ici, il y a une histoire, 
+            un sourire, et beaucoup d'amour. Plongez dans un univers où l'art du crochet rencontre la douceur 
+            et la créativité.
           </Subtitle>
-        </HeroContent>
-      </HeroSection>
+        </Header>
 
-      <StorySection>
-        <StoryGrid>
-          <StoryImage>
-            <img src="/images/about/eva-portrait.jpg" alt="Eva dans son atelier" />
-          </StoryImage>
-          <StoryContent>
-            <h2>Mon Histoire</h2>
-            <p>
-              Passionnée par les travaux manuels depuis mon plus jeune âge, j'ai découvert 
-              le crochet comme une évidence. Cette technique ancestrale m'a immédiatement 
-              conquise par sa versatilité et les possibilités infinies qu'elle offre.
-            </p>
-            <p>
-              Chaque création qui sort de mes mains est unique et réalisée avec amour. 
-              Je sélectionne méticuleusement les matériaux, privilégiant la qualité et 
-              la durabilité, pour vous offrir des pièces qui traverseront le temps.
-            </p>
-            <p>
-              La Cabane d'Eva est née de mon désir de partager cette passion et 
-              d'apporter une touche de douceur et de fait-main dans votre quotidien.
-            </p>
-          </StoryContent>
-        </StoryGrid>
-      </StorySection>
+        <motion.div
+          ref={contentRef}
+          {...getContentAnimationProps()}
+        >
+          <Section itemScope itemType="https://schema.org/Article">
+            <Content>
+              <h2 itemProp="headline">Mon Histoire</h2>
+              <div itemProp="articleBody">
+                <p>
+                  Tout a commencé par un amour simple pour le fait-main. Le crochet était d'abord un passe-temps 
+                  pour moi, une manière de décompresser et d'apporter un peu de douceur à mon quotidien. C'est ma 
+                  grand-mère qui m'a transmis cette passion, m'enseignant patiemment les techniques traditionnelles.
+                </p>
+                <p>
+                  Rapidement, mes proches ont commencé à passer commande, séduits par l'originalité et la qualité 
+                  de mes créations. C'est ainsi qu'est née La Cabane d'Eva, un projet qui me permet aujourd'hui de 
+                  partager ma passion avec vous.
+                </p>
+              </div>
+            </Content>
+            <ImageWrapper>
+              <OptimizedImage
+                src="/images/about/histoire.jpg"
+                alt="Eva dans son atelier"
+                height="400px"
+                isHoverable
+                itemProp="image"
+              />
+            </ImageWrapper>
+          </Section>
 
-      <ValuesSection>
-        <ValuesContainer>
-          <ValuesTitle>Mes Valeurs</ValuesTitle>
-          <ValuesGrid>
-            <ValueCard>
-              <div className="emoji">🎨</div>
-              <h3>Créativité</h3>
+          <Section>
+            <Content>
+              <h2>Mon Atelier</h2>
               <p>
-                Chaque pièce est une création unique, née d'un mélange d'inspiration 
-                et de savoir-faire artisanal
+                C'est dans mon petit atelier, un espace chaleureux et inspirant, que je donne vie à mes créations. 
+                Entourée de fils colorés soigneusement sélectionnés et de mes outils préférés, je passe des heures 
+                à crocheter avec passion.
               </p>
-            </ValueCard>
-            <ValueCard>
-              <div className="emoji">💝</div>
-              <h3>Passion</h3>
               <p>
-                Le crochet n'est pas qu'un simple passe-temps, c'est un art que 
-                je pratique avec amour et dévouement
+                Chaque pièce est créée dans le respect des traditions artisanales, en utilisant des matériaux de 
+                qualité premium choisis pour leur douceur et leur durabilité. Je porte une attention particulière 
+                aux finitions pour vous garantir des créations qui traverseront le temps.
               </p>
-            </ValueCard>
-            <ValueCard>
-              <div className="emoji">✨</div>
-              <h3>Qualité</h3>
-              <p>
-                Je ne fais aucun compromis sur la qualité des matériaux et le soin 
-                apporté aux finitions
-              </p>
-            </ValueCard>
-          </ValuesGrid>
-        </ValuesContainer>
-      </ValuesSection>
+            </Content>
+            <ImageWrapper>
+              <OptimizedImage
+                src="/images/about/atelier.jpg"
+                alt="L'atelier de création"
+                height="400px"
+                isHoverable
+              />
+            </ImageWrapper>
+          </Section>
 
-      <CTASection>
-        <CTAContent>
-          <h2>Envie de découvrir mes créations ?</h2>
-          <p>
-            Visitez ma boutique en ligne pour trouver des pièces uniques qui 
-            apporteront une touche de chaleur et d'authenticité à votre intérieur
-          </p>
-          <CTAButton to="/boutique">
-            Découvrir la boutique
-          </CTAButton>
-        </CTAContent>
-      </CTASection>
-    </AboutContainer>
+          <ProcessSteps>
+            <Step variants={itemVariants} number="1">
+              <h3>L'Inspiration</h3>
+              <p>
+                Chaque création commence par une étincelle d'inspiration, puisée dans la nature, 
+                les tendances actuelles ou vos demandes personnalisées.
+              </p>
+            </Step>
+
+            <Step variants={itemVariants} number="2">
+              <h3>La Sélection</h3>
+              <p>
+                Je choisis méticuleusement les matériaux de la plus haute qualité pour garantir 
+                la beauté et la durabilité de chaque pièce.
+              </p>
+            </Step>
+
+            <Step variants={itemVariants} number="3">
+              <h3>La Création</h3>
+              <p>
+                Chaque point est crocheté avec soin et attention, en respectant les techniques 
+                traditionnelles tout en y ajoutant ma touche personnelle.
+              </p>
+            </Step>
+
+            <Step variants={itemVariants} number="4">
+              <h3>Les Finitions</h3>
+              <p>
+                Une attention particulière est portée aux détails et aux finitions pour vous 
+                garantir une pièce parfaite et unique.
+              </p>
+            </Step>
+          </ProcessSteps>
+
+          <TestimonialsSection>
+            <TestimonialsTitle>Ce qu'en disent mes clients</TestimonialsTitle>
+            <TestimonialsContainer itemScope itemType="https://schema.org/ReviewAggregator">
+              <NavigationButton 
+                className="prev" 
+                onClick={prevTestimonial}
+                aria-label="Témoignage précédent"
+              >
+                <FiChevronLeft size={24} />
+              </NavigationButton>
+              
+              <AnimatePresence mode="wait">
+                <Testimonial
+                  key={currentTestimonial}
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -50 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <TestimonialText>
+                    {testimonials[currentTestimonial].text}
+                  </TestimonialText>
+                  <TestimonialAuthor>
+                    {testimonials[currentTestimonial].author}
+                  </TestimonialAuthor>
+                  <TestimonialLocation>
+                    {testimonials[currentTestimonial].location}
+                  </TestimonialLocation>
+                </Testimonial>
+              </AnimatePresence>
+
+              <NavigationButton 
+                className="next" 
+                onClick={nextTestimonial}
+                aria-label="Témoignage suivant"
+              >
+                <FiChevronRight size={24} />
+              </NavigationButton>
+            </TestimonialsContainer>
+            
+            <ProgressDots
+              total={testimonials.length}
+              current={currentTestimonial}
+              onChange={setCurrentTestimonial}
+            />
+          </TestimonialsSection>
+
+          <GallerySection itemScope itemType="https://schema.org/ImageGallery">
+            <GalleryTitle>Mes Dernières Créations</GalleryTitle>
+            <GalleryGrid>
+              {galleryImages.map((image, index) => (
+                <GalleryItem
+                  key={image.id}
+                  onClick={() => handleImageClick(index)}
+                  whileHover={{ y: -5 }}
+                  itemScope
+                  itemType="https://schema.org/ImageObject"
+                >
+                  <OptimizedImage
+                    src={image.src}
+                    alt={image.alt}
+                    isHoverable
+                    itemProp="contentUrl"
+                  />
+                  <meta itemProp="name" content={image.alt} />
+                </GalleryItem>
+              ))}
+            </GalleryGrid>
+          </GallerySection>
+
+          <CTASection>
+            <CTATitle>Envie d'une création unique ?</CTATitle>
+            <CTAText>
+              Découvrez ma collection de créations artisanales ou parlons ensemble de votre projet personnalisé.
+              Chaque pièce est réalisée avec amour et attention, spécialement pour vous.
+            </CTAText>
+            <CTAButton 
+              to="/boutique"
+              itemProp="significantLink"
+            >
+              Découvrir la boutique
+            </CTAButton>
+          </CTASection>
+
+          <ContactSection itemScope itemType="https://schema.org/ContactPoint">
+            <ContactTitle>Une idée, une envie ?</ContactTitle>
+            <ContactInfo>
+              <p>Je serais ravie d'échanger avec vous sur votre projet personnalisé</p>
+              <a 
+                href="mailto:contact@lacabanedeva.fr"
+                itemProp="email"
+              >
+                contact@lacabanedeva.fr
+              </a>
+              <a 
+                href="tel:+33612345678"
+                itemProp="telephone"
+              >
+                06 12 34 56 78
+              </a>
+            </ContactInfo>
+          </ContactSection>
+        </motion.div>
+
+        <ImageModal
+          isOpen={modalImage !== null}
+          onClose={handleCloseModal}
+          images={galleryImages}
+          currentIndex={modalImage || 0}
+          onPrevious={handlePreviousImage}
+          onNext={handleNextImage}
+        />
+      </AboutContainer>
+    </>
   );
 };
 

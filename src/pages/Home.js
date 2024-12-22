@@ -1,36 +1,73 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import LazyImage from '../components/common/LazyImage';
 
 const HeroSection = styled.section`
   background-color: ${props => props.theme.colors.backgroundAlt};
   padding: ${props => props.theme.spacing.xxl} 0;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('/images/pattern.png') repeat;
+    opacity: 0.05;
+    z-index: 1;
+  }
 `;
 
 const HeroContent = styled.div`
   max-width: ${props => props.theme.container.maxWidth};
   margin: 0 auto;
-  padding: 0 ${props => props.theme.spacing.md};
+  padding: 0 ${props => props.theme.spacing.xl};
+  position: relative;
+  z-index: 2;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: 0 ${props => props.theme.spacing.lg};
+  }
 `;
 
 const HeroTitle = styled.h1`
   color: ${props => props.theme.colors.text};
   margin-bottom: ${props => props.theme.spacing.lg};
-  font-size: 3.5rem;
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  line-height: 1.2;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUpFade 0.6s ease-out forwards;
   
   span {
     color: ${props => props.theme.colors.primary};
+    display: inline-block;
+  }
+
+  @keyframes slideUpFade {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 `;
 
 const HeroSubtitle = styled.p`
   color: ${props => props.theme.colors.textLight};
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 2vw, 1.2rem);
   margin-bottom: ${props => props.theme.spacing.xl};
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  line-height: 1.6;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUpFade 0.6s ease-out forwards 0.2s;
 `;
 
 const CTAButton = styled(Link)`
@@ -43,22 +80,40 @@ const CTAButton = styled(Link)`
   text-transform: uppercase;
   letter-spacing: 1px;
   transition: ${props => props.theme.transitions.medium};
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUpFade 0.6s ease-out forwards 0.4s;
   
   &:hover {
     background-color: ${props => props.theme.colors.accent};
     transform: translateY(-3px);
     color: ${props => props.theme.colors.white};
+    box-shadow: ${props => props.theme.shadows.medium};
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: ${props => props.theme.spacing.md} ${props => props.theme.spacing.lg};
+    width: 100%;
+    max-width: 300px;
   }
 `;
 
 const FeaturedSection = styled.section`
   padding: ${props => props.theme.spacing.xxl} 0;
+  background-color: ${props => props.theme.colors.background};
 `;
 
 const SectionTitle = styled.h2`
   text-align: center;
   margin-bottom: ${props => props.theme.spacing.xl};
   color: ${props => props.theme.colors.text};
+  font-size: clamp(2rem, 4vw, 2.4rem);
+  opacity: 0;
+  transform: translateY(20px);
+  
+  &.visible {
+    animation: slideUpFade 0.6s ease-out forwards;
+  }
   
   &::after {
     content: '';
@@ -67,16 +122,27 @@ const SectionTitle = styled.h2`
     height: 3px;
     background-color: ${props => props.theme.colors.primary};
     margin: ${props => props.theme.spacing.sm} auto 0;
+    transform: scaleX(0);
+    transition: transform 0.6s ease-out;
+  }
+
+  &.visible::after {
+    transform: scaleX(1);
   }
 `;
 
 const CategoryGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: ${props => props.theme.spacing.xl};
   max-width: ${props => props.theme.container.maxWidth};
   margin: 0 auto;
-  padding: 0 ${props => props.theme.spacing.md};
+  padding: 0 ${props => props.theme.spacing.xl};
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: 0 ${props => props.theme.spacing.lg};
+    gap: ${props => props.theme.spacing.lg};
+  }
 `;
 
 const CategoryCard = styled(Link)`
@@ -84,6 +150,13 @@ const CategoryCard = styled(Link)`
   border-radius: ${props => props.theme.borderRadius.large};
   overflow: hidden;
   aspect-ratio: 1;
+  box-shadow: ${props => props.theme.shadows.medium};
+  opacity: 0;
+  transform: translateY(20px);
+  
+  &.visible {
+    animation: slideUpFade 0.6s ease-out forwards;
+  }
   
   &::before {
     content: '';
@@ -94,17 +167,22 @@ const CategoryCard = styled(Link)`
     bottom: 0;
     background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%);
     z-index: 1;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
   }
   
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: ${props => props.theme.transitions.medium};
-  }
-  
-  &:hover img {
-    transform: scale(1.05);
+  &:hover {
+    &::before {
+      opacity: 0.6;
+    }
+
+    img {
+      transform: scale(1.05);
+    }
+
+    ${CategoryTitle} {
+      transform: translateY(-5px);
+    }
   }
 `;
 
@@ -116,46 +194,106 @@ const CategoryTitle = styled.h3`
   z-index: 2;
   margin: 0;
   font-size: 1.5rem;
+  transition: transform 0.3s ease;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 `;
 
 const AboutSection = styled.section`
   background-color: ${props => props.theme.colors.backgroundAlt};
   padding: ${props => props.theme.spacing.xxl} 0;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('/images/pattern.png') repeat;
+    opacity: 0.05;
+    z-index: 1;
+  }
 `;
 
 const AboutContent = styled.div`
   max-width: ${props => props.theme.container.maxWidth};
   margin: 0 auto;
-  padding: 0 ${props => props.theme.spacing.md};
+  padding: 0 ${props => props.theme.spacing.xl};
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: ${props => props.theme.spacing.xl};
   align-items: center;
+  position: relative;
+  z-index: 2;
   
   @media (max-width: ${props => props.theme.breakpoints.tablet}) {
     grid-template-columns: 1fr;
+    padding: 0 ${props => props.theme.spacing.lg};
   }
 `;
 
 const AboutText = styled.div`
+  opacity: 0;
+  transform: translateX(-20px);
+  
+  &.visible {
+    animation: slideInFade 0.6s ease-out forwards;
+  }
+
   h2 {
     margin-bottom: ${props => props.theme.spacing.lg};
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
   }
   
   p {
     margin-bottom: ${props => props.theme.spacing.md};
     color: ${props => props.theme.colors.textLight};
+    line-height: 1.8;
+  }
+
+  @keyframes slideInFade {
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
 `;
 
-const AboutImage = styled.img`
-  width: 100%;
-  height: auto;
-  border-radius: ${props => props.theme.borderRadius.large};
-  box-shadow: ${props => props.theme.shadows.large};
+const AboutImageWrapper = styled.div`
+  opacity: 0;
+  transform: translateX(20px);
+  
+  &.visible {
+    animation: slideInFade 0.6s ease-out forwards 0.2s;
+  }
 `;
 
 const Home = () => {
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    const elements = document.querySelectorAll('.animate-on-scroll');
+    elements.forEach(el => observer.observe(el));
+
+    return () => {
+      elements.forEach(el => observer.unobserve(el));
+    };
+  }, []);
+
   return (
     <>
       <HeroSection>
@@ -173,18 +311,18 @@ const Home = () => {
       </HeroSection>
 
       <FeaturedSection>
-        <SectionTitle>Nos Catégories</SectionTitle>
+        <SectionTitle className="animate-on-scroll">Nos Catégories</SectionTitle>
         <CategoryGrid>
-          <CategoryCard to="/boutique?category=amigurumis">
-            <img src="/images/categories/amigurumis.jpg" alt="Amigurumis" />
+          <CategoryCard to="/boutique?category=amigurumis" className="animate-on-scroll">
+            <LazyImage src="/images/categories/amigurumis.jpg" alt="Amigurumis" />
             <CategoryTitle>Amigurumis</CategoryTitle>
           </CategoryCard>
-          <CategoryCard to="/boutique?category=decorations">
-            <img src="/images/categories/decorations.jpg" alt="Décorations" />
+          <CategoryCard to="/boutique?category=decorations" className="animate-on-scroll" style={{ animationDelay: '0.2s' }}>
+            <LazyImage src="/images/categories/decorations.jpg" alt="Décorations" />
             <CategoryTitle>Décorations</CategoryTitle>
           </CategoryCard>
-          <CategoryCard to="/boutique?category=accessoires">
-            <img src="/images/categories/accessoires.jpg" alt="Accessoires" />
+          <CategoryCard to="/boutique?category=accessoires" className="animate-on-scroll" style={{ animationDelay: '0.4s' }}>
+            <LazyImage src="/images/categories/accessoires.jpg" alt="Accessoires" />
             <CategoryTitle>Accessoires</CategoryTitle>
           </CategoryCard>
         </CategoryGrid>
@@ -192,7 +330,7 @@ const Home = () => {
 
       <AboutSection>
         <AboutContent>
-          <AboutText>
+          <AboutText className="animate-on-scroll">
             <h2>À propos de La Cabane d'Eva</h2>
             <p>
               Passionnée par le crochet et les créations artisanales, je crée des pièces uniques 
@@ -204,7 +342,14 @@ const Home = () => {
             </p>
             <CTAButton to="/a-propos">En savoir plus</CTAButton>
           </AboutText>
-          <AboutImage src="/images/about/atelier.jpg" alt="L'atelier d'Eva" />
+          <AboutImageWrapper className="animate-on-scroll">
+            <LazyImage 
+              src="/images/about/atelier.jpg" 
+              alt="L'atelier d'Eva"
+              height="400px"
+              objectFit="cover"
+            />
+          </AboutImageWrapper>
         </AboutContent>
       </AboutSection>
     </>
