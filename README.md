@@ -1,74 +1,78 @@
-# Boutique Artisanale en Ligne
+# La Cabane d'Eva - Boutique de Créations Artisanales
 
-Ce projet est un site web pour une boutique artisanale proposant des créations faites main.
+## 🎨 À propos
+La Cabane d'Eva est une boutique en ligne de créations artisanales, proposant des pièces uniques et faites main. Le site met en valeur le savoir-faire artisanal dans un environnement chaleureux et élégant.
 
-## Structure du Projet
+## 🚀 Fonctionnalités
 
-```
-.
-├── assets/
-│   ├── css/
-│   │   └── style.css
-│   ├── js/
-│   │   └── main.js
-│   └── images/
-│       ├── deco_sapin_crochet.jpg
-│       ├── deco_sapin_crochet_paindepice.jpg
-│       ├── ensemble_patisserie_crochet.jpg
-│       ├── legumes_crochet.jpg
-│       ├── mobile_origamis.jpg
-│       ├── mobile_origamis_2.jpg
-│       ├── suspension_bois_crochet.jpg
-│       └── suspension_bois_crochet_2.jpg
-├── index.html
-├── about.html
-├── contact.html
-├── boutique.html
-├── panier.html
-└── README.md
-```
+### Pour les Clients
+- 🛍️ Boutique en ligne avec filtres et recherche
+- 🛒 Panier d'achat avec persistance locale
+- 💳 Processus de paiement sécurisé
+- 📱 Design responsive et adaptatif
+- 🖼️ Galerie de produits optimisée
+- 📝 Pages d'information détaillées
 
-## Technologies Utilisées
+### Pour l'Administration
+- 📊 Interface d'administration sécurisée
+- ✏️ Gestion des produits (CRUD)
+- 📦 Gestion des commandes
+- 📈 Tableau de bord analytique
+- 🎯 Gestion des promotions
 
-- HTML5
-- CSS3
-- JavaScript
-- Font Awesome (pour les icônes)
-- Google Fonts
+## 🛠️ Technologies Utilisées
+- **Frontend**: React.js, Styled Components
+- **État**: Context API, Hooks personnalisés
+- **Style**: Design System personnalisé
+- **Performance**: Chargement progressif, optimisation des images
+- **Accessibilité**: Conformité WCAG
+- **SEO**: Meta tags, Schema.org
 
-## Installation
+## 🎯 Améliorations Prévues
+- [ ] Système de notifications en temps réel
+- [ ] Gestion des stocks avancée
+- [ ] Système de fidélité
+- [ ] Blog intégré
+- [ ] Newsletter
+- [ ] Internationalisation
 
-1. Clonez ce dépôt
-   ```bash
-   git clone https://github.com/votre-nom/boutique-artisanale.git
-   ```
-2. Ouvrez `index.html` dans votre navigateur
+## 🔧 Installation
 
-## Fonctionnalités
+\`\`\`bash
+# Cloner le repository
+git clone [URL_DU_REPO]
 
-- Page d'accueil avec présentation des produits phares
-- Galerie de produits par catégories
-- Système de panier
-- Page À propos
-- Formulaire de contact
-- Blog/Actualités
-- Design responsive
+# Installer les dépendances
+npm install
 
-## Déploiement
+# Lancer en développement
+npm start
 
-Le site peut être déployé sur n'importe quel hébergeur web statique comme :
-- GitHub Pages
-- Netlify
-- Vercel
+# Construire pour la production
+npm run build
+\`\`\`
 
-## Contribution
+## 📚 Structure du Projet
 
-1. Forkez le projet
-2. Créez votre branche de fonctionnalité (`git checkout -b feature/nouvelle-fonctionnalite`)
-3. Committez vos changements (`git commit -m 'Ajout d'une nouvelle fonctionnalité'`)
-4. Poussez vers la branche (`git push origin feature/nouvelle-fonctionnalite`)
-5. Ouvrez une Pull Request
+\`\`\`
+src/
+├── components/
+│   ├── common/         # Composants réutilisables
+│   ├── layout/         # Composants de structure
+│   └── shop/          # Composants liés à la boutique
+├── contexts/          # Contextes React
+├── hooks/            # Hooks personnalisés
+├── pages/            # Pages principales
+├── styles/           # Styles globaux et thème
+└── utils/            # Utilitaires
+\`\`\`
 
-## Licence
+## 🤝 Contribution
+Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou une pull request.
 
-Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
+## 📝 Licence
+Ce projet est sous licence MIT.
+
+## 👥 Équipe
+- Eva - Créatrice et Artisane
+- [Autres membres de l'équipe]

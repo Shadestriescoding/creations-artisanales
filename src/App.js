@@ -1,53 +1,98 @@
-import React, { Suspense, lazy } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import { GlobalStyle } from './styles/GlobalStyle';
-import { theme } from './styles/theme';
 import { ToastProvider } from './contexts/ToastContext';
+import { CartProvider } from './contexts/CartContext';
+import { AuthProvider } from './contexts/AuthContext';
+import GlobalStyle from './styles/GlobalStyle';
+import theme from './styles/theme';
 
-// Composants de mise en page
+// Pages publiques
+import Home from './pages/Home';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import Shop from './pages/Shop';
+import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
+
+// Pages admin
+import Login from './pages/admin/Login';
+import { AdminRoutes } from './admin/AdminRoutes';
+
+// Composants communs
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import ScrollToTop from './components/common/ScrollToTop';
-import LoadingSpinner from './components/common/LoadingSpinner';
+import Toast from './components/common/Toast';
+import OfflineNotice from './components/common/OfflineNotice';
 
-// Chargement paresseux des pages
-const Home = lazy(() => import('./pages/Home'));
-const Shop = lazy(() => import('./pages/Shop'));
-const About = lazy(() => import('./pages/About'));
-const Contact = lazy(() => import('./pages/Contact'));
-const Cart = lazy(() => import('./pages/Cart'));
-const Checkout = lazy(() => import('./pages/Checkout'));
-const Admin = lazy(() => import('./pages/Admin'));
-
-function App() {
+const App = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <ToastProvider>
-        <GlobalStyle />
-        <Router>
-          <div className="app">
-            <Header />
-            <main>
-              <Suspense fallback={<LoadingSpinner text="Chargement..." />}>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/boutique" element={<Shop />} />
-                  <Route path="/a-propos" element={<About />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/panier" element={<Cart />} />
-                  <Route path="/commande" element={<Checkout />} />
-                  <Route path="/admin/*" element={<Admin />} />
-                </Routes>
-              </Suspense>
-            </main>
-            <Footer />
-            <ScrollToTop />
-          </div>
-        </Router>
-      </ToastProvider>
-    </ThemeProvider>
+    <Router>
+      <ThemeProvider theme={theme}>
+        <ToastProvider>
+          <AuthProvider>
+            <CartProvider>
+              <GlobalStyle />
+              <ScrollToTop />
+              <Toast />
+              <OfflineNotice />
+              
+              <Routes>
+                {/* Routes publiques */}
+                <Route path="/" element={
+                  <>
+                    <Header />
+                    <Home />
+                    <Footer />
+                  </>
+                } />
+                <Route path="/about" element={
+                  <>
+                    <Header />
+                    <About />
+                    <Footer />
+                  </>
+                } />
+                <Route path="/contact" element={
+                  <>
+                    <Header />
+                    <Contact />
+                    <Footer />
+                  </>
+                } />
+                <Route path="/shop" element={
+                  <>
+                    <Header />
+                    <Shop />
+                    <Footer />
+                  </>
+                } />
+                <Route path="/cart" element={
+                  <>
+                    <Header />
+                    <Cart />
+                    <Footer />
+                  </>
+                } />
+                <Route path="/checkout" element={
+                  <>
+                    <Header />
+                    <Checkout />
+                    <Footer />
+                  </>
+                } />
+
+                {/* Routes admin */}
+                <Route path="/admin/login" element={<Login />} />
+                <Route path="/admin/*" element={<AdminRoutes />} />
+              </Routes>
+            </CartProvider>
+          </AuthProvider>
+        </ToastProvider>
+      </ThemeProvider>
+    </Router>
   );
-}
+};
 
 export default App; 

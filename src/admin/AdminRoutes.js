@@ -1,30 +1,33 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { AdminLayout } from './components/AdminLayout';
 import { Dashboard } from './pages/Dashboard';
 import { Products } from './pages/Products';
 import { Orders } from './pages/Orders';
 import { Customers } from './pages/Customers';
 import { Stats } from './pages/Stats';
+import { Settings } from './pages/Settings';
 
-// Ces composants seront créés plus tard
-const Settings = () => <div>Page des paramètres (à venir)</div>;
-
-// Middleware de protection des routes admin (à implémenter avec l'authentification)
 const ProtectedRoute = ({ children }) => {
-  const isAuthenticated = true; // À remplacer par une vraie vérification
-  
-  if (!isAuthenticated) {
-    return <Navigate to="/admin/login" replace />;
+  const { isAuthenticated, loading } = useAuth();
+  const location = useLocation();
+
+  if (loading) {
+    return <div>Chargement...</div>;
   }
-  
+
+  if (!isAuthenticated) {
+    return <Navigate to="/admin/login" state={{ from: location }} replace />;
+  }
+
   return children;
 };
 
 export const AdminRoutes = () => {
   return (
     <Routes>
-      <Route path="/admin" element={
+      <Route path="/" element={
         <ProtectedRoute>
           <AdminLayout />
         </ProtectedRoute>
