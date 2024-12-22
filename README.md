@@ -1,78 +1,164 @@
-# La Cabane d'Eva - Boutique de Créations Artisanales
+# La Cabane d'Eva - Site E-commerce
 
-## 🎨 À propos
-La Cabane d'Eva est une boutique en ligne de créations artisanales, proposant des pièces uniques et faites main. Le site met en valeur le savoir-faire artisanal dans un environnement chaleureux et élégant.
+## Description
+Site e-commerce pour La Cabane d'Eva, une boutique de créations artisanales.
 
-## 🚀 Fonctionnalités
+## Technologies utilisées
+- Frontend : React.js, Styled Components
+- Backend : Node.js, Express
+- Base de données : MongoDB
+- Authentification : JWT
+- Gestion des fichiers : Multer
+- Génération de PDF : PDFKit
 
-### Pour les Clients
-- 🛍️ Boutique en ligne avec filtres et recherche
-- 🛒 Panier d'achat avec persistance locale
-- 💳 Processus de paiement sécurisé
-- 📱 Design responsive et adaptatif
-- 🖼️ Galerie de produits optimisée
-- 📝 Pages d'information détaillées
+## Fonctionnalités principales
 
-### Pour l'Administration
-- 📊 Interface d'administration sécurisée
-- ✏️ Gestion des produits (CRUD)
-- 📦 Gestion des commandes
-- 📈 Tableau de bord analytique
-- 🎯 Gestion des promotions
+### Site public
+- Catalogue de produits avec filtres et recherche
+- Panier d'achat
+- Processus de commande
+- Page de contact
+- Responsive design
 
-## 🛠️ Technologies Utilisées
-- **Frontend**: React.js, Styled Components
-- **État**: Context API, Hooks personnalisés
-- **Style**: Design System personnalisé
-- **Performance**: Chargement progressif, optimisation des images
-- **Accessibilité**: Conformité WCAG
-- **SEO**: Meta tags, Schema.org
+### Back Office (Administration)
+- Tableau de bord avec statistiques
+- Gestion des produits (CRUD)
+- Gestion des catégories
+- Gestion des commandes
+  - Suivi des commandes
+  - Génération de factures PDF
+  - Confirmation de commande
+- Gestion des paramètres du site
+- Statistiques de vente
+- Interface responsive
 
-## 🎯 Améliorations Prévues
-- [ ] Système de notifications en temps réel
-- [ ] Gestion des stocks avancée
-- [ ] Système de fidélité
-- [ ] Blog intégré
-- [ ] Newsletter
-- [ ] Internationalisation
+## Installation
 
-## 🔧 Installation
+1. Cloner le dépôt :
+```bash
+git clone https://github.com/votre-username/lacabanedeva.git
+cd lacabanedeva
+```
 
-\`\`\`bash
-# Cloner le repository
-git clone [URL_DU_REPO]
-
-# Installer les dépendances
+2. Installer les dépendances du backend :
+```bash
+cd server
 npm install
+```
 
-# Lancer en développement
+3. Installer les dépendances du frontend :
+```bash
+cd client
+npm install
+```
+
+4. Configurer les variables d'environnement :
+- Créer un fichier `.env` dans le dossier `server` :
+```
+PORT=5000
+MONGODB_URI=votre_uri_mongodb
+JWT_SECRET=votre_secret_jwt
+```
+- Créer un fichier `.env` dans le dossier `client` :
+```
+REACT_APP_API_URL=http://localhost:5000/api
+```
+
+5. Démarrer le serveur de développement :
+```bash
+# Dans le dossier server
 npm start
 
-# Construire pour la production
-npm run build
-\`\`\`
+# Dans le dossier client
+npm start
+```
 
-## 📚 Structure du Projet
+## Accès au Back Office
 
-\`\`\`
-src/
-├── components/
-│   ├── common/         # Composants réutilisables
-│   ├── layout/         # Composants de structure
-│   └── shop/          # Composants liés à la boutique
-├── contexts/          # Contextes React
-├── hooks/            # Hooks personnalisés
-├── pages/            # Pages principales
-├── styles/           # Styles globaux et thème
-└── utils/            # Utilitaires
-\`\`\`
+1. URL : http://localhost:3000/admin
+2. Identifiants par défaut :
+   - Email : admin@lacabanedeva.fr
+   - Mot de passe : admin123
 
-## 🤝 Contribution
-Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou une pull request.
+## Structure du projet
 
-## 📝 Licence
+```
+lacabanedeva/
+├── client/                 # Frontend React
+│   ├── public/
+│   └── src/
+│       ├── admin/         # Composants du back office
+│       ├── components/    # Composants réutilisables
+│       ├── contexts/      # Contextes React
+│       ├── hooks/         # Hooks personnalisés
+│       ├── pages/         # Pages principales
+│       ├── services/      # Services API
+│       └── styles/        # Styles globaux
+└── server/                # Backend Node.js
+    ├── controllers/       # Contrôleurs
+    ├── middleware/        # Middleware personnalisé
+    ├── models/           # Modèles Mongoose
+    ├── routes/           # Routes API
+    ├── services/         # Services
+    ├── utils/            # Utilitaires
+    └── validators/       # Validateurs
+
+```
+
+## Fonctionnalités détaillées du Back Office
+
+### Tableau de bord
+- Vue d'ensemble des ventes
+- Statistiques des commandes
+- Produits les plus vendus
+- Alertes de stock bas
+- Graphiques de performance
+
+### Gestion des produits
+- Liste des produits avec pagination
+- Ajout/modification/suppression de produits
+- Gestion des images
+- Gestion des stocks
+- Catégorisation des produits
+
+### Gestion des commandes
+- Liste des commandes avec filtres
+- Détails des commandes
+- Mise à jour du statut
+- Génération de documents (factures, bons de livraison)
+- Historique des modifications
+
+### Gestion des catégories
+- Arborescence des catégories
+- Ajout/modification/suppression
+- Association aux produits
+
+### Paramètres
+- Informations de la boutique
+- Configuration des moyens de paiement
+- Options de livraison
+- Gestion des emails automatiques
+
+## Sécurité
+- Authentification JWT
+- Protection CSRF
+- Validation des données
+- Gestion des permissions
+- Logs de sécurité
+
+## Maintenance
+- Sauvegarde automatique
+- Logs d'erreurs
+- Mode maintenance
+- Monitoring des performances
+
+## Contribution
+Les contributions sont les bienvenues ! Pour contribuer :
+1. Forker le projet
+2. Créer une branche (`git checkout -b feature/nouvelle-fonctionnalite`)
+3. Commiter les changements (`git commit -m 'Ajout d'une nouvelle fonctionnalité'`)
+4. Pusher vers la branche (`git push origin feature/nouvelle-fonctionnalite`)
+5. Ouvrir une Pull Request
+
+## Licence
 Ce projet est sous licence MIT.
-
-## 👥 Équipe
-- Eva - Créatrice et Artisane
-- [Autres membres de l'équipe]
