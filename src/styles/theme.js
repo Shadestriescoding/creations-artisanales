@@ -1,126 +1,150 @@
-export const theme = {
+const theme = {
   colors: {
-    primary: '#e4a7b9', // Rose poudré plus doux
-    secondary: '#a7c4bc', // Vert sauge plus doux
-    accent: '#d88c9a', // Rose vintage
-    background: '#fdf6f8', // Fond très légèrement rosé
-    backgroundAlt: '#f8f1f3', // Fond alternatif plus foncé
-    backgroundLight: '#fff9fb', // Fond très clair
-    text: '#2c2c2c',
-    textLight: '#666666',
-    textMuted: '#999999',
-    white: '#ffffff',
-    error: '#e57373',
-    success: '#81c784',
-    warning: '#ffd54f',
-    border: '#e0e0e0',
-    shadow: 'rgba(0, 0, 0, 0.1)',
+    primary: '#E5B5B0', // Rose poudré
+    primaryLight: '#F2D5D0',
+    primaryDark: '#C99B96',
+    accent: '#A4C3B9', // Vert sauge
+    accentLight: '#C6DDD6',
+    accentDark: '#89A69D',
+    background: '#FAF7F7', // Blanc cassé
+    backgroundAlt: '#F0EBEB',
+    text: '#4A4545',
+    textLight: '#847D7D',
+    white: '#FFFFFF',
+    error: '#E77D7D',
+    errorLight: '#FFE9E9',
+    errorDark: '#C65F5F',
+    success: '#7DB982',
+    successLight: '#E9F5EA',
+    successDark: '#5F9A64',
+    border: '#E5E0E0',
+    overlay: 'rgba(74, 69, 69, 0.7)'
   },
-  
+
   typography: {
     titleFont: "'Playfair Display', serif",
     bodyFont: "'Lato', sans-serif",
-    h1: {
-      fontSize: '2.8rem',
-      lineHeight: 1.2,
-      fontWeight: 700,
-      letterSpacing: '-0.02em',
-    },
-    h2: {
-      fontSize: '2.2rem',
-      lineHeight: 1.3,
-      fontWeight: 600,
-      letterSpacing: '-0.01em',
-    },
-    h3: {
-      fontSize: '1.8rem',
-      lineHeight: 1.4,
-      fontWeight: 500,
-    },
-    h4: {
-      fontSize: '1.4rem',
-      lineHeight: 1.4,
-      fontWeight: 500,
-    },
-    body1: {
-      fontSize: '1.1rem',
-      lineHeight: 1.6,
-      fontWeight: 400,
-    },
-    body2: {
-      fontSize: '0.95rem',
-      lineHeight: 1.5,
-      fontWeight: 400,
-    },
-    caption: {
-      fontSize: '0.85rem',
-      lineHeight: 1.4,
-      fontWeight: 400,
-    },
-    button: {
-      fontSize: '1rem',
-      lineHeight: 1.5,
-      fontWeight: 600,
-      textTransform: 'uppercase',
-      letterSpacing: '0.05em',
-    },
+    h1: '3rem',
+    h2: '2.5rem',
+    h3: '2rem',
+    h4: '1.5rem',
+    h5: '1.25rem',
+    h6: '1rem',
+    body: '1rem',
+    small: '0.875rem',
+    tiny: '0.75rem'
   },
-  
+
   spacing: {
-    xxs: '0.125rem',
-    xs: '0.25rem',
-    sm: '0.5rem',
+    xxs: '0.25rem',
+    xs: '0.5rem',
+    sm: '0.75rem',
     md: '1rem',
     lg: '1.5rem',
     xl: '2rem',
     xxl: '3rem',
-    xxxl: '4rem',
+    xxxl: '4rem'
   },
-  
+
   borderRadius: {
     small: '4px',
     medium: '8px',
-    large: '12px',
-    xl: '16px',
-    xxl: '24px',
-    round: '50%',
+    large: '16px',
+    xl: '24px',
+    round: '50%'
   },
-  
+
   shadows: {
-    small: '0 2px 4px rgba(0,0,0,0.1)',
-    medium: '0 4px 6px rgba(0,0,0,0.1)',
-    large: '0 8px 16px rgba(0,0,0,0.1)',
-    hover: '0 8px 20px rgba(0,0,0,0.15)',
-    button: '0 2px 4px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.05)',
-    card: '0 4px 8px rgba(0,0,0,0.05), 0 8px 16px rgba(0,0,0,0.05)',
+    small: '0 2px 4px rgba(0, 0, 0, 0.05)',
+    medium: '0 4px 12px rgba(0, 0, 0, 0.08)',
+    large: '0 8px 24px rgba(0, 0, 0, 0.12)',
+    soft: '0 4px 12px rgba(229, 181, 176, 0.15)', // Ombre douce avec la couleur primaire
+    hover: '0 8px 32px rgba(229, 181, 176, 0.25)' // Ombre au hover avec la couleur primaire
   },
-  
+
   transitions: {
     fast: 'all 0.2s ease',
     medium: 'all 0.3s ease',
     slow: 'all 0.5s ease',
-    bounce: 'all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+    bounce: 'all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)'
   },
-  
+
   breakpoints: {
     mobile: '576px',
     tablet: '768px',
-    desktop: '1024px',
-    wide: '1200px',
-    ultraWide: '1440px',
+    laptop: '992px',
+    desktop: '1200px'
   },
-  
-  container: {
-    padding: '0 1rem',
+
+  layout: {
     maxWidth: '1200px',
-    gutter: '2rem',
+    contentWidth: '800px',
+    sidebarWidth: '300px',
+    headerHeight: '80px',
+    footerHeight: '200px'
   },
-  
+
   zIndex: {
     modal: 1000,
     overlay: 900,
     dropdown: 800,
     header: 700,
-    footer: 600,
-  },
-}; 
+    footer: 600
+  }
+};
+
+// Ajout des variantes de couleurs pour les états
+theme.colors.buttonHover = theme.colors.primaryDark;
+theme.colors.buttonActive = theme.colors.primary;
+theme.colors.buttonDisabled = theme.colors.textLight;
+theme.colors.inputFocus = theme.colors.primaryLight;
+theme.colors.inputError = theme.colors.error;
+theme.colors.inputSuccess = theme.colors.success;
+
+// Ajout des styles spécifiques pour les éléments de navigation
+theme.nav = {
+  height: '60px',
+  background: theme.colors.white,
+  textColor: theme.colors.text,
+  activeColor: theme.colors.primary,
+  hoverColor: theme.colors.primaryLight,
+  mobileBreakpoint: theme.breakpoints.tablet
+};
+
+// Ajout des styles pour les cartes produits
+theme.card = {
+  background: theme.colors.white,
+  border: `1px solid ${theme.colors.border}`,
+  borderRadius: theme.borderRadius.large,
+  shadow: theme.shadows.small,
+  hoverShadow: theme.shadows.hover,
+  padding: theme.spacing.lg,
+  imageRatio: '1/1'
+};
+
+// Ajout des styles pour les formulaires
+theme.form = {
+  inputHeight: '48px',
+  inputPadding: theme.spacing.md,
+  inputBorder: `2px solid ${theme.colors.border}`,
+  inputBorderRadius: theme.borderRadius.medium,
+  inputFocusShadow: `0 0 0 3px ${theme.colors.primaryLight}40`,
+  labelMargin: theme.spacing.xs,
+  helperTextSize: theme.typography.small,
+  errorColor: theme.colors.error,
+  successColor: theme.colors.success
+};
+
+// Ajout des styles pour les boutons
+theme.button = {
+  height: '48px',
+  padding: `${theme.spacing.md} ${theme.spacing.xl}`,
+  borderRadius: theme.borderRadius.medium,
+  fontSize: theme.typography.body,
+  fontWeight: '600',
+  transition: theme.transitions.medium,
+  shadow: theme.shadows.small,
+  hoverShadow: theme.shadows.hover
+};
+
+export default theme; 
