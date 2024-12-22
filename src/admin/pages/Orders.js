@@ -1,272 +1,273 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useToast } from '../../contexts/ToastContext';
+import OrderDetails from '../components/orders/OrderDetails';
 
 const OrdersContainer = styled.div`
-  padding: ${props => props.theme.spacing.lg};
+  padding: ${({ theme }) => theme.spacing.xl};
+`;
+
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
+`;
+
+const Title = styled.h1`
+  color: ${({ theme }) => theme.colors.text};
+  font-family: ${({ theme }) => theme.typography.titleFont};
 `;
 
 const FiltersBar = styled.div`
+  background: ${({ theme }) => theme.colors.white};
+  padding: ${({ theme }) => theme.spacing.lg};
+  border-radius: ${({ theme }) => theme.borderRadius.medium};
+  box-shadow: ${({ theme }) => theme.shadows.small};
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
   display: flex;
-  gap: ${props => props.theme.spacing.md};
-  margin-bottom: ${props => props.theme.spacing.xl};
-  flex-wrap: wrap;
+  gap: ${({ theme }) => theme.spacing.md};
+  align-items: center;
 `;
 
-const FilterSelect = styled.select`
-  padding: ${props => props.theme.spacing.sm} ${props => props.theme.spacing.lg};
-  border: 1px solid ${props => props.theme.colors.backgroundAlt};
-  border-radius: ${props => props.theme.borderRadius.medium};
-  background-color: white;
-  min-width: 200px;
-  
+const Select = styled.select`
+  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+  border: 2px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  font-size: ${({ theme }) => theme.typography.body};
+  color: ${({ theme }) => theme.colors.text};
+  background-color: ${({ theme }) => theme.colors.white};
+  cursor: pointer;
+
   &:focus {
     outline: none;
-    border-color: ${props => props.theme.colors.primary};
-    box-shadow: 0 0 0 2px ${props => props.theme.colors.primary}33;
+    border-color: ${({ theme }) => theme.colors.primary};
   }
 `;
 
 const SearchInput = styled.input`
-  padding: ${props => props.theme.spacing.sm} ${props => props.theme.spacing.lg};
-  border: 1px solid ${props => props.theme.colors.backgroundAlt};
-  border-radius: ${props => props.theme.borderRadius.medium};
-  min-width: 300px;
-  
+  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+  border: 2px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  font-size: ${({ theme }) => theme.typography.body};
+  width: 250px;
+
   &:focus {
     outline: none;
-    border-color: ${props => props.theme.colors.primary};
-    box-shadow: 0 0 0 2px ${props => props.theme.colors.primary}33;
+    border-color: ${({ theme }) => theme.colors.primary};
   }
 `;
 
 const OrdersTable = styled.div`
-  background: white;
-  border-radius: ${props => props.theme.borderRadius.large};
-  box-shadow: ${props => props.theme.shadows.medium};
+  background: ${({ theme }) => theme.colors.white};
+  border-radius: ${({ theme }) => theme.borderRadius.medium};
+  box-shadow: ${({ theme }) => theme.shadows.medium};
   overflow: hidden;
-  
+
   table {
     width: 100%;
     border-collapse: collapse;
-    
-    th, td {
-      padding: ${props => props.theme.spacing.md};
-      text-align: left;
-      border-bottom: 1px solid ${props => props.theme.colors.backgroundAlt};
-    }
-    
-    th {
-      background: ${props => props.theme.colors.backgroundAlt};
-      font-weight: 600;
-      color: ${props => props.theme.colors.text};
-    }
-    
-    tr:hover {
-      background: ${props => props.theme.colors.backgroundAlt}33;
-    }
+  }
+
+  th, td {
+    padding: ${({ theme }) => theme.spacing.md};
+    text-align: left;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  }
+
+  th {
+    background-color: ${({ theme }) => theme.colors.backgroundAlt};
+    font-weight: 600;
+  }
+
+  tr:hover {
+    background-color: ${({ theme }) => theme.colors.backgroundAlt};
   }
 `;
 
 const StatusBadge = styled.span`
-  padding: ${props => props.theme.spacing.xs} ${props => props.theme.spacing.sm};
-  border-radius: ${props => props.theme.borderRadius.small};
-  font-size: 0.85rem;
+  padding: ${({ theme }) => theme.spacing.xxs} ${({ theme }) => theme.spacing.sm};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  font-size: ${({ theme }) => theme.typography.small};
   font-weight: 500;
   
-  ${props => {
-    switch (props.status) {
+  ${({ status, theme }) => {
+    switch (status) {
       case 'pending':
         return `
-          background: ${props.theme.colors.warning}22;
-          color: ${props.theme.colors.warning};
+          background-color: ${theme.colors.warning}20;
+          color: ${theme.colors.warning};
         `;
       case 'processing':
         return `
-          background: ${props.theme.colors.primary}22;
-          color: ${props.theme.colors.primary};
+          background-color: ${theme.colors.primary}20;
+          color: ${theme.colors.primary};
         `;
       case 'shipped':
         return `
-          background: ${props.theme.colors.success}22;
-          color: ${props.theme.colors.success};
+          background-color: ${theme.colors.success}20;
+          color: ${theme.colors.success};
+        `;
+      case 'delivered':
+        return `
+          background-color: ${theme.colors.accent}20;
+          color: ${theme.colors.accent};
         `;
       case 'cancelled':
         return `
-          background: ${props.theme.colors.error}22;
-          color: ${props.theme.colors.error};
+          background-color: ${theme.colors.error}20;
+          color: ${theme.colors.error};
         `;
       default:
-        return `
-          background: ${props.theme.colors.textLight}22;
-          color: ${props.theme.colors.textLight};
-        `;
+        return '';
     }
   }}
 `;
 
 const ActionButton = styled.button`
-  background: none;
+  padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.sm};
   border: none;
-  color: ${props => props.theme.colors.primary};
+  background: none;
   cursor: pointer;
-  padding: ${props => props.theme.spacing.xs};
-  border-radius: ${props => props.theme.borderRadius.small};
-  transition: ${props => props.theme.transitions.fast};
-  
+  color: ${({ theme }) => theme.colors.primary};
+  font-size: ${({ theme }) => theme.typography.small};
+  transition: ${({ theme }) => theme.transitions.fast};
+
   &:hover {
-    background: ${props => props.theme.colors.backgroundAlt};
-  }
-  
-  &:not(:last-child) {
-    margin-right: ${props => props.theme.spacing.xs};
-  }
-`;
-
-const OrderDetails = styled.div`
-  padding: ${props => props.theme.spacing.md};
-  background: ${props => props.theme.colors.backgroundAlt}33;
-  margin-top: -1px;
-  border-bottom: 1px solid ${props => props.theme.colors.backgroundAlt};
-`;
-
-const ProductList = styled.div`
-  display: grid;
-  gap: ${props => props.theme.spacing.sm};
-  margin-top: ${props => props.theme.spacing.sm};
-`;
-
-const ProductItem = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${props => props.theme.spacing.md};
-  padding: ${props => props.theme.spacing.sm};
-  background: white;
-  border-radius: ${props => props.theme.borderRadius.medium};
-  
-  img {
-    width: 50px;
-    height: 50px;
-    border-radius: ${props => props.theme.borderRadius.small};
-    object-fit: cover;
-  }
-  
-  .details {
-    flex: 1;
-    
-    .name {
-      font-weight: 500;
-    }
-    
-    .price {
-      color: ${props => props.theme.colors.textLight};
-      font-size: 0.9rem;
-    }
-  }
-  
-  .quantity {
-    color: ${props => props.theme.colors.textLight};
-    font-weight: 500;
+    color: ${({ theme }) => theme.colors.primaryDark};
   }
 `;
 
 export const Orders = () => {
-  const [expandedOrder, setExpandedOrder] = useState(null);
-  const [filterStatus, setFilterStatus] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [dateRange, setDateRange] = useState('all');
+  const { showToast } = useToast();
+  const [filter, setFilter] = useState('all');
+  const [search, setSearch] = useState('');
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
-  // Ces données seront remplacées par des vraies données de l'API
+  // Données mockées pour les commandes avec plus de détails
   const mockOrders = [
     {
-      id: "ORD-001",
-      date: "2024-01-18",
-      customer: {
-        name: "Marie Dupont",
-        email: "marie.d@example.com"
-      },
-      status: "processing",
-      total: "75.99",
+      id: "CMD001",
+      date: "2024-01-20",
+      customer: "Marie Dupont",
+      email: "marie.dupont@example.com",
+      phone: "06 12 34 56 78",
+      total: "89.99",
+      status: "pending",
+      items: 3,
+      subtotal: "84.99",
+      shipping: "5.00",
       products: [
         {
           id: 1,
           name: "Bracelet en perles roses",
-          price: 25.99,
+          price: 29.99,
           quantity: 2,
-          image: "https://via.placeholder.com/50"
+          image: "https://via.placeholder.com/80"
         },
         {
           id: 2,
-          name: "Collier artisanal doré",
-          price: 24.01,
+          name: "Collier artisanal",
+          price: 25.01,
           quantity: 1,
-          image: "https://via.placeholder.com/50"
+          image: "https://via.placeholder.com/80"
         }
       ]
     },
     {
-      id: "ORD-002",
-      date: "2024-01-17",
-      customer: {
-        name: "Sophie Lambert",
-        email: "sophie.l@example.com"
-      },
-      status: "shipped",
-      total: "120.00",
+      id: "CMD002",
+      date: "2024-01-19",
+      customer: "Jean Martin",
+      email: "jean.martin@example.com",
+      phone: "06 98 76 54 32",
+      total: "145.50",
+      status: "processing",
+      items: 5,
+      subtotal: "140.50",
+      shipping: "5.00",
       products: [
         {
           id: 3,
-          name: "Boucles d'oreilles fleuries",
-          price: 120.00,
+          name: "Mobile origami",
+          price: 45.50,
           quantity: 1,
-          image: "https://via.placeholder.com/50"
+          image: "https://via.placeholder.com/80"
+        },
+        {
+          id: 4,
+          name: "Set de décoration",
+          price: 25.00,
+          quantity: 4,
+          image: "https://via.placeholder.com/80"
         }
       ]
-    }
+    },
+    // ... autres commandes ...
   ];
+
+  const handleStatusChange = async (orderId, newStatus) => {
+    try {
+      // TODO: Appel API pour mettre à jour le statut
+      await new Promise(resolve => setTimeout(resolve, 500));
+      showToast('Statut de la commande mis à jour', 'success');
+    } catch (error) {
+      showToast('Erreur lors de la mise à jour du statut', 'error');
+    }
+  };
+
+  const handleViewDetails = (orderId) => {
+    const order = mockOrders.find(o => o.id === orderId);
+    setSelectedOrder(order);
+  };
 
   const getStatusLabel = (status) => {
     const labels = {
       pending: 'En attente',
       processing: 'En traitement',
-      shipped: 'Expédié',
-      cancelled: 'Annulé'
+      shipped: 'Expédiée',
+      delivered: 'Livrée',
+      cancelled: 'Annulée'
     };
     return labels[status] || status;
   };
 
-  const toggleOrderDetails = (orderId) => {
-    setExpandedOrder(expandedOrder === orderId ? null : orderId);
-  };
+  const filteredOrders = mockOrders.filter(order => {
+    if (filter !== 'all' && order.status !== filter) return false;
+    if (search) {
+      const searchLower = search.toLowerCase();
+      return (
+        order.id.toLowerCase().includes(searchLower) ||
+        order.customer.toLowerCase().includes(searchLower) ||
+        order.email.toLowerCase().includes(searchLower)
+      );
+    }
+    return true;
+  });
 
   return (
     <OrdersContainer>
+      <Header>
+        <Title>Gestion des commandes</Title>
+      </Header>
+
       <FiltersBar>
-        <FilterSelect 
-          value={filterStatus}
-          onChange={(e) => setFilterStatus(e.target.value)}
+        <Select 
+          value={filter} 
+          onChange={(e) => setFilter(e.target.value)}
         >
           <option value="all">Tous les statuts</option>
           <option value="pending">En attente</option>
           <option value="processing">En traitement</option>
-          <option value="shipped">Expédié</option>
-          <option value="cancelled">Annulé</option>
-        </FilterSelect>
-
-        <FilterSelect
-          value={dateRange}
-          onChange={(e) => setDateRange(e.target.value)}
-        >
-          <option value="all">Toutes les dates</option>
-          <option value="today">Aujourd'hui</option>
-          <option value="week">Cette semaine</option>
-          <option value="month">Ce mois</option>
-        </FilterSelect>
+          <option value="shipped">Expédiée</option>
+          <option value="delivered">Livrée</option>
+          <option value="cancelled">Annulée</option>
+        </Select>
 
         <SearchInput
           type="text"
           placeholder="Rechercher une commande..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
       </FiltersBar>
 
@@ -274,63 +275,46 @@ export const Orders = () => {
         <table>
           <thead>
             <tr>
-              <th>Commande</th>
+              <th>N° Commande</th>
               <th>Date</th>
               <th>Client</th>
+              <th>Articles</th>
               <th>Total</th>
               <th>Statut</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {mockOrders.map(order => (
-              <React.Fragment key={order.id}>
-                <tr>
-                  <td>{order.id}</td>
-                  <td>{order.date}</td>
-                  <td>
-                    <div>{order.customer.name}</div>
-                    <div style={{ color: '#666', fontSize: '0.9em' }}>{order.customer.email}</div>
-                  </td>
-                  <td>{order.total}€</td>
-                  <td>
-                    <StatusBadge status={order.status}>
-                      {getStatusLabel(order.status)}
-                    </StatusBadge>
-                  </td>
-                  <td>
-                    <ActionButton onClick={() => toggleOrderDetails(order.id)}>
-                      {expandedOrder === order.id ? '🔼' : '🔽'}
-                    </ActionButton>
-                    <ActionButton>✏️</ActionButton>
-                  </td>
-                </tr>
-                {expandedOrder === order.id && (
-                  <tr>
-                    <td colSpan="6">
-                      <OrderDetails>
-                        <h4>Détails de la commande</h4>
-                        <ProductList>
-                          {order.products.map(product => (
-                            <ProductItem key={product.id}>
-                              <img src={product.image} alt={product.name} />
-                              <div className="details">
-                                <div className="name">{product.name}</div>
-                                <div className="price">{product.price}€</div>
-                              </div>
-                              <div className="quantity">x{product.quantity}</div>
-                            </ProductItem>
-                          ))}
-                        </ProductList>
-                      </OrderDetails>
-                    </td>
-                  </tr>
-                )}
-              </React.Fragment>
+            {filteredOrders.map(order => (
+              <tr key={order.id}>
+                <td>{order.id}</td>
+                <td>{new Date(order.date).toLocaleDateString('fr-FR')}</td>
+                <td>{order.customer}</td>
+                <td>{order.items} article(s)</td>
+                <td>{order.total}€</td>
+                <td>
+                  <StatusBadge status={order.status}>
+                    {getStatusLabel(order.status)}
+                  </StatusBadge>
+                </td>
+                <td>
+                  <ActionButton onClick={() => handleViewDetails(order.id)}>
+                    Détails
+                  </ActionButton>
+                </td>
+              </tr>
             ))}
           </tbody>
         </table>
       </OrdersTable>
+
+      {selectedOrder && (
+        <OrderDetails
+          order={selectedOrder}
+          onClose={() => setSelectedOrder(null)}
+          onUpdateStatus={handleStatusChange}
+        />
+      )}
     </OrdersContainer>
   );
 }; 
