@@ -1,45 +1,53 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from './styles/GlobalStyle';
 import { theme } from './styles/theme';
+import { ToastProvider } from './contexts/ToastContext';
 
 // Composants de mise en page
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import Navigation from './components/layout/Navigation';
+import ScrollToTop from './components/common/ScrollToTop';
+import LoadingSpinner from './components/common/LoadingSpinner';
 
-// Pages
-import Home from './pages/Home';
-import Shop from './pages/Shop';
-import About from './pages/About';
-import Contact from './pages/Contact';
-import Cart from './pages/Cart';
-import Checkout from './pages/Checkout';
-import Admin from './pages/Admin';
+// Chargement paresseux des pages
+const Home = lazy(() => import('./pages/Home'));
+const Shop = lazy(() => import('./pages/Shop'));
+const About = lazy(() => import('./pages/About'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Cart = lazy(() => import('./pages/Cart'));
+const Checkout = lazy(() => import('./pages/Checkout'));
+const Admin = lazy(() => import('./pages/Admin'));
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <Router>
-        <div className="app">
-          <Header />
-          <Navigation />
-          <main>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/boutique" element={<Shop />} />
-              <Route path="/a-propos" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/panier" element={<Cart />} />
-              <Route path="/commande" element={<Checkout />} />
-              <Route path="/admin/*" element={<Admin />} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-      </Router>
+      <ToastProvider>
+        <GlobalStyle />
+        <Router>
+          <div className="app">
+            <Header />
+            <Navigation />
+            <main>
+              <Suspense fallback={<LoadingSpinner text="Chargement..." />}>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/boutique" element={<Shop />} />
+                  <Route path="/a-propos" element={<About />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/panier" element={<Cart />} />
+                  <Route path="/commande" element={<Checkout />} />
+                  <Route path="/admin/*" element={<Admin />} />
+                </Routes>
+              </Suspense>
+            </main>
+            <Footer />
+            <ScrollToTop />
+          </div>
+        </Router>
+      </ToastProvider>
     </ThemeProvider>
   );
 }
