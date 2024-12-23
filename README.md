@@ -1,7 +1,12 @@
 # La Cabane d'Eva - Site E-commerce
 
+![CI](https://github.com/Shadestriescoding/creations-artisanales/workflows/CI/badge.svg)
+![Deploy](https://github.com/Shadestriescoding/creations-artisanales/workflows/Deploy%20to%20GitHub%20Pages/badge.svg)
+
 ## Description
 Site e-commerce pour La Cabane d'Eva, une boutique de créations artisanales.
+
+[🌐 Voir le site](https://shadestriescoding.github.io/creations-artisanales/)
 
 ## Technologies utilisées
 - Frontend : React.js, Styled Components
