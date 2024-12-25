@@ -22,8 +22,8 @@ const theme = {
     },
 
     typography: {
-        titleFont: "'Playfair Display', serif",
-        bodyFont: "'Lato', sans-serif",
+        titleFont: '\'Playfair Display\', serif',
+        bodyFont: '\'Lato\', sans-serif',
         h1: '3rem',
         h2: '2.5rem',
         h3: '2rem',

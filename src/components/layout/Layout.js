@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 
@@ -19,6 +19,24 @@ const MainContent = styled.main`
     padding: 2rem;
     transition: opacity 0.3s ease;
     opacity: ${props => props.isTransitioning ? 0 : 1};
+`;
+
+const NavList = styled.ul`
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    padding: 1rem 2rem;
+    margin: 0;
+    background-color: ${props => props.theme.colors.primary};
+`;
+
+const NavLink = styled(Link)`
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    &:hover {
+        text-decoration: underline;
+    }
 `;
 
 const Layout = ({ title = 'La cabane d\'Eva', description = 'Créations artisanales au crochet', children }) => {
@@ -45,11 +63,11 @@ const Layout = ({ title = 'La cabane d\'Eva', description = 'Créations artisana
 
             <LayoutWrapper>
                 <nav>
-                    <ul>
-                        <li><a href='/'>Accueil</a></li>
-                        <li><a href='/boutique'>Boutique</a></li>
-                        <li><a href='/contact'>Contact</a></li>
-                    </ul>
+                    <NavList>
+                        <li><NavLink to='/'>Accueil</NavLink></li>
+                        <li><NavLink to='/shop'>Boutique</NavLink></li>
+                        <li><NavLink to='/contact'>Contact</NavLink></li>
+                    </NavList>
                 </nav>
                 <MainContent isTransitioning={isPageTransitioning}>
                     <Outlet />
