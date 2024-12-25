@@ -1,9 +1,9 @@
 import { createGlobalStyle } from 'styled-components';
 
-const GlobalStyles = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Lato:wght@300;400;700&display=swap');
+export const GlobalStyles = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Lato:wght@300;400;700&display=swap');
 
-  *, *::before, *::after {
+  * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -15,78 +15,87 @@ const GlobalStyles = createGlobalStyle`
   }
 
   body {
-    font-family: ${({ theme }) => theme.typography.bodyFont};
-    background-color: ${({ theme }) => theme.colors.background};
-    color: ${({ theme }) => theme.colors.text};
-    line-height: 1.6;
+    font-family: ${props => props.theme.typography.bodyFont};
+    color: ${props => props.theme.colors.text};
+    line-height: ${props => props.theme.typography.body.lineHeight};
+    background-color: ${props => props.theme.colors.background};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: ${({ theme }) => theme.typography.titleFont};
-    font-weight: 600;
-    line-height: 1.3;
-    margin-bottom: ${({ theme }) => theme.spacing.md};
+    font-family: ${props => props.theme.typography.titleFont};
+    margin-bottom: ${props => props.theme.spacing.md};
+    color: ${props => props.theme.colors.text};
+    font-weight: 500;
   }
 
-  h1 { font-size: ${({ theme }) => theme.typography.h1}; }
-  h2 { font-size: ${({ theme }) => theme.typography.h2}; }
-  h3 { font-size: ${({ theme }) => theme.typography.h3}; }
-  h4 { font-size: ${({ theme }) => theme.typography.h4}; }
-  h5 { font-size: ${({ theme }) => theme.typography.h5}; }
-  h6 { font-size: ${({ theme }) => theme.typography.h6}; }
+  h1 {
+    font-size: ${props => props.theme.typography.h1.fontSize};
+    letter-spacing: ${props => props.theme.typography.h1.letterSpacing};
+    font-weight: ${props => props.theme.typography.h1.fontWeight};
+  }
+
+  h2 {
+    font-size: ${props => props.theme.typography.h2.fontSize};
+    letter-spacing: ${props => props.theme.typography.h2.letterSpacing};
+  }
+
+  h3 {
+    font-size: ${props => props.theme.typography.h3.fontSize};
+    letter-spacing: ${props => props.theme.typography.h3.letterSpacing};
+  }
 
   p {
-    margin-bottom: ${({ theme }) => theme.spacing.md};
-  }
-
-  a {
-    color: ${({ theme }) => theme.colors.primary};
-    text-decoration: none;
-    transition: ${({ theme }) => theme.transitions.fast};
-
-    &:hover {
-      color: ${({ theme }) => theme.colors.primaryDark};
-    }
+    margin-bottom: ${props => props.theme.spacing.md};
   }
 
   img {
     max-width: 100%;
     height: auto;
+    display: block;
   }
 
   button {
+    font-family: ${props => props.theme.typography.bodyFont};
     cursor: pointer;
     border: none;
     outline: none;
     background: none;
-    font-family: inherit;
-  }
-
-  input, textarea, select {
-    font-family: inherit;
     font-size: inherit;
   }
 
-  ul, ol {
-    list-style: none;
+  a {
+    color: inherit;
+    text-decoration: none;
+    transition: ${props => props.theme.transitions.fast};
   }
 
   ::selection {
-    background-color: ${({ theme }) => theme.colors.primary}40;
-    color: ${({ theme }) => theme.colors.text};
+    background-color: ${props => props.theme.colors.primary};
+    color: white;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: ${props => props.theme.colors.backgroundAlt};
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: ${props => props.theme.colors.primary};
+    border-radius: ${props => props.theme.borderRadius.medium};
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: ${props => props.theme.colors.primaryDark};
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
     html {
       font-size: 14px;
     }
-
-    h1 { font-size: calc(${({ theme }) => theme.typography.h1} * 0.8); }
-    h2 { font-size: calc(${({ theme }) => theme.typography.h2} * 0.8); }
-    h3 { font-size: calc(${({ theme }) => theme.typography.h3} * 0.8); }
   }
 `;
-
-export default GlobalStyles;

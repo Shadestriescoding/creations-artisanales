@@ -1,49 +1,30 @@
-import React, { useState } from 'react';
-import { Container, Text, Flex, Button, Spacer } from '../components/common';
-import ProductManager from '../components/admin/ProductManager';
-import { useAuth } from '../contexts/AuthContext';
-import { Navigate } from 'react-router-dom';
+import React from 'react';
+import styled from 'styled-components';
+
+const AdminContainer = styled.div`
+  max-width: ${props => props.theme.container.maxWidth};
+  margin: 0 auto;
+  padding: ${props => props.theme.spacing.xl} ${props => props.theme.spacing.md};
+`;
+
+const Title = styled.h1`
+  text-align: center;
+  color: ${props => props.theme.colors.text};
+  margin-bottom: ${props => props.theme.spacing.xl};
+
+  span {
+    color: ${props => props.theme.colors.primary};
+  }
+`;
 
 const Admin = () => {
-  const { user, isAdmin } = useAuth();
-  const [activeTab, setActiveTab] = useState('products');
-
-  if (!user || !isAdmin) {
-    return <Navigate to="/login" replace />;
-  }
-
-  const tabs = [
-    { id: 'products', label: 'Produits' },
-    { id: 'orders', label: 'Commandes' },
-    { id: 'settings', label: 'Paramètres' }
-  ];
-
   return (
-    <Container>
-      <Spacer size="xl" />
-      <Text variant="h1" align="center">Administration</Text>
-      <Spacer size="xl" />
-
-      <Flex justify="center" gap="small">
-        {tabs.map(tab => (
-          <Button
-            key={tab.id}
-            variant={activeTab === tab.id ? 'primary' : 'outline'}
-            onClick={() => setActiveTab(tab.id)}
-          >
-            {tab.label}
-          </Button>
-        ))}
-      </Flex>
-
-      <Spacer size="xl" />
-
-      {activeTab === 'products' && <ProductManager />}
-      {activeTab === 'orders' && <Text>Gestion des commandes à venir</Text>}
-      {activeTab === 'settings' && <Text>Paramètres à venir</Text>}
-
-      <Spacer size="xxxl" />
-    </Container>
+    <AdminContainer>
+      <Title>
+        <span>Administration</span>
+      </Title>
+      <p>L'interface d'administration est en cours de développement...</p>
+    </AdminContainer>
   );
 };
 

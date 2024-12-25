@@ -1,5 +1,5 @@
 {
-  "name": "la-cabane-eva",
+  "name": "eva-boutique",
   "version": "0.1.0",
   "private": true,
   "homepage": "https://shadestriescoding.github.io/creations-artisanales",
@@ -32,8 +32,7 @@
     "dev": "concurrently \"npm run server\" \"npm start\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "process-images": "node scripts/processImages.js"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
