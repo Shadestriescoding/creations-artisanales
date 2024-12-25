@@ -5,21 +5,15 @@ import { CartProvider } from './contexts/CartContext';
 import { NotificationProvider } from './contexts/NotificationContext';
 import GlobalStyle from './styles/GlobalStyle';
 import theme from './styles/theme';
-import Admin from './pages/Admin';
 
-// Layouts
-import Layout from './components/layout/Layout';
-import AdminLayout from './admin/components/AdminLayout';
-
-// Pages publiques
+// Pages
 import Home from './pages/Home';
 import Shop from './pages/Shop';
 import Contact from './pages/Contact';
-import ProductDetails from './pages/ProductDetails';
 import NotFound from './pages/NotFound';
 
-// Pages admin
-import AdminRoutes from './admin/AdminRoutes';
+// Layout
+import Layout from './components/layout/Layout';
 
 const App = () => {
   return (
@@ -29,20 +23,12 @@ const App = () => {
           <GlobalStyle />
           <Router>
             <Routes>
-              {/* Routes publiques */}
-              <Route path="/" element={<Layout />}>
+              <Route element={<Layout />}>
                 <Route index element={<Home />} />
                 <Route path="shop" element={<Shop />} />
-                <Route path="shop/:productId" element={<ProductDetails />} />
                 <Route path="contact" element={<Contact />} />
-                <Route path="/admin" element={<Admin />} />
+                <Route path="*" element={<NotFound />} />
               </Route>
-
-              {/* Routes admin */}
-              <Route path="/admin/*" element={<AdminRoutes />} />
-
-              {/* Route 404 */}
-              <Route path="*" element={<NotFound />} />
             </Routes>
           </Router>
         </CartProvider>
