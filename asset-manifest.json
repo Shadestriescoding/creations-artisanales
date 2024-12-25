@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/creations-artisanales/static/js/main.4ae1e93c.js",
+    "main.js": "/creations-artisanales/static/js/main.765d45cf.js",
     "index.html": "/creations-artisanales/index.html",
-    "main.4ae1e93c.js.map": "/creations-artisanales/static/js/main.4ae1e93c.js.map"
+    "main.765d45cf.js.map": "/creations-artisanales/static/js/main.765d45cf.js.map"
   },
   "entrypoints": [
-    "static/js/main.4ae1e93c.js"
+    "static/js/main.765d45cf.js"
   ]
 }
