@@ -9,7 +9,6 @@ permissions:
   contents: write
   pages: write
   id-token: write
-  deployments: write
 
 jobs:
   build-and-deploy:
@@ -32,11 +31,8 @@ jobs:
         env:
           CI: false
 
-      - name: Deploy
-        run: |
-          git config --global user.name "Shadestriescoding"
-          git config --global user.email "tristan.beguet@edu.devinci.fr"
-          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-          npm run deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build
+          branch: gh-pages 
