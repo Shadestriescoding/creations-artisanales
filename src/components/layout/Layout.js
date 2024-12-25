@@ -139,19 +139,19 @@ const Layout = ({ title = 'La cabane d\'Eva', description = 'Créations artisana
                 <meta name='description' content={description} />
                 <meta name='viewport' content='width=device-width, initial-scale=1' />
                 <link rel='icon' href='/favicon.ico' />
-                <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+                <link href='https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Lato:wght@300;400;700&display=swap' rel='stylesheet' />
             </Helmet>
 
             <LayoutWrapper>
                 <Header>
                     <Container>
-                        <Flex justify="space-between" align="center" padding="md">
-                            <Logo to="/">La Cabane d'Eva</Logo>
+                        <Flex justify='space-between' align='center' padding='md'>
+                            <Logo to='/'>La Cabane d'Eva</Logo>
                             <nav>
                                 <NavList>
-                                    <li><NavLink to="/" className={location.pathname === "/" ? "active" : ""}>Accueil</NavLink></li>
-                                    <li><NavLink to="/shop" className={location.pathname === "/shop" ? "active" : ""}>Boutique</NavLink></li>
-                                    <li><NavLink to="/contact" className={location.pathname === "/contact" ? "active" : ""}>Contact</NavLink></li>
+                                    <li><NavLink to='/' className={location.pathname === '/' ? 'active' : ''}>Accueil</NavLink></li>
+                                    <li><NavLink to='/shop' className={location.pathname === '/shop' ? 'active' : ''}>Boutique</NavLink></li>
+                                    <li><NavLink to='/contact' className={location.pathname === '/contact' ? 'active' : ''}>Contact</NavLink></li>
                                     <li>
                                         <CartButton onClick={toggleCart}>
                                             <FiShoppingBag />
@@ -171,22 +171,22 @@ const Layout = ({ title = 'La cabane d\'Eva', description = 'Créations artisana
 
                 <Footer>
                     <Container>
-                        <Flex direction="column" align="center" gap="xl">
-                            <Logo to="/">La Cabane d'Eva</Logo>
-                            <Text variant="subtitle" align="center" style={{ maxWidth: '600px' }}>
+                        <Flex direction='column' align='center' gap='xl'>
+                            <Logo to='/'>La Cabane d'Eva</Logo>
+                            <Text variant='subtitle' align='center' style={{ maxWidth: '600px' }}>
                                 Créations artisanales au crochet, faites avec amour et passion.
                                 Chaque pièce est unique et raconte une histoire.
                             </Text>
-                            <Flex gap="lg">
-                                <SocialLink href="https://instagram.com/lacabanedeva" target="_blank" rel="noopener noreferrer">
+                            <Flex gap='lg'>
+                                <SocialLink href='https://instagram.com/lacabanedeva' target='_blank' rel='noopener noreferrer'>
                                     <FiInstagram />
                                 </SocialLink>
-                                <SocialLink href="https://facebook.com/lacabanedeva" target="_blank" rel="noopener noreferrer">
+                                <SocialLink href='https://facebook.com/lacabanedeva' target='_blank' rel='noopener noreferrer'>
                                     <FiFacebook />
                                 </SocialLink>
                             </Flex>
-                            <Spacer size="lg" />
-                            <Text variant="small" color="textLight">
+                            <Spacer size='lg' />
+                            <Text variant='small' color='textLight'>
                                 &copy; {new Date().getFullYear()} La Cabane d'Eva. Tous droits réservés.
                             </Text>
                         </Flex>
