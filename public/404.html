@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Page non trouvée - La Cabane d'Eva</title>
+    <script>
+        // Redirection vers la page d'accueil avec le bon hash
+        window.location.href = window.location.origin + window.location.pathname.split('/').slice(0, -1).join('/') + '/#/404';
+    </script>
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #F5F0EE;
+            color: #4A4545;
+        }
+        
+        .container {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #E5B5B0;
+            margin-bottom: 1rem;
+        }
+        
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .redirect {
+            font-size: 0.9rem;
+            color: #847D7D;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Page non trouvée</h1>
+        <p>Nous vous redirigeons vers la page d'accueil...</p>
+        <p class="redirect">Si la redirection ne fonctionne pas, <a href="/">cliquez ici</a></p>
+    </div>
+</body>
+</html> 

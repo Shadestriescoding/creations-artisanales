@@ -32,7 +32,8 @@
     "dev": "concurrently \"npm run server\" \"npm start\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "process-images": "node scripts/processImages.js"
   },
   "eslintConfig": {
     "extends": [

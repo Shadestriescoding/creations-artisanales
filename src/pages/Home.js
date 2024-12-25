@@ -1,76 +1,110 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Container, Text, Grid, Card, Button, Flex, Spacer } from '../components/common';
+import { Link } from 'react-router-dom';
 
-const HomeContainer = styled.div`
-  padding: ${({ theme }) => theme.spacing.xxl};
+const HeroBanner = styled.div`
+  background-color: ${({ theme }) => theme.colors.primaryLight};
+  padding: ${({ theme }) => theme.spacing.xxxl} 0;
+  margin-bottom: ${({ theme }) => theme.spacing.xxl};
   text-align: center;
 `;
 
-const Hero = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacing.xxl};
-`;
-
-const Title = styled.h1`
-  font-family: ${({ theme }) => theme.typography.titleFont};
-  font-size: 3.5rem;
-  color: ${({ theme }) => theme.colors.primary};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
-`;
-
-const Subtitle = styled.p`
-  font-size: 1.2rem;
-  color: ${({ theme }) => theme.colors.text};
-  max-width: 600px;
-  margin: 0 auto;
-  line-height: 1.6;
-`;
-
-const FeaturesGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: ${({ theme }) => theme.spacing.xl};
-  margin-top: ${({ theme }) => theme.spacing.xxl};
-`;
-
-const FeatureCard = styled.div`
-  padding: ${({ theme }) => theme.spacing.xl};
-  background: ${({ theme }) => theme.colors.white};
+const CategoryImage = styled.img`
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
   border-radius: ${({ theme }) => theme.borderRadius.large};
-  box-shadow: ${({ theme }) => theme.shadows.medium};
-  transition: ${({ theme }) => theme.transitions.medium};
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: ${({ theme }) => theme.shadows.large};
-  }
+  margin-bottom: ${({ theme }) => theme.spacing.md};
 `;
+
+const categories = [
+  {
+    id: 'deco',
+    name: 'Décorations',
+    image: '/assets/images/categories/deco_sapin_crochet.jpg',
+    description: 'Ajoutez une touche unique à votre intérieur'
+  },
+  {
+    id: 'jouets',
+    name: 'Jouets',
+    image: '/assets/images/categories/legumes_crochet.jpg',
+    description: 'Des jouets faits main pour petits et grands'
+  },
+  {
+    id: 'suspensions',
+    name: 'Suspensions',
+    image: '/assets/images/categories/suspension_bois_crochet.jpg',
+    description: 'Décorez vos murs avec style'
+  }
+];
 
 const Home = () => {
   return (
-    <HomeContainer>
-      <Hero>
-        <Title>Bienvenue à La Cabane d'Eva</Title>
-        <Subtitle>
-          Découvrez des créations artisanales uniques au crochet, faites avec amour et passion.
-          Chaque pièce raconte une histoire et apporte une touche de douceur à votre quotidien.
-        </Subtitle>
-      </Hero>
+    <>
+      <HeroBanner>
+        <Container>
+          <Text variant="h1" color="primary">
+            Bienvenue à La Cabane d'Eva
+          </Text>
+          <Spacer size="md" />
+          <Text variant="subtitle" align="center" style={{ maxWidth: '600px', margin: '0 auto' }}>
+            Découvrez des créations artisanales uniques au crochet, faites avec amour et passion.
+            Chaque pièce raconte une histoire et apporte une touche de douceur à votre quotidien.
+          </Text>
+          <Spacer size="xl" />
+          <Button as={Link} to="/shop" size="large">
+            Découvrir la boutique
+          </Button>
+        </Container>
+      </HeroBanner>
 
-      <FeaturesGrid>
-        <FeatureCard>
-          <h3>Créations Uniques</h3>
-          <p>Chaque pièce est fabriquée à la main avec soin et attention aux détails.</p>
-        </FeatureCard>
-        <FeatureCard>
-          <h3>Matériaux de Qualité</h3>
-          <p>Nous utilisons uniquement des matériaux soigneusement sélectionnés pour nos créations.</p>
-        </FeatureCard>
-        <FeatureCard>
-          <h3>Sur Mesure</h3>
-          <p>Possibilité de personnaliser vos commandes selon vos envies.</p>
-        </FeatureCard>
-      </FeaturesGrid>
-    </HomeContainer>
+      <Container>
+        <Text variant="h2" align="center">Nos Créations</Text>
+        <Spacer size="xl" />
+        
+        <Grid columns={3} gap="large">
+          {categories.map(category => (
+            <Grid.Item key={category.id}>
+              <Card hoverable>
+                <CategoryImage src={category.image} alt={category.name} />
+                <Flex direction="column" padding={({ theme }) => theme.spacing.lg}>
+                  <Text variant="h4">{category.name}</Text>
+                  <Text variant="subtitle">{category.description}</Text>
+                  <Spacer size="md" />
+                  <Button 
+                    as={Link} 
+                    to={`/shop?category=${category.id}`}
+                    variant="outline"
+                  >
+                    Voir plus
+                  </Button>
+                </Flex>
+              </Card>
+            </Grid.Item>
+          ))}
+        </Grid>
+
+        <Spacer size="xxxl" />
+
+        <Card padding="large">
+          <Flex direction="column" align="center" gap="large">
+            <Text variant="h3" align="center">
+              Envie d'une création sur mesure ?
+            </Text>
+            <Text variant="subtitle" align="center">
+              Je peux créer des pièces uniques selon vos envies et vos besoins.
+              N'hésitez pas à me contacter pour en discuter !
+            </Text>
+            <Button as={Link} to="/contact" variant="secondary" size="large">
+              Me contacter
+            </Button>
+          </Flex>
+        </Card>
+
+        <Spacer size="xxxl" />
+      </Container>
+    </>
   );
 };
 

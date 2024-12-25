@@ -5,6 +5,7 @@ import { CartProvider } from './contexts/CartContext';
 import { ToastProvider } from './contexts/ToastContext';
 import GlobalStyle from './styles/GlobalStyle';
 import theme from './styles/theme';
+import Admin from './pages/Admin';
 
 // Layouts
 import Layout from './components/layout/Layout';
@@ -34,6 +35,7 @@ const App = () => {
                 <Route path="shop" element={<Shop />} />
                 <Route path="shop/:productId" element={<ProductDetails />} />
                 <Route path="contact" element={<Contact />} />
+                <Route path="/admin" element={<Admin />} />
               </Route>
 
               {/* Routes admin */}

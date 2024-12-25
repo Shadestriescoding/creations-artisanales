@@ -1,87 +1,26 @@
 import React, { useState } from 'react';
+import { Container, Text, Card, Button, Input, Flex, Spacer, Grid } from '../components/common';
 import styled from 'styled-components';
+import { FiMail, FiInstagram, FiFacebook } from 'react-icons/fi';
 
-const ContactContainer = styled.div`
-  max-width: 600px;
-  margin: 0 auto;
-  padding: ${({ theme }) => theme.spacing.xxl};
-`;
-
-const Title = styled.h1`
-  font-family: ${({ theme }) => theme.typography.titleFont};
-  color: ${({ theme }) => theme.colors.primary};
-  text-align: center;
-  margin-bottom: ${({ theme }) => theme.spacing.xl};
-`;
-
-const Form = styled.form`
+const SocialLink = styled.a`
   display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.lg};
-`;
-
-const FormGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.xs};
-`;
-
-const Label = styled.label`
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
   color: ${({ theme }) => theme.colors.text};
-  font-weight: 500;
-`;
-
-const Input = styled.input`
-  padding: ${({ theme }) => theme.spacing.md};
-  border: 2px solid ${({ theme }) => theme.colors.border};
+  text-decoration: none;
+  padding: ${({ theme }) => theme.spacing.sm};
   border-radius: ${({ theme }) => theme.borderRadius.medium};
-  font-size: 1rem;
   transition: ${({ theme }) => theme.transitions.fast};
-
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.primary};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.primaryLight}40;
-  }
-`;
-
-const TextArea = styled.textarea`
-  padding: ${({ theme }) => theme.spacing.md};
-  border: 2px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.borderRadius.medium};
-  font-size: 1rem;
-  min-height: 150px;
-  resize: vertical;
-  font-family: inherit;
-  transition: ${({ theme }) => theme.transitions.fast};
-
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.primary};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.primaryLight}40;
-  }
-`;
-
-const SubmitButton = styled.button`
-  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.xl};
-  background-color: ${({ theme }) => theme.colors.primary};
-  color: white;
-  border: none;
-  border-radius: ${({ theme }) => theme.borderRadius.medium};
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: ${({ theme }) => theme.transitions.medium};
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.primaryDark};
+    background-color: ${({ theme }) => theme.colors.primaryLight};
+    color: ${({ theme }) => theme.colors.primary};
     transform: translateY(-2px);
   }
 
-  &:disabled {
-    background-color: ${({ theme }) => theme.colors.border};
-    cursor: not-allowed;
-    transform: none;
+  svg {
+    font-size: 1.5rem;
   }
 `;
 
@@ -89,6 +28,7 @@ const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    subject: '',
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -112,6 +52,7 @@ const Contact = () => {
     setFormData({
       name: '',
       email: '',
+      subject: '',
       message: ''
     });
     setIsSubmitting(false);
@@ -119,46 +60,86 @@ const Contact = () => {
   };
 
   return (
-    <ContactContainer>
-      <Title>Contactez-nous</Title>
-      <Form onSubmit={handleSubmit}>
-        <FormGroup>
-          <Label htmlFor="name">Nom</Label>
-          <Input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label htmlFor="email">Email</Label>
-          <Input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label htmlFor="message">Message</Label>
-          <TextArea
-            id="message"
-            name="message"
-            value={formData.message}
-            onChange={handleChange}
-            required
-          />
-        </FormGroup>
-        <SubmitButton type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Envoi en cours...' : 'Envoyer'}
-        </SubmitButton>
-      </Form>
-    </ContactContainer>
+    <Container size="small">
+      <Spacer size="xl" />
+      <Text variant="h1" align="center">Contactez-moi</Text>
+      <Text variant="subtitle" align="center">
+        Une question ? Une commande personnalisée ? N'hésitez pas à me contacter !
+      </Text>
+      <Spacer size="xl" />
+
+      <Grid columns={1} gap="large">
+        <Grid.Item>
+          <Card padding="large">
+            <form onSubmit={handleSubmit}>
+              <Flex direction="column" gap="medium">
+                <Input
+                  label="Nom"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+                <Input
+                  label="Email"
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+                <Input
+                  label="Sujet"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  required
+                />
+                <Input
+                  label="Message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                  as="textarea"
+                  rows={6}
+                />
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  style={{ alignSelf: 'flex-end' }}
+                >
+                  {isSubmitting ? 'Envoi en cours...' : 'Envoyer'}
+                </Button>
+              </Flex>
+            </form>
+          </Card>
+        </Grid.Item>
+
+        <Grid.Item>
+          <Card padding="large">
+            <Text variant="h3">Retrouvez-moi aussi sur</Text>
+            <Spacer size="md" />
+            <Flex direction="column" gap="medium">
+              <SocialLink href="mailto:contact@lacabanedeva.fr" target="_blank" rel="noopener noreferrer">
+                <FiMail />
+                contact@lacabanedeva.fr
+              </SocialLink>
+              <SocialLink href="https://instagram.com/lacabanedeva" target="_blank" rel="noopener noreferrer">
+                <FiInstagram />
+                @lacabanedeva
+              </SocialLink>
+              <SocialLink href="https://facebook.com/lacabanedeva" target="_blank" rel="noopener noreferrer">
+                <FiFacebook />
+                La Cabane d'Eva
+              </SocialLink>
+            </Flex>
+          </Card>
+        </Grid.Item>
+      </Grid>
+
+      <Spacer size="xxxl" />
+    </Container>
   );
 };
 
