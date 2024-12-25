@@ -2,7 +2,7 @@ import React from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { CartProvider } from './contexts/CartContext';
-import { ToastProvider } from './contexts/ToastContext';
+import { NotificationProvider } from './contexts/NotificationContext';
 import GlobalStyle from './styles/GlobalStyle';
 import theme from './styles/theme';
 import Admin from './pages/Admin';
@@ -24,7 +24,7 @@ import AdminRoutes from './admin/AdminRoutes';
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
-      <ToastProvider>
+      <NotificationProvider>
         <CartProvider>
           <GlobalStyle />
           <Router>
@@ -46,7 +46,7 @@ const App = () => {
             </Routes>
           </Router>
         </CartProvider>
-      </ToastProvider>
+      </NotificationProvider>
     </ThemeProvider>
   );
 };
