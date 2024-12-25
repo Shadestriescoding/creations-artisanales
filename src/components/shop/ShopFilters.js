@@ -28,7 +28,7 @@ const FilterGroup = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: ${props => props.theme.spacing.lg};
   align-items: start;
-  
+
   @media (max-width: ${props => props.theme.breakpoints.mobile}) {
     grid-template-columns: 1fr;
     gap: ${props => props.theme.spacing.md};
@@ -56,7 +56,7 @@ const Select = styled.select`
   font-family: ${props => props.theme.typography.bodyFont};
   cursor: pointer;
   transition: ${props => props.theme.transitions.fast};
-  
+
   &:focus {
     outline: none;
     border-color: ${props => props.theme.colors.primary};
@@ -76,7 +76,7 @@ const SearchInput = styled.input`
   color: ${props => props.theme.colors.text};
   font-family: ${props => props.theme.typography.bodyFont};
   transition: ${props => props.theme.transitions.fast};
-  
+
   &:focus {
     outline: none;
     border-color: ${props => props.theme.colors.primary};
@@ -107,7 +107,7 @@ const PriceInput = styled.input`
   color: ${props => props.theme.colors.text};
   font-family: ${props => props.theme.typography.bodyFont};
   transition: ${props => props.theme.transitions.fast};
-  
+
   &:focus {
     outline: none;
     border-color: ${props => props.theme.colors.primary};
@@ -150,7 +150,7 @@ const ResetButton = styled.button`
   }
 `;
 
-const ShopFilters = ({ 
+const ShopFilters = ({
   categories,
   selectedCategory,
   onCategoryChange,
@@ -159,14 +159,14 @@ const ShopFilters = ({
   searchQuery,
   onSearchChange,
   priceRange,
-  onPriceRangeChange
+  onPriceRangeChange,
 }) => {
   const [localPriceRange, setLocalPriceRange] = useState(priceRange);
 
   const handlePriceChange = (type, value) => {
     const newRange = { ...localPriceRange, [type]: value };
     setLocalPriceRange(newRange);
-    
+
     // Debounce the price range update
     const timer = setTimeout(() => {
       onPriceRangeChange(newRange);
@@ -183,11 +183,11 @@ const ShopFilters = ({
     onPriceRangeChange({ min: 0, max: 0 });
   };
 
-  const hasActiveFilters = 
-    selectedCategory !== 'all' || 
-    sortBy !== 'default' || 
-    searchQuery !== '' || 
-    priceRange.min > 0 || 
+  const hasActiveFilters =
+    selectedCategory !== 'all' ||
+    sortBy !== 'default' ||
+    searchQuery !== '' ||
+    priceRange.min > 0 ||
     priceRange.max > 0;
 
   return (
@@ -195,10 +195,10 @@ const ShopFilters = ({
       <FilterGroup>
         <FilterSection>
           <label htmlFor="category">Catégorie</label>
-          <Select 
+          <Select
             id="category"
-            value={selectedCategory} 
-            onChange={(e) => onCategoryChange(e.target.value)}
+            value={selectedCategory}
+            onChange={e => onCategoryChange(e.target.value)}
           >
             <option value="all">Toutes les catégories</option>
             {categories.map(category => (
@@ -211,10 +211,10 @@ const ShopFilters = ({
 
         <FilterSection>
           <label htmlFor="sort">Trier par</label>
-          <Select 
+          <Select
             id="sort"
-            value={sortBy} 
-            onChange={(e) => onSortChange(e.target.value)}
+            value={sortBy}
+            onChange={e => onSortChange(e.target.value)}
           >
             <option value="default">Par défaut</option>
             <option value="price-asc">Prix croissant</option>
@@ -231,7 +231,7 @@ const ShopFilters = ({
             type="text"
             placeholder="Rechercher un produit..."
             value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
+            onChange={e => onSearchChange(e.target.value)}
           />
         </FilterSection>
 
@@ -243,7 +243,9 @@ const ShopFilters = ({
               min="0"
               placeholder="Min"
               value={localPriceRange.min || ''}
-              onChange={(e) => handlePriceChange('min', parseInt(e.target.value) || 0)}
+              onChange={e =>
+                handlePriceChange('min', parseInt(e.target.value) || 0)
+              }
             />
             <Separator>à</Separator>
             <PriceInput
@@ -251,7 +253,9 @@ const ShopFilters = ({
               min="0"
               placeholder="Max"
               value={localPriceRange.max || ''}
-              onChange={(e) => handlePriceChange('max', parseInt(e.target.value) || 0)}
+              onChange={e =>
+                handlePriceChange('max', parseInt(e.target.value) || 0)
+              }
             />
             <Separator>€</Separator>
           </PriceRangeContainer>
@@ -267,4 +271,4 @@ const ShopFilters = ({
   );
 };
 
-export default ShopFilters; 
+export default ShopFilters;

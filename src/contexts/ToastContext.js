@@ -1,48 +1,73 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import Toast from '../components/common/Toast';
+import { motion, AnimatePresence } from 'framer-motion';
 
-const ToastContext = createContext(null);
+const ToastContext = createContext();
 
-export const useToast = () => {
-  const context = useContext(ToastContext);
-  if (!context) {
-    throw new Error('useToast doit être utilisé à l\'intérieur d\'un ToastProvider');
-  }
-  return context;
-};
+export function useToast() {
+    return useContext(ToastContext);
+}
 
-export const ToastProvider = ({ children }) => {
-  const [toasts, setToasts] = useState([]);
+export function ToastProvider({ children }) {
+    const [toasts, setToasts] = useState([]);
 
-  const addToast = useCallback((message, type = 'info', duration = 3000) => {
-    const id = Math.random().toString(36).substr(2, 9);
-    setToasts(prev => [...prev, { id, message, type, duration }]);
-  }, []);
+    const addToast = useCallback((message, type = 'info', duration = 3000) => {
+        const id = Date.now();
+        setToasts(prev => [...prev, { id, message, type }]);
 
-  const removeToast = useCallback((id) => {
-    setToasts(prev => prev.filter(toast => toast.id !== id));
-  }, []);
+        setTimeout(() => {
+            setToasts(prev => prev.filter(toast => toast.id !== id));
+        }, duration);
+    }, []);
 
-  const value = {
-    addToast,
-    success: (message, duration) => addToast(message, 'success', duration),
-    error: (message, duration) => addToast(message, 'error', duration),
-    warning: (message, duration) => addToast(message, 'warning', duration),
-    info: (message, duration) => addToast(message, 'info', duration),
-  };
+    const removeToast = useCallback((id) => {
+        setToasts(prev => prev.filter(toast => toast.id !== id));
+    }, []);
 
-  return (
-    <ToastContext.Provider value={value}>
-      {children}
-      {toasts.map(toast => (
-        <Toast
-          key={toast.id}
-          message={toast.message}
-          type={toast.type}
-          duration={toast.duration}
-          onClose={() => removeToast(toast.id)}
-        />
-      ))}
-    </ToastContext.Provider>
-  );
-}; 
+    const success = useCallback((message) => {
+        addToast(message, 'success');
+    }, [addToast]);
+
+    const error = useCallback((message) => {
+        addToast(message, 'error');
+    }, [addToast]);
+
+    const info = useCallback((message) => {
+        addToast(message, 'info');
+    }, [addToast]);
+
+    const warning = useCallback((message) => {
+        addToast(message, 'warning');
+    }, [addToast]);
+
+    const value = {
+        addToast,
+        removeToast,
+        success,
+        error,
+        info,
+        warning
+    };
+
+    return (
+        <ToastContext.Provider value={value}>
+            {children}
+            <div className="toast-container">
+                <AnimatePresence>
+                    {toasts.map(toast => (
+                        <motion.div
+                            key={toast.id}
+                            className={`toast toast-${toast.type}`}
+                            initial={{ opacity: 0, y: 50 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -50 }}
+                        >
+                            {toast.message}
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
+            </div>
+        </ToastContext.Provider>
+    );
+}
+
+export default ToastProvider;

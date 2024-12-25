@@ -9,7 +9,7 @@ const GalleryContainer = styled.div`
   padding: ${props => props.theme.spacing.xl} 0;
   max-width: ${props => props.theme.container.maxWidth};
   margin: 0 auto;
-  
+
   @media (max-width: ${props => props.theme.breakpoints.mobile}) {
     grid-template-columns: 1fr;
     padding: ${props => props.theme.spacing.md};
@@ -28,7 +28,7 @@ const ProductCard = styled.div`
   height: 100%;
   position: relative;
   cursor: pointer;
-  
+
   &:hover {
     transform: translateY(-5px);
     box-shadow: ${props => props.theme.shadows.hover};
@@ -40,7 +40,7 @@ const ProductImage = styled.div`
   padding-top: 100%; // Aspect ratio 1:1
   background-color: ${props => props.theme.colors.backgroundAlt};
   overflow: hidden;
-  
+
   &::after {
     content: '';
     position: absolute;
@@ -52,10 +52,10 @@ const ProductImage = styled.div`
       to bottom,
       transparent 0%,
       transparent 70%,
-      rgba(0,0,0,0.1) 100%
+      rgba(0, 0, 0, 0.1) 100%
     );
   }
-  
+
   img {
     position: absolute;
     top: 0;
@@ -65,7 +65,7 @@ const ProductImage = styled.div`
     object-fit: cover;
     transition: ${props => props.theme.transitions.medium};
   }
-  
+
   ${ProductCard}:hover & img {
     transform: scale(1.05);
   }
@@ -117,12 +117,12 @@ const StockBadge = styled.div`
   font-size: 0.8rem;
   font-weight: 600;
   z-index: 1;
-  
+
   &.in-stock {
     background-color: ${props => props.theme.colors.success}20;
     color: ${props => props.theme.colors.success};
   }
-  
+
   &.out-of-stock {
     background-color: ${props => props.theme.colors.error}20;
     color: ${props => props.theme.colors.error};
@@ -167,7 +167,7 @@ const NoProductsMessage = styled.div`
 export const ProductGallery = ({ products, onAddToCart }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  const handleProductClick = (product) => {
+  const handleProductClick = product => {
     setSelectedProduct(product);
   };
 
@@ -184,21 +184,26 @@ export const ProductGallery = ({ products, onAddToCart }) => {
           </NoProductsMessage>
         ) : (
           products.map(product => (
-            <ProductCard key={product.id} onClick={() => handleProductClick(product)}>
-              <StockBadge className={product.inStock ? 'in-stock' : 'out-of-stock'}>
+            <ProductCard
+              key={product.id}
+              onClick={() => handleProductClick(product)}
+            >
+              <StockBadge
+                className={product.inStock ? 'in-stock' : 'out-of-stock'}
+              >
                 {product.inStock ? 'En stock' : 'Rupture de stock'}
               </StockBadge>
-              
+
               <ProductImage>
                 <img src={product.image} alt={product.name} loading="lazy" />
               </ProductImage>
-              
+
               <ProductInfo>
                 <ProductName>{product.name}</ProductName>
                 <ProductDescription>{product.description}</ProductDescription>
                 <PriceTag>{product.price.toFixed(2)} €</PriceTag>
                 <AddToCartButton
-                  onClick={(e) => {
+                  onClick={e => {
                     e.stopPropagation();
                     onAddToCart(product);
                   }}
@@ -221,4 +226,4 @@ export const ProductGallery = ({ products, onAddToCart }) => {
       )}
     </>
   );
-}; 
+};

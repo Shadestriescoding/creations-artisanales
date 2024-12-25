@@ -8,7 +8,8 @@ const NoticeContainer = styled(motion.div)`
   bottom: ${props => props.theme.spacing.xl};
   left: 50%;
   transform: translateX(-50%);
-  background-color: ${props => props.online ? props.theme.colors.success : props.theme.colors.error};
+  background-color: ${props =>
+    props.online ? props.theme.colors.success : props.theme.colors.error};
   color: ${props => props.theme.colors.white};
   padding: ${props => props.theme.spacing.md} ${props => props.theme.spacing.xl};
   border-radius: ${props => props.theme.borderRadius.large};
@@ -53,7 +54,8 @@ const RetryButton = styled.button`
 
   &:hover {
     background: ${props => props.theme.colors.white};
-    color: ${props => props.online ? props.theme.colors.success : props.theme.colors.error};
+    color: ${props =>
+      props.online ? props.theme.colors.success : props.theme.colors.error};
   }
 `;
 
@@ -85,10 +87,10 @@ const OfflineNotice = () => {
   const handleRetry = () => {
     if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
       navigator.serviceWorker.controller.postMessage({
-        type: 'RETRY_FAILED_REQUESTS'
+        type: 'RETRY_FAILED_REQUESTS',
       });
     }
-    
+
     // Tenter de recharger les ressources en échec
     if (isOnline) {
       window.location.reload();
@@ -122,4 +124,4 @@ const OfflineNotice = () => {
   );
 };
 
-export default OfflineNotice; 
+export default OfflineNotice;

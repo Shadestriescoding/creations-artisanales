@@ -1,8 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import StatCard from '../components/dashboard/StatCard';
-import SalesChart from '../components/dashboard/SalesChart';
-import AlertsList from '../components/dashboard/AlertsList';
 
 const DashboardContainer = styled.div`
   padding: ${({ theme }) => theme.spacing.xl};
@@ -16,102 +13,156 @@ const Title = styled.h1`
 
 const StatsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: ${({ theme }) => theme.spacing.lg};
   margin-bottom: ${({ theme }) => theme.spacing.xl};
 `;
 
-const TwoColumnGrid = styled.div`
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: ${({ theme }) => theme.spacing.xl};
-  margin-top: ${({ theme }) => theme.spacing.xl};
+const StatCard = styled.div`
+  background: ${({ theme }) => theme.colors.cardBackground};
+  border-radius: ${({ theme }) => theme.borderRadius.medium};
+  padding: ${({ theme }) => theme.spacing.md};
+  box-shadow: ${({ theme }) => theme.shadows.medium};
+  transition: transform 0.2s ease;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.laptop}) {
-    grid-template-columns: 1fr;
+  &:hover {
+    transform: translateY(-4px);
   }
 `;
 
-export const Dashboard = () => {
-  // Données mockées pour les statistiques
-  const stats = {
-    sales: {
-      title: "Ventes du mois",
-      value: "2,450€",
-      change: "+15%",
-      icon: "💰"
-    },
-    orders: {
-      title: "Commandes",
-      value: "124",
-      change: "+8%",
-      icon: "📦"
-    },
-    avgOrder: {
-      title: "Panier moyen",
-      value: "45€",
-      change: "+5%",
-      icon: "🛒"
-    },
-    customers: {
-      title: "Nouveaux clients",
-      value: "28",
-      change: "+12%",
-      icon: "👥"
-    }
-  };
+const StatTitle = styled.h3`
+  color: ${({ theme }) => theme.colors.text};
+  margin-bottom: ${({ theme }) => theme.spacing.xs};
+`;
 
-  // Données mockées pour le graphique
-  const chartData = {
-    labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
-    current: [350, 420, 280, 450, 380, 520, 450],
-    previous: [300, 380, 250, 400, 350, 480, 400]
-  };
+const StatValue = styled.p`
+  color: ${({ theme }) => theme.colors.primary};
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: ${({ theme }) => theme.spacing.xs} 0;
+`;
 
-  // Données mockées pour les alertes
-  const alerts = [
+const StatChange = styled.span`
+  color: ${({ isPositive, theme }) =>
+    isPositive ? theme.colors.success : theme.colors.error};
+  font-size: 0.9em;
+  display: block;
+`;
+
+const RecentActivitySection = styled.div`
+  background: ${({ theme }) => theme.colors.cardBackground};
+  border-radius: ${({ theme }) => theme.borderRadius.medium};
+  padding: ${({ theme }) => theme.spacing.md};
+  box-shadow: ${({ theme }) => theme.shadows.medium};
+`;
+
+const ActivityTitle = styled.h2`
+  color: ${({ theme }) => theme.colors.text};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+`;
+
+const ActivityList = styled.div`
+  display: grid;
+  gap: ${({ theme }) => theme.spacing.sm};
+`;
+
+const ActivityItem = styled.div`
+  padding: ${({ theme }) => theme.spacing.sm};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  background: ${({ theme }) => theme.colors.backgroundAlt}33;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const ActivityText = styled.p`
+  color: ${({ theme }) => theme.colors.text};
+  margin: 0;
+`;
+
+const ActivityTime = styled.span`
+  color: ${({ theme }) => theme.colors.textLight};
+  font-size: 0.9em;
+`;
+
+const Dashboard = () => {
+  const [stats] = useState([
     {
-      type: 'warning',
-      message: 'Stock faible pour "Bracelet en perles roses" (2 restants)',
-      time: new Date(Date.now() - 30 * 60000) // 30 minutes ago
+      id: 1,
+      title: 'Ventes du mois',
+      value: '2,499.99€',
+      change: '+15.2%'
     },
     {
-      type: 'success',
-      message: 'Excellentes ventes pour "Collier artisanal doré" cette semaine',
-      time: new Date(Date.now() - 2 * 3600000) // 2 hours ago
+      id: 2,
+      title: 'Commandes',
+      value: '45',
+      change: '+8.5%'
     },
     {
-      type: 'error',
-      message: 'Erreur de paiement sur la commande #CMD123',
-      time: new Date(Date.now() - 4 * 3600000) // 4 hours ago
+      id: 3,
+      title: 'Nouveaux clients',
+      value: '12',
+      change: '+3.7%'
     },
     {
-      type: 'info',
-      message: 'Nouvelle évaluation 5 étoiles reçue',
-      time: new Date(Date.now() - 12 * 3600000) // 12 hours ago
+      id: 4,
+      title: 'Taux de conversion',
+      value: '3.2%',
+      change: '-0.5%'
     }
-  ];
+  ]);
+
+  const [activities] = useState([
+    {
+      id: 1,
+      text: 'Nouvelle commande #EVA-001',
+      time: 'Il y a 5 minutes'
+    },
+    {
+      id: 2,
+      text: 'Stock faible pour "Bracelet tressé"',
+      time: 'Il y a 15 minutes'
+    },
+    {
+      id: 3,
+      text: 'Nouveau client inscrit',
+      time: 'Il y a 30 minutes'
+    },
+    {
+      id: 4,
+      text: 'Commande #EVA-002 expédiée',
+      time: 'Il y a 1 heure'
+    }
+  ]);
 
   return (
     <DashboardContainer>
       <Title>Tableau de bord</Title>
-      
       <StatsGrid>
-        {Object.entries(stats).map(([key, stat]) => (
-          <StatCard
-            key={key}
-            title={stat.title}
-            value={stat.value}
-            change={stat.change}
-            icon={stat.icon}
-          />
+        {stats.map(stat => (
+          <StatCard key={stat.id}>
+            <StatTitle>{stat.title}</StatTitle>
+            <StatValue>{stat.value}</StatValue>
+            <StatChange isPositive={stat.change.startsWith('+')}>
+              {stat.change}
+            </StatChange>
+          </StatCard>
         ))}
       </StatsGrid>
-
-      <TwoColumnGrid>
-        <SalesChart data={chartData} />
-        <AlertsList alerts={alerts} />
-      </TwoColumnGrid>
+      <RecentActivitySection>
+        <ActivityTitle>Activité récente</ActivityTitle>
+        <ActivityList>
+          {activities.map(activity => (
+            <ActivityItem key={activity.id}>
+              <ActivityText>{activity.text}</ActivityText>
+              <ActivityTime>{activity.time}</ActivityTime>
+            </ActivityItem>
+          ))}
+        </ActivityList>
+      </RecentActivitySection>
     </DashboardContainer>
   );
-}; 
+};
+
+export default Dashboard;

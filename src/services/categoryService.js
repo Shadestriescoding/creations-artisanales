@@ -17,8 +17,8 @@ export const categoryService = {
   async createCategory(formData) {
     const response = await axios.post(`${API_URL}/categories`, formData, {
       headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+        'Content-Type': 'multipart/form-data',
+      },
     });
     return response.data;
   },
@@ -26,8 +26,8 @@ export const categoryService = {
   async updateCategory(id, formData) {
     const response = await axios.put(`${API_URL}/categories/${id}`, formData, {
       headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+        'Content-Type': 'multipart/form-data',
+      },
     });
     return response.data;
   },
@@ -38,12 +38,16 @@ export const categoryService = {
   },
 
   async updateOrder(orders) {
-    const response = await axios.post(`${API_URL}/categories/order`, { orders });
+    const response = await axios.post(`${API_URL}/categories/order`, {
+      orders,
+    });
     return response.data;
   },
 
   async searchCategories(query) {
-    const response = await axios.get(`${API_URL}/categories/search?q=${encodeURIComponent(query)}`);
+    const response = await axios.get(
+      `${API_URL}/categories/search?q=${encodeURIComponent(query)}`
+    );
     return response.data;
-  }
-}; 
+  },
+};

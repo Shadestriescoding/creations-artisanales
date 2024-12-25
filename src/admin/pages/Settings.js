@@ -1,358 +1,185 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useAuth } from '../../contexts/AuthContext';
-import { useToast } from '../../contexts/ToastContext';
-import { settingsService } from '../../services/settingsService';
 
 const SettingsContainer = styled.div`
   padding: ${({ theme }) => theme.spacing.xl};
 `;
 
-const Section = styled.section`
-  background: ${({ theme }) => theme.colors.white};
-  padding: ${({ theme }) => theme.spacing.xl};
-  border-radius: ${({ theme }) => theme.borderRadius.large};
-  box-shadow: ${({ theme }) => theme.shadows.medium};
+const Title = styled.h1`
+  color: ${({ theme }) => theme.colors.text};
+  font-family: ${({ theme }) => theme.typography.titleFont};
   margin-bottom: ${({ theme }) => theme.spacing.xl};
 `;
 
-const Title = styled.h2`
-  color: ${({ theme }) => theme.colors.text};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
-  font-family: ${({ theme }) => theme.typography.titleFont};
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
+const SettingsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: ${({ theme }) => theme.spacing.lg};
-  max-width: 500px;
 `;
 
-const FormGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.xs};
+const SettingCard = styled.div`
+  background: ${({ theme }) => theme.colors.cardBackground};
+  border-radius: ${({ theme }) => theme.borderRadius.medium};
+  padding: ${({ theme }) => theme.spacing.md};
+  box-shadow: ${({ theme }) => theme.shadows.medium};
 `;
 
-const Label = styled.label`
+const SettingTitle = styled.h3`
   color: ${({ theme }) => theme.colors.text};
-  font-weight: 500;
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+`;
+
+const SettingDescription = styled.p`
+  color: ${({ theme }) => theme.colors.textLight};
+  font-size: 0.9em;
+  margin-bottom: ${({ theme }) => theme.spacing.md};
 `;
 
 const Input = styled.input`
-  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
-  border: 2px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.borderRadius.medium};
-  font-size: ${({ theme }) => theme.typography.body};
-  transition: ${({ theme }) => theme.transitions.fast};
+  width: 100%;
+  padding: ${({ theme }) => theme.spacing.sm};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
 
   &:focus {
     outline: none;
     border-color: ${({ theme }) => theme.colors.primary};
-    box-shadow: ${({ theme }) => theme.shadows.soft};
+    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary}33;
+  }
+`;
+
+const Select = styled.select`
+  width: 100%;
+  padding: ${({ theme }) => theme.spacing.sm};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+  background-color: white;
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.primary};
+    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary}33;
   }
 `;
 
 const Button = styled.button`
-  background-color: ${({ theme }) => theme.colors.primary};
-  color: ${({ theme }) => theme.colors.white};
-  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+  background: ${({ theme }) => theme.colors.primary};
+  color: white;
   border: none;
-  border-radius: ${({ theme }) => theme.borderRadius.medium};
-  font-weight: 600;
+  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
   cursor: pointer;
-  transition: ${({ theme }) => theme.transitions.medium};
-  align-self: flex-start;
+  transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.primaryDark};
-  }
-
-  &:disabled {
-    background-color: ${({ theme }) => theme.colors.textLight};
-    cursor: not-allowed;
+    background: ${({ theme }) => theme.colors.primaryDark};
   }
 `;
 
-const ToggleSwitch = styled.label`
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-
-  input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-
-  span {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: ${({ theme }) => theme.colors.border};
-    transition: ${({ theme }) => theme.transitions.medium};
-    border-radius: 34px;
-
-    &:before {
-      position: absolute;
-      content: "";
-      height: 26px;
-      width: 26px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      transition: ${({ theme }) => theme.transitions.medium};
-      border-radius: 50%;
-    }
-  }
-
-  input:checked + span {
-    background-color: ${({ theme }) => theme.colors.primary};
-  }
-
-  input:checked + span:before {
-    transform: translateX(26px);
-  }
-`;
-
-export const Settings = () => {
-  const { user } = useAuth();
-  const { showToast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  
+const Settings = () => {
   const [settings, setSettings] = useState({
-    siteName: "",
-    email: "",
-    phone: "",
-    address: "",
-    notificationsEnabled: true,
-    maintenanceMode: false,
-    socialMedia: {
-      instagram: "",
-      facebook: "",
-      pinterest: ""
-    },
-    seo: {
-      metaDescription: "",
-      keywords: ""
-    }
+    shopName: 'La Cabane d\'Eva',
+    email: 'contact@lacabanedeva.fr',
+    currency: 'EUR',
+    language: 'fr',
+    orderPrefix: 'EVA-',
+    notificationEmail: 'notifications@lacabanedeva.fr'
   });
 
-  useEffect(() => {
-    loadSettings();
-  }, []);
-
-  const loadSettings = async () => {
-    try {
-      const data = await settingsService.getSettings();
-      setSettings(data);
-    } catch (error) {
-      showToast('Erreur lors du chargement des paramètres', 'error');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    if (name.includes('.')) {
-      const [section, key] = name.split('.');
-      setSettings(prev => ({
-        ...prev,
-        [section]: {
-          ...prev[section],
-          [key]: value
-        }
-      }));
-    } else {
-      setSettings(prev => ({
-        ...prev,
-        [name]: type === 'checkbox' ? checked : value
-      }));
-    }
+    const { name, value } = e.target;
+    setSettings(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
-
-    try {
-      await settingsService.updateSettings(settings);
-      showToast('Paramètres sauvegardés avec succès', 'success');
-      
-      if (settings.maintenanceMode) {
-        await settingsService.toggleMaintenanceMode(true);
-        showToast('Mode maintenance activé', 'info');
-      }
-    } catch (error) {
-      showToast('Erreur lors de la sauvegarde des paramètres', 'error');
-    } finally {
-      setIsSubmitting(false);
-    }
+    // Ici, nous ajouterons la logique pour sauvegarder les paramètres
+    console.log('Settings saved:', settings);
   };
-
-  if (isLoading) {
-    return <div>Chargement...</div>;
-  }
 
   return (
     <SettingsContainer>
-      <Section>
-        <Title>Paramètres généraux</Title>
-        <Form onSubmit={handleSubmit}>
-          <FormGroup>
-            <Label htmlFor="siteName">Nom du site</Label>
+      <Title>Paramètres</Title>
+      <form onSubmit={handleSubmit}>
+        <SettingsGrid>
+          <SettingCard>
+            <SettingTitle>Informations générales</SettingTitle>
+            <SettingDescription>
+              Configurez les informations de base de votre boutique
+            </SettingDescription>
             <Input
               type="text"
-              id="siteName"
-              name="siteName"
-              value={settings.siteName}
+              name="shopName"
+              value={settings.shopName}
               onChange={handleChange}
-              required
+              placeholder="Nom de la boutique"
             />
-          </FormGroup>
-
-          <FormGroup>
-            <Label htmlFor="email">Email de contact</Label>
             <Input
               type="email"
-              id="email"
               name="email"
               value={settings.email}
               onChange={handleChange}
-              required
+              placeholder="Email de contact"
             />
-          </FormGroup>
+          </SettingCard>
 
-          <FormGroup>
-            <Label htmlFor="phone">Téléphone</Label>
-            <Input
-              type="tel"
-              id="phone"
-              name="phone"
-              value={settings.phone}
+          <SettingCard>
+            <SettingTitle>Préférences régionales</SettingTitle>
+            <SettingDescription>
+              Définissez la devise et la langue par défaut
+            </SettingDescription>
+            <Select
+              name="currency"
+              value={settings.currency}
               onChange={handleChange}
-            />
-          </FormGroup>
+            >
+              <option value="EUR">Euro (€)</option>
+              <option value="USD">Dollar ($)</option>
+              <option value="GBP">Livre Sterling (£)</option>
+            </Select>
+            <Select
+              name="language"
+              value={settings.language}
+              onChange={handleChange}
+            >
+              <option value="fr">Français</option>
+              <option value="en">English</option>
+              <option value="es">Español</option>
+            </Select>
+          </SettingCard>
 
-          <FormGroup>
-            <Label htmlFor="address">Adresse</Label>
+          <SettingCard>
+            <SettingTitle>Paramètres des commandes</SettingTitle>
+            <SettingDescription>
+              Configurez les options liées aux commandes
+            </SettingDescription>
             <Input
               type="text"
-              id="address"
-              name="address"
-              value={settings.address}
+              name="orderPrefix"
+              value={settings.orderPrefix}
               onChange={handleChange}
+              placeholder="Préfixe des commandes"
             />
-          </FormGroup>
-
-          <FormGroup>
-            <Label>
-              <ToggleSwitch>
-                <input
-                  type="checkbox"
-                  name="notificationsEnabled"
-                  checked={settings.notificationsEnabled}
-                  onChange={handleChange}
-                />
-                <span></span>
-              </ToggleSwitch>
-              {' '}Notifications par email
-            </Label>
-          </FormGroup>
-
-          <FormGroup>
-            <Label>
-              <ToggleSwitch>
-                <input
-                  type="checkbox"
-                  name="maintenanceMode"
-                  checked={settings.maintenanceMode}
-                  onChange={handleChange}
-                />
-                <span></span>
-              </ToggleSwitch>
-              {' '}Mode maintenance
-            </Label>
-          </FormGroup>
-
-          <Section>
-            <Title>Réseaux sociaux</Title>
-            <FormGroup>
-              <Label htmlFor="instagram">Instagram</Label>
-              <Input
-                type="url"
-                id="instagram"
-                name="socialMedia.instagram"
-                value={settings.socialMedia.instagram}
-                onChange={handleChange}
-                placeholder="https://instagram.com/..."
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label htmlFor="facebook">Facebook</Label>
-              <Input
-                type="url"
-                id="facebook"
-                name="socialMedia.facebook"
-                value={settings.socialMedia.facebook}
-                onChange={handleChange}
-                placeholder="https://facebook.com/..."
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label htmlFor="pinterest">Pinterest</Label>
-              <Input
-                type="url"
-                id="pinterest"
-                name="socialMedia.pinterest"
-                value={settings.socialMedia.pinterest}
-                onChange={handleChange}
-                placeholder="https://pinterest.com/..."
-              />
-            </FormGroup>
-          </Section>
-
-          <Section>
-            <Title>SEO</Title>
-            <FormGroup>
-              <Label htmlFor="metaDescription">Description meta</Label>
-              <Input
-                as="textarea"
-                id="metaDescription"
-                name="seo.metaDescription"
-                value={settings.seo.metaDescription}
-                onChange={handleChange}
-                placeholder="Description pour les moteurs de recherche..."
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label htmlFor="keywords">Mots-clés</Label>
-              <Input
-                type="text"
-                id="keywords"
-                name="seo.keywords"
-                value={settings.seo.keywords}
-                onChange={handleChange}
-                placeholder="mot-clé1, mot-clé2, ..."
-              />
-            </FormGroup>
-          </Section>
-
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Sauvegarde...' : 'Sauvegarder'}
-          </Button>
-        </Form>
-      </Section>
+            <Input
+              type="email"
+              name="notificationEmail"
+              value={settings.notificationEmail}
+              onChange={handleChange}
+              placeholder="Email de notification"
+            />
+          </SettingCard>
+        </SettingsGrid>
+        <Button type="submit" style={{ marginTop: '2rem' }}>
+          Enregistrer les modifications
+        </Button>
+      </form>
     </SettingsContainer>
   );
-}; 
+};
+
+export default Settings;

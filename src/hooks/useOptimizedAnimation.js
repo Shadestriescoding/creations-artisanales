@@ -5,7 +5,7 @@ const useOptimizedAnimation = (options = {}) => {
     threshold = 0.1,
     rootMargin = '50px',
     shouldAnimate = true,
-    reduceMotion = false
+    reduceMotion = false,
   } = options;
 
   const [isVisible, setIsVisible] = useState(false);
@@ -17,18 +17,18 @@ const useOptimizedAnimation = (options = {}) => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     setPrefersReducedMotion(mediaQuery.matches);
 
-    const handleChange = (e) => setPrefersReducedMotion(e.matches);
+    const handleChange = e => setPrefersReducedMotion(e.matches);
     mediaQuery.addEventListener('change', handleChange);
 
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
-  const callback = useCallback((entries) => {
+  const callback = useCallback(entries => {
     const [entry] = entries;
     setIsVisible(entry.isIntersecting);
   }, []);
 
-  const setRef = useCallback((node) => {
+  const setRef = useCallback(node => {
     if (node !== null) {
       setElement(node);
     }
@@ -38,7 +38,7 @@ const useOptimizedAnimation = (options = {}) => {
     if (element && shouldAnimate && !reduceMotion && !prefersReducedMotion) {
       const observer = new IntersectionObserver(callback, {
         threshold,
-        rootMargin
+        rootMargin,
       });
 
       observer.observe(element);
@@ -48,36 +48,47 @@ const useOptimizedAnimation = (options = {}) => {
           observer.unobserve(element);
         }
       };
-    } else if (element && (!shouldAnimate || reduceMotion || prefersReducedMotion)) {
+    } else if (
+      element &&
+      (!shouldAnimate || reduceMotion || prefersReducedMotion)
+    ) {
       setIsVisible(true);
     }
-  }, [callback, element, threshold, rootMargin, shouldAnimate, reduceMotion, prefersReducedMotion]);
+  }, [
+    callback,
+    element,
+    threshold,
+    rootMargin,
+    shouldAnimate,
+    reduceMotion,
+    prefersReducedMotion,
+  ]);
 
   const getAnimationProps = useCallback(() => {
     if (!shouldAnimate || reduceMotion || prefersReducedMotion) {
       return {
         initial: false,
-        animate: false
+        animate: false,
       };
     }
 
     return {
-      initial: "hidden",
-      animate: isVisible ? "visible" : "hidden",
+      initial: 'hidden',
+      animate: isVisible ? 'visible' : 'hidden',
       variants: {
-        hidden: { 
+        hidden: {
           opacity: 0,
-          y: 20
+          y: 20,
         },
         visible: {
           opacity: 1,
           y: 0,
           transition: {
             duration: 0.6,
-            ease: "easeOut"
-          }
-        }
-      }
+            ease: 'easeOut',
+          },
+        },
+      },
     };
   }, [isVisible, shouldAnimate, reduceMotion, prefersReducedMotion]);
 
@@ -85,8 +96,8 @@ const useOptimizedAnimation = (options = {}) => {
     setRef,
     isVisible,
     getAnimationProps,
-    prefersReducedMotion
+    prefersReducedMotion,
   };
 };
 
-export default useOptimizedAnimation; 
+export default useOptimizedAnimation;

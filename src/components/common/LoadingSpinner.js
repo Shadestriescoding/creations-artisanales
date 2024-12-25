@@ -16,7 +16,7 @@ const SpinnerWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  min-height: ${props => props.fullScreen ? '100vh' : '200px'};
+  min-height: ${props => (props.fullScreen ? '100vh' : '200px')};
   animation: ${fadeIn} 0.3s ease-in;
 `;
 
@@ -45,4 +45,4 @@ const LoadingSpinner = ({ fullScreen, text }) => {
   );
 };
 
-export default LoadingSpinner; 
+export default LoadingSpinner;

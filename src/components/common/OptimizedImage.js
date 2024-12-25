@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { LazyImage } from './LazyImage';
+import LazyImage from './LazyImage';
 
 const ImageContainer = styled.div`
   position: relative;
   width: 100%;
   height: ${props => props.height || '100%'};
   background-color: ${props => props.theme.colors.backgroundAlt};
-  border-radius: ${props => props.borderRadius || props.theme.borderRadius.medium};
+  border-radius: ${props =>
+    props.borderRadius || props.theme.borderRadius.medium};
   overflow: hidden;
 `;
 
@@ -17,8 +18,10 @@ const StyledImage = styled(LazyImage)`
   height: 100%;
   object-fit: ${props => props.objectFit || 'cover'};
   transition: transform 0.6s ease;
-  
-  ${props => props.isHoverable && `
+
+  ${props =>
+    props.isHoverable &&
+    `
     &:hover {
       transform: scale(1.05);
     }
@@ -111,8 +114,8 @@ const OptimizedImage = ({
   }, [src]);
 
   return (
-    <ImageContainer 
-      height={height} 
+    <ImageContainer
+      height={height}
       borderRadius={borderRadius}
       className={className}
     >
@@ -133,12 +136,8 @@ const OptimizedImage = ({
           Veuillez réessayer ultérieurement
         </ErrorMessage>
       )}
-      
-      {isLoading && !hasError && (
-        <Placeholder>
-          Chargement...
-        </Placeholder>
-      )}
+
+      {isLoading && !hasError && <Placeholder>Chargement...</Placeholder>}
     </ImageContainer>
   );
 };
@@ -147,17 +146,23 @@ OptimizedImage.propTypes = {
   src: PropTypes.string.isRequired,
   alt: PropTypes.string.isRequired,
   height: PropTypes.string,
-  objectFit: PropTypes.oneOf(['cover', 'contain', 'fill', 'none', 'scale-down']),
+  objectFit: PropTypes.oneOf([
+    'cover',
+    'contain',
+    'fill',
+    'none',
+    'scale-down',
+  ]),
   borderRadius: PropTypes.string,
   isHoverable: PropTypes.bool,
   onLoad: PropTypes.func,
   onError: PropTypes.func,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 OptimizedImage.defaultProps = {
   objectFit: 'cover',
-  isHoverable: false
+  isHoverable: false,
 };
 
-export default OptimizedImage; 
+export default OptimizedImage;

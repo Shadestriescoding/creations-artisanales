@@ -26,7 +26,7 @@ const Value = styled.div`
 `;
 
 const Change = styled.div`
-  color: ${({ positive, theme }) => 
+  color: ${({ positive, theme }) =>
     positive ? theme.colors.success : theme.colors.error};
   font-size: ${({ theme }) => theme.typography.small};
   display: flex;
@@ -34,7 +34,7 @@ const Change = styled.div`
   gap: ${({ theme }) => theme.spacing.xs};
 
   &::before {
-    content: "${({ positive }) => positive ? '↑' : '↓'}";
+    content: '${({ positive }) => (positive ? '↑' : '↓')}';
   }
 `;
 
@@ -52,13 +52,9 @@ const StatCard = ({ title, value, change, icon }) => {
       <Icon>{icon}</Icon>
       <Title>{title}</Title>
       <Value>{value}</Value>
-      {change && (
-        <Change positive={isPositive}>
-          {change}
-        </Change>
-      )}
+      {change && <Change positive={isPositive}>{change}</Change>}
     </Card>
   );
 };
 
-export default StatCard; 
+export default StatCard;

@@ -8,8 +8,8 @@ const Overlay = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  opacity: ${props => props.isOpen ? 1 : 0};
-  visibility: ${props => props.isOpen ? 'visible' : 'hidden'};
+  opacity: ${props => (props.isOpen ? 1 : 0)};
+  visibility: ${props => (props.isOpen ? 'visible' : 'hidden')};
   transition: opacity 0.3s ease;
   z-index: 999;
 `;
@@ -17,11 +17,11 @@ const Overlay = styled.div`
 const CartContainer = styled.div`
   position: fixed;
   top: 0;
-  right: ${props => props.isOpen ? '0' : '-400px'};
+  right: ${props => (props.isOpen ? '0' : '-400px')};
   width: 400px;
   height: 100vh;
   background-color: white;
-  box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
   padding: 2rem;
   transition: right 0.3s ease;
   z-index: 1000;
@@ -29,7 +29,7 @@ const CartContainer = styled.div`
 
   @media (max-width: 480px) {
     width: 100%;
-    right: ${props => props.isOpen ? '0' : '-100%'};
+    right: ${props => (props.isOpen ? '0' : '-100%')};
   }
 `;
 
@@ -40,7 +40,7 @@ const CartHeader = styled.div`
   margin-bottom: 2rem;
   padding-bottom: 1rem;
   border-bottom: 2px solid ${props => props.theme.colors.background};
-  
+
   h2 {
     font-size: 1.5rem;
     color: ${props => props.theme.colors.text};
@@ -61,7 +61,7 @@ const CartItem = styled.div`
   align-items: center;
   padding: 1rem 0;
   border-bottom: 1px solid ${props => props.theme.colors.background};
-  
+
   img {
     width: 80px;
     height: 80px;
@@ -73,13 +73,13 @@ const CartItem = styled.div`
 
 const ItemInfo = styled.div`
   flex-grow: 1;
-  
+
   h3 {
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
     color: ${props => props.theme.colors.text};
   }
-  
+
   p {
     font-size: 1.1rem;
     font-weight: bold;
@@ -92,13 +92,13 @@ const QuantityControl = styled.div`
   align-items: center;
   gap: 0.8rem;
   margin-left: 1rem;
-  
+
   span {
     min-width: 24px;
     text-align: center;
     font-weight: bold;
   }
-  
+
   button {
     background-color: ${props => props.theme.colors.background};
     border: none;
@@ -110,7 +110,7 @@ const QuantityControl = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    
+
     &:hover {
       background-color: ${props => props.theme.colors.primary};
       color: white;
@@ -126,7 +126,7 @@ const Total = styled.div`
   text-align: right;
   font-weight: bold;
   font-size: 1.2rem;
-  
+
   span {
     color: ${props => props.theme.colors.accent};
     margin-left: 0.5rem;
@@ -150,11 +150,11 @@ const CheckoutButton = styled.button`
   margin-top: 1rem;
   cursor: pointer;
   font-weight: bold;
-  
+
   &:hover {
     background-color: ${props => props.theme.colors.accent};
   }
-  
+
   &:disabled {
     background-color: #ccc;
     cursor: not-allowed;
@@ -162,9 +162,12 @@ const CheckoutButton = styled.button`
 `;
 
 export const Cart = ({ isOpen, onClose, items, onUpdateQuantity }) => {
-  const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const total = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
-  const handleOverlayClick = (e) => {
+  const handleOverlayClick = e => {
     if (e.target === e.currentTarget) {
       onClose();
     }
@@ -178,11 +181,9 @@ export const Cart = ({ isOpen, onClose, items, onUpdateQuantity }) => {
           <h2>Panier</h2>
           <CloseButton onClick={onClose}>&times;</CloseButton>
         </CartHeader>
-        
+
         {items.length === 0 ? (
-          <EmptyCartMessage>
-            Votre panier est vide
-          </EmptyCartMessage>
+          <EmptyCartMessage>Votre panier est vide</EmptyCartMessage>
         ) : (
           <>
             {items.map(item => (
@@ -193,18 +194,26 @@ export const Cart = ({ isOpen, onClose, items, onUpdateQuantity }) => {
                   <p>{item.price.toFixed(2)}€</p>
                 </ItemInfo>
                 <QuantityControl>
-                  <button onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}>−</button>
+                  <button
+                    onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
+                  >
+                    −
+                  </button>
                   <span>{item.quantity}</span>
-                  <button onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}>+</button>
+                  <button
+                    onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
+                  >
+                    +
+                  </button>
                 </QuantityControl>
               </CartItem>
             ))}
-            
+
             <Total>
               Total: <span>{total.toFixed(2)}€</span>
             </Total>
-            
-            <CheckoutButton 
+
+            <CheckoutButton
               disabled={items.length === 0}
               onClick={() => alert('Fonctionnalité de paiement à venir')}
             >
@@ -215,4 +224,4 @@ export const Cart = ({ isOpen, onClose, items, onUpdateQuantity }) => {
       </CartContainer>
     </>
   );
-}; 
+};

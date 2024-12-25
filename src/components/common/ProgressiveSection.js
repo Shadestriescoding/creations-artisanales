@@ -7,11 +7,13 @@ const SectionContainer = styled(motion.section)`
   opacity: 0;
   transform: translateY(20px);
   will-change: opacity, transform;
-  
+
   &.loaded {
     opacity: 1;
     transform: translateY(0);
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    transition:
+      opacity 0.6s ease-out,
+      transform 0.6s ease-out;
   }
 `;
 
@@ -114,9 +116,7 @@ const ProgressiveSection = ({
       <ErrorContainer>
         <p>Une erreur est survenue lors du chargement de cette section.</p>
         {onRetry && (
-          <RetryButton onClick={() => onRetry(id)}>
-            Réessayer
-          </RetryButton>
+          <RetryButton onClick={() => onRetry(id)}>Réessayer</RetryButton>
         )}
       </ErrorContainer>
     );
@@ -147,14 +147,14 @@ ProgressiveSection.propTypes = {
   shouldRender: PropTypes.bool,
   hasError: PropTypes.bool,
   onRetry: PropTypes.func,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 ProgressiveSection.defaultProps = {
   height: '300px',
   isLoaded: false,
   shouldRender: false,
-  hasError: false
+  hasError: false,
 };
 
-export default memo(ProgressiveSection); 
+export default memo(ProgressiveSection);

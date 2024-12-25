@@ -14,7 +14,9 @@ export const settingsService = {
   },
 
   async toggleMaintenanceMode(enabled) {
-    const response = await axios.post(`${API_URL}/settings/maintenance`, { enabled });
+    const response = await axios.post(`${API_URL}/settings/maintenance`, {
+      enabled,
+    });
     return response.data;
-  }
-}; 
+  },
+};

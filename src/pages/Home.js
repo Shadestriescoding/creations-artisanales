@@ -1,25 +1,27 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { FiArrowRight, FiHeart, FiPackage } from 'react-icons/fi';
 import LazyImage from '../components/common/LazyImage';
 
-const HeroSection = styled.section`
-  background-color: ${props => props.theme.colors.backgroundAlt};
-  padding: ${props => props.theme.spacing.xxl} 0;
-  text-align: center;
+const HeroSection = styled(motion.section)`
   position: relative;
+  height: 80vh;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
+  background: linear-gradient(
+    to bottom right,
+    ${props => props.theme.colors.backgroundAlt},
+    ${props => props.theme.colors.background}
+  );
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('/images/pattern.png') repeat;
-    opacity: 0.05;
-    z-index: 1;
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    height: 70vh;
+    min-height: 500px;
   }
 `;
 
@@ -27,117 +29,78 @@ const HeroContent = styled.div`
   max-width: ${props => props.theme.container.maxWidth};
   margin: 0 auto;
   padding: 0 ${props => props.theme.spacing.xl};
-  position: relative;
-  z-index: 2;
+  text-align: center;
+  z-index: 1;
 
   @media (max-width: ${props => props.theme.breakpoints.mobile}) {
     padding: 0 ${props => props.theme.spacing.lg};
   }
 `;
 
-const HeroTitle = styled.h1`
+const HeroTitle = styled(motion.h1)`
+  font-size: 3.5rem;
   color: ${props => props.theme.colors.text};
   margin-bottom: ${props => props.theme.spacing.lg};
-  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-family: ${props => props.theme.typography.titleFont};
   line-height: 1.2;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: slideUpFade 0.6s ease-out forwards;
-  
-  span {
-    color: ${props => props.theme.colors.primary};
-    display: inline-block;
-  }
 
-  @keyframes slideUpFade {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 2.5rem;
   }
 `;
 
-const HeroSubtitle = styled.p`
+const HeroSubtitle = styled(motion.p)`
+  font-size: 1.2rem;
   color: ${props => props.theme.colors.textLight};
-  font-size: clamp(1rem, 2vw, 1.2rem);
   margin-bottom: ${props => props.theme.spacing.xl};
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
   line-height: 1.6;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: slideUpFade 0.6s ease-out forwards 0.2s;
-`;
-
-const CTAButton = styled(Link)`
-  display: inline-block;
-  padding: ${props => props.theme.spacing.md} ${props => props.theme.spacing.xl};
-  background-color: ${props => props.theme.colors.primary};
-  color: ${props => props.theme.colors.white};
-  border-radius: ${props => props.theme.borderRadius.medium};
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: ${props => props.theme.transitions.medium};
-  opacity: 0;
-  transform: translateY(20px);
-  animation: slideUpFade 0.6s ease-out forwards 0.4s;
-  
-  &:hover {
-    background-color: ${props => props.theme.colors.accent};
-    transform: translateY(-3px);
-    color: ${props => props.theme.colors.white};
-    box-shadow: ${props => props.theme.shadows.medium};
-  }
 
   @media (max-width: ${props => props.theme.breakpoints.mobile}) {
-    padding: ${props => props.theme.spacing.md} ${props => props.theme.spacing.lg};
-    width: 100%;
-    max-width: 300px;
+    font-size: 1.1rem;
   }
 `;
 
-const FeaturedSection = styled.section`
+const CTAButton = styled(motion(Link))`
+  display: inline-flex;
+  align-items: center;
+  gap: ${props => props.theme.spacing.sm};
+  padding: ${props => props.theme.spacing.md} ${props => props.theme.spacing.xl};
+  background-color: ${props => props.theme.colors.primary};
+  color: white;
+  text-decoration: none;
+  border-radius: ${props => props.theme.borderRadius.large};
+  font-weight: 600;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: ${props => props.theme.colors.primaryDark};
+    transform: translateY(-2px);
+  }
+
+  svg {
+    transition: transform 0.3s ease;
+  }
+
+  &:hover svg {
+    transform: translateX(5px);
+  }
+`;
+
+const FeaturesSection = styled.section`
   padding: ${props => props.theme.spacing.xxl} 0;
   background-color: ${props => props.theme.colors.background};
 `;
 
-const SectionTitle = styled.h2`
-  text-align: center;
-  margin-bottom: ${props => props.theme.spacing.xl};
-  color: ${props => props.theme.colors.text};
-  font-size: clamp(2rem, 4vw, 2.4rem);
-  opacity: 0;
-  transform: translateY(20px);
-  
-  &.visible {
-    animation: slideUpFade 0.6s ease-out forwards;
-  }
-  
-  &::after {
-    content: '';
-    display: block;
-    width: 60px;
-    height: 3px;
-    background-color: ${props => props.theme.colors.primary};
-    margin: ${props => props.theme.spacing.sm} auto 0;
-    transform: scaleX(0);
-    transition: transform 0.6s ease-out;
-  }
-
-  &.visible::after {
-    transform: scaleX(1);
-  }
-`;
-
-const CategoryGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: ${props => props.theme.spacing.xl};
+const FeaturesGrid = styled.div`
   max-width: ${props => props.theme.container.maxWidth};
   margin: 0 auto;
   padding: 0 ${props => props.theme.spacing.xl};
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: ${props => props.theme.spacing.xl};
 
   @media (max-width: ${props => props.theme.breakpoints.mobile}) {
     padding: 0 ${props => props.theme.spacing.lg};
@@ -145,215 +108,214 @@ const CategoryGrid = styled.div`
   }
 `;
 
-const CategoryCard = styled(Link)`
-  position: relative;
+const FeatureCard = styled(motion.div)`
+  padding: ${props => props.theme.spacing.xl};
+  background: linear-gradient(
+    135deg,
+    ${props => props.theme.colors.backgroundAlt},
+    ${props => props.theme.colors.background}
+  );
   border-radius: ${props => props.theme.borderRadius.large};
-  overflow: hidden;
-  aspect-ratio: 1;
-  box-shadow: ${props => props.theme.shadows.medium};
-  opacity: 0;
-  transform: translateY(20px);
-  
-  &.visible {
-    animation: slideUpFade 0.6s ease-out forwards;
-  }
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%);
-    z-index: 1;
-    opacity: 0.8;
-    transition: opacity 0.3s ease;
-  }
-  
-  &:hover {
-    &::before {
-      opacity: 0.6;
-    }
+  text-align: center;
+  transition: all 0.3s ease;
 
-    img {
-      transform: scale(1.05);
-    }
+  svg {
+    font-size: 2rem;
+    color: ${props => props.theme.colors.primary};
+    margin-bottom: ${props => props.theme.spacing.md};
+  }
 
-    ${CategoryTitle} {
-      transform: translateY(-5px);
-    }
+  h3 {
+    color: ${props => props.theme.colors.text};
+    margin-bottom: ${props => props.theme.spacing.md};
+    font-family: ${props => props.theme.typography.titleFont};
+  }
+
+  p {
+    color: ${props => props.theme.colors.textLight};
+    line-height: 1.6;
   }
 `;
 
-const CategoryTitle = styled.h3`
-  position: absolute;
-  bottom: ${props => props.theme.spacing.lg};
-  left: ${props => props.theme.spacing.lg};
-  color: ${props => props.theme.colors.white};
-  z-index: 2;
-  margin: 0;
-  font-size: 1.5rem;
-  transition: transform 0.3s ease;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-`;
-
-const AboutSection = styled.section`
-  background-color: ${props => props.theme.colors.backgroundAlt};
+const LatestCreationsSection = styled.section`
   padding: ${props => props.theme.spacing.xxl} 0;
-  position: relative;
-  overflow: hidden;
+  background-color: ${props => props.theme.colors.backgroundAlt};
+`;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('/images/pattern.png') repeat;
-    opacity: 0.05;
-    z-index: 1;
+const SectionTitle = styled.h2`
+  text-align: center;
+  font-size: 2.5rem;
+  color: ${props => props.theme.colors.text};
+  margin-bottom: ${props => props.theme.spacing.xl};
+  font-family: ${props => props.theme.typography.titleFont};
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 2rem;
   }
 `;
 
-const AboutContent = styled.div`
+const CreationsGrid = styled.div`
   max-width: ${props => props.theme.container.maxWidth};
   margin: 0 auto;
   padding: 0 ${props => props.theme.spacing.xl};
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: ${props => props.theme.spacing.xl};
-  align-items: center;
-  position: relative;
-  z-index: 2;
-  
-  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
-    grid-template-columns: 1fr;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
     padding: 0 ${props => props.theme.spacing.lg};
+    gap: ${props => props.theme.spacing.lg};
   }
 `;
 
-const AboutText = styled.div`
-  opacity: 0;
-  transform: translateX(-20px);
-  
-  &.visible {
-    animation: slideInFade 0.6s ease-out forwards;
+const CreationCard = styled(motion.div)`
+  position: relative;
+  border-radius: ${props => props.theme.borderRadius.large};
+  overflow: hidden;
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
   }
 
-  h2 {
-    margin-bottom: ${props => props.theme.spacing.lg};
-    font-size: clamp(1.8rem, 3vw, 2.4rem);
+  &:hover img {
+    transform: scale(1.05);
   }
-  
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.5),
+      transparent
+    );
+    pointer-events: none;
+  }
+`;
+
+const CreationInfo = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: ${props => props.theme.spacing.lg};
+  color: white;
+  z-index: 1;
+
+  h3 {
+    font-size: 1.2rem;
+    margin-bottom: ${props => props.theme.spacing.sm};
+    font-family: ${props => props.theme.typography.titleFont};
+  }
+
   p {
-    margin-bottom: ${props => props.theme.spacing.md};
-    color: ${props => props.theme.colors.textLight};
-    line-height: 1.8;
-  }
-
-  @keyframes slideInFade {
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-`;
-
-const AboutImageWrapper = styled.div`
-  opacity: 0;
-  transform: translateX(20px);
-  
-  &.visible {
-    animation: slideInFade 0.6s ease-out forwards 0.2s;
+    font-size: 0.9rem;
+    opacity: 0.9;
   }
 `;
 
 const Home = () => {
-  useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1
-    };
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, observerOptions);
-
-    const elements = document.querySelectorAll('.animate-on-scroll');
-    elements.forEach(el => observer.observe(el));
-
-    return () => {
-      elements.forEach(el => observer.unobserve(el));
-    };
-  }, []);
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5
+      }
+    }
+  };
 
   return (
-    <>
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       <HeroSection>
         <HeroContent>
-          <HeroTitle>
-            Bienvenue dans <span>La Cabane d'Eva</span>
+          <HeroTitle variants={itemVariants}>
+            Créations artisanales au crochet
           </HeroTitle>
-          <HeroSubtitle>
-            Découvrez mes créations uniques au crochet : amigurumis, décorations et accessoires faits main avec passion
+          <HeroSubtitle variants={itemVariants}>
+            Découvrez des pièces uniques faites main avec amour et passion.
+            Chaque création raconte une histoire et apporte une touche de douceur à votre intérieur.
           </HeroSubtitle>
-          <CTAButton to="/boutique">
-            Découvrir la boutique
+          <CTAButton
+            to="/shop"
+            variants={itemVariants}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Découvrir la boutique <FiArrowRight />
           </CTAButton>
         </HeroContent>
       </HeroSection>
 
-      <FeaturedSection>
-        <SectionTitle className="animate-on-scroll">Nos Catégories</SectionTitle>
-        <CategoryGrid>
-          <CategoryCard to="/boutique?category=amigurumis" className="animate-on-scroll">
-            <LazyImage src="/images/categories/amigurumis.jpg" alt="Amigurumis" />
-            <CategoryTitle>Amigurumis</CategoryTitle>
-          </CategoryCard>
-          <CategoryCard to="/boutique?category=decorations" className="animate-on-scroll" style={{ animationDelay: '0.2s' }}>
-            <LazyImage src="/images/categories/decorations.jpg" alt="Décorations" />
-            <CategoryTitle>Décorations</CategoryTitle>
-          </CategoryCard>
-          <CategoryCard to="/boutique?category=accessoires" className="animate-on-scroll" style={{ animationDelay: '0.4s' }}>
-            <LazyImage src="/images/categories/accessoires.jpg" alt="Accessoires" />
-            <CategoryTitle>Accessoires</CategoryTitle>
-          </CategoryCard>
-        </CategoryGrid>
-      </FeaturedSection>
+      <FeaturesSection>
+        <FeaturesGrid>
+          <FeatureCard
+            variants={itemVariants}
+            whileHover={{ y: -10 }}
+          >
+            <FiHeart />
+            <h3>Fait main avec amour</h3>
+            <p>Chaque pièce est créée avec soin et attention aux détails pour vous offrir des créations uniques et personnelles.</p>
+          </FeatureCard>
+          <FeatureCard
+            variants={itemVariants}
+            whileHover={{ y: -10 }}
+          >
+            <FiPackage />
+            <h3>Livraison soignée</h3>
+            <p>Vos créations sont emballées avec soin et expédiées rapidement pour vous garantir une réception en parfait état.</p>
+          </FeatureCard>
+        </FeaturesGrid>
+      </FeaturesSection>
 
-      <AboutSection>
-        <AboutContent>
-          <AboutText className="animate-on-scroll">
-            <h2>À propos de La Cabane d'Eva</h2>
-            <p>
-              Passionnée par le crochet et les créations artisanales, je crée des pièces uniques 
-              qui apportent douceur et originalité à votre intérieur.
-            </p>
-            <p>
-              Chaque création est réalisée à la main avec amour et attention aux détails, 
-              pour vous offrir des objets de qualité qui durent dans le temps.
-            </p>
-            <CTAButton to="/a-propos">En savoir plus</CTAButton>
-          </AboutText>
-          <AboutImageWrapper className="animate-on-scroll">
-            <LazyImage 
-              src="/images/about/atelier.jpg" 
-              alt="L'atelier d'Eva"
-              height="400px"
-              objectFit="cover"
-            />
-          </AboutImageWrapper>
-        </AboutContent>
-      </AboutSection>
-    </>
+      <LatestCreationsSection>
+        <SectionTitle>Dernières créations</SectionTitle>
+        <CreationsGrid>
+          {[1, 2, 3].map((item) => (
+            <CreationCard
+              key={item}
+              variants={itemVariants}
+              whileHover={{ y: -10 }}
+            >
+              <LazyImage
+                src={`/images/creation-${item}.jpg`}
+                alt={`Création ${item}`}
+                width={400}
+                height={300}
+              />
+              <CreationInfo>
+                <h3>Création {item}</h3>
+                <p>Une pièce unique pleine de charme</p>
+              </CreationInfo>
+            </CreationCard>
+          ))}
+        </CreationsGrid>
+      </LatestCreationsSection>
+    </motion.div>
   );
 };
 
-export default Home; 
+export default Home;

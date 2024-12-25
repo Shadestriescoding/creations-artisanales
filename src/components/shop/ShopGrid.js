@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { LazyImage } from '../common/LazyImage';
+import LazyImage from '../common/LazyImage';
 import { useToast } from '../../contexts/ToastContext';
 
 const Grid = styled.div`
@@ -21,21 +21,24 @@ const ProductCard = styled(motion.div)`
   border-radius: ${props => props.theme.borderRadius.large};
   box-shadow: ${props => props.theme.shadows.medium};
   overflow: hidden;
-  transition: ${props => props.theme.transitions.fast};
   cursor: pointer;
   position: relative;
+  isolation: isolate;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 
   &:hover {
-    transform: translateY(-4px);
     box-shadow: ${props => props.theme.shadows.large};
-
-    .product-image {
-      transform: scale(1.05);
-    }
-
+    transform: translateY(-4px);
+    
     .quick-add {
       opacity: 1;
       transform: translateY(0);
+    }
+
+    .product-image {
+      transform: scale(1.05);
     }
   }
 `;
@@ -46,7 +49,7 @@ const ImageContainer = styled.div`
   overflow: hidden;
   background-color: ${props => props.theme.colors.backgroundAlt};
 
-  .product-image {
+  img {
     position: absolute;
     top: 0;
     left: 0;
@@ -62,27 +65,29 @@ const ProductInfo = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${props => props.theme.spacing.xs};
-`;
-
-const ProductName = styled.h3`
-  margin: 0;
-  font-size: ${props => props.theme.typography.h4};
-  color: ${props => props.theme.colors.text};
-  font-weight: 600;
-  line-height: 1.4;
-`;
-
-const ProductPrice = styled.span`
-  font-size: ${props => props.theme.typography.h5};
-  color: ${props => props.theme.colors.primary};
-  font-weight: 700;
+  flex-grow: 1;
 `;
 
 const ProductCategory = styled.span`
-  font-size: ${props => props.theme.typography.small};
   color: ${props => props.theme.colors.textLight};
+  font-size: 0.9rem;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.05em;
+`;
+
+const ProductName = styled.h3`
+  color: ${props => props.theme.colors.text};
+  font-family: ${props => props.theme.typography.titleFont};
+  font-size: 1.1rem;
+  margin: 0;
+  line-height: 1.4;
+`;
+
+const ProductPrice = styled.div`
+  color: ${props => props.theme.colors.primary};
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin-top: auto;
 `;
 
 const QuickAddButton = styled.button`
@@ -92,19 +97,16 @@ const QuickAddButton = styled.button`
   right: 0;
   background-color: ${props => props.theme.colors.primary};
   color: ${props => props.theme.colors.white};
-  padding: ${props => props.theme.spacing.md};
   border: none;
+  padding: ${props => props.theme.spacing.md};
+  font-weight: 600;
   opacity: 0;
   transform: translateY(100%);
   transition: all 0.3s ease;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-size: ${props => props.theme.typography.small};
+  cursor: pointer;
 
   &:hover {
     background-color: ${props => props.theme.colors.primaryDark};
-    transform: translateY(0);
   }
 
   &:disabled {
@@ -113,69 +115,45 @@ const QuickAddButton = styled.button`
   }
 `;
 
-const NoResults = styled.div`
-  text-align: center;
-  padding: ${props => props.theme.spacing.xxl} 0;
-  color: ${props => props.theme.colors.textLight};
-  font-size: ${props => props.theme.typography.h3};
-  font-weight: 500;
+const StockBadge = styled.div`
+  position: absolute;
+  top: ${props => props.theme.spacing.md};
+  right: ${props => props.theme.spacing.md};
+  background-color: ${props => props.inStock ? props.theme.colors.success : props.theme.colors.error};
+  color: white;
+  padding: ${props => props.theme.spacing.xs} ${props => props.theme.spacing.sm};
+  border-radius: ${props => props.theme.borderRadius.small};
+  font-size: 0.8rem;
+  font-weight: 600;
+  z-index: 1;
 `;
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1
-    }
-  }
-};
-
-const itemVariants = {
-  hidden: { 
-    opacity: 0,
-    y: 20
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: "easeOut"
-    }
-  }
-};
-
 const ShopGrid = ({ products, onProductClick, onAddToCart }) => {
-  const { showToast } = useToast();
-
-  if (!products || products.length === 0) {
-    return (
-      <NoResults>
-        Aucun produit ne correspond à vos critères de recherche
-      </NoResults>
-    );
-  }
+  const { addToast } = useToast();
 
   const handleQuickAdd = (e, product) => {
     e.stopPropagation();
-    onAddToCart(product);
-    showToast('success', `${product.name} a été ajouté au panier`);
+    if (product.inStock) {
+      onAddToCart(product);
+      addToast('Produit ajouté au panier', 'success');
+    }
   };
 
   return (
-    <Grid
-      as={motion.div}
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      {products.map((product) => (
+    <Grid>
+      {products.map(product => (
         <ProductCard
           key={product.id}
-          variants={itemVariants}
           onClick={() => onProductClick(product)}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
         >
+          <StockBadge inStock={product.inStock}>
+            {product.inStock ? 'En stock' : 'Rupture de stock'}
+          </StockBadge>
           <ImageContainer>
             <LazyImage
               src={product.image}
@@ -191,10 +169,10 @@ const ShopGrid = ({ products, onProductClick, onAddToCart }) => {
           </ProductInfo>
           <QuickAddButton
             className="quick-add"
-            onClick={(e) => handleQuickAdd(e, product)}
+            onClick={e => handleQuickAdd(e, product)}
             disabled={!product.inStock}
           >
-            {product.inStock ? 'Ajouter au panier' : 'Rupture de stock'}
+            {product.inStock ? '🛍️ Ajouter au panier' : 'Indisponible'}
           </QuickAddButton>
         </ProductCard>
       ))}
@@ -202,4 +180,4 @@ const ShopGrid = ({ products, onProductClick, onAddToCart }) => {
   );
 };
 
-export default ShopGrid; 
+export default ShopGrid;

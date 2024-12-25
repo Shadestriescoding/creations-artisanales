@@ -1,81 +1,110 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiInstagram, FiMail, FiPhone, FiMapPin, FiHeart } from 'react-icons/fi';
 
-const FooterContainer = styled.footer`
-  background-color: ${props => props.theme.colors.backgroundAlt};
-  padding: ${props => props.theme.spacing.xxl} 0;
+const FooterWrapper = styled.footer`
+  background: linear-gradient(
+    to bottom,
+    ${props => props.theme.colors.backgroundAlt},
+    ${props => props.theme.colors.background}
+  );
+  padding: ${props => props.theme.spacing.xxl} 0 ${props => props.theme.spacing.xl};
   margin-top: auto;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      ${props => props.theme.colors.primary}40,
+      transparent
+    );
+  }
 `;
 
 const FooterContent = styled.div`
   max-width: ${props => props.theme.container.maxWidth};
   margin: 0 auto;
-  padding: 0 ${props => props.theme.spacing.md};
+  padding: 0 ${props => props.theme.spacing.xl};
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: ${props => props.theme.spacing.xl};
+  gap: ${props => props.theme.spacing.xxl};
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: 0 ${props => props.theme.spacing.lg};
+    gap: ${props => props.theme.spacing.xl};
+  }
 `;
 
 const FooterSection = styled.div`
-  h3 {
-    color: ${props => props.theme.colors.text};
-    margin-bottom: ${props => props.theme.spacing.md};
-    font-size: 1.2rem;
-  }
-`;
-
-const FooterLinks = styled.ul`
-  list-style: none;
-  padding: 0;
-  
-  li {
-    margin-bottom: ${props => props.theme.spacing.sm};
-  }
-  
-  a {
-    color: ${props => props.theme.colors.textLight};
-    text-decoration: none;
-    transition: ${props => props.theme.transitions.fast};
-    
-    &:hover {
-      color: ${props => props.theme.colors.primary};
-      padding-left: ${props => props.theme.spacing.xs};
-    }
-  }
-`;
-
-const NewsletterForm = styled.form`
   display: flex;
   flex-direction: column;
-  gap: ${props => props.theme.spacing.sm};
+  gap: ${props => props.theme.spacing.lg};
 `;
 
-const Input = styled.input`
-  padding: ${props => props.theme.spacing.sm};
-  border: 2px solid ${props => props.theme.colors.primary};
-  border-radius: ${props => props.theme.borderRadius.medium};
-  font-family: ${props => props.theme.typography.bodyFont};
-  
-  &:focus {
-    outline: none;
-    border-color: ${props => props.theme.colors.accent};
+const SectionTitle = styled.h3`
+  color: ${props => props.theme.colors.text};
+  font-family: ${props => props.theme.typography.titleFont};
+  font-size: 1.2rem;
+  margin-bottom: ${props => props.theme.spacing.md};
+  position: relative;
+  padding-bottom: ${props => props.theme.spacing.sm};
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background-color: ${props => props.theme.colors.primary};
   }
 `;
 
-const SubscribeButton = styled.button`
-  padding: ${props => props.theme.spacing.sm};
-  background-color: ${props => props.theme.colors.primary};
-  color: ${props => props.theme.colors.white};
-  border: none;
-  border-radius: ${props => props.theme.borderRadius.medium};
-  font-weight: 600;
-  cursor: pointer;
-  transition: ${props => props.theme.transitions.fast};
-  
+const FooterLink = styled(Link)`
+  color: ${props => props.theme.colors.textLight};
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: ${props => props.theme.spacing.sm};
+
   &:hover {
-    background-color: ${props => props.theme.colors.accent};
-    transform: translateY(-2px);
+    color: ${props => props.theme.colors.primary};
+    transform: translateX(5px);
+  }
+`;
+
+const ContactInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${props => props.theme.spacing.md};
+`;
+
+const ContactItem = styled.a`
+  color: ${props => props.theme.colors.textLight};
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: ${props => props.theme.spacing.sm};
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: ${props => props.theme.colors.primary};
+    transform: translateX(5px);
+  }
+
+  svg {
+    color: ${props => props.theme.colors.primary};
   }
 `;
 
@@ -83,93 +112,183 @@ const SocialLinks = styled.div`
   display: flex;
   gap: ${props => props.theme.spacing.md};
   margin-top: ${props => props.theme.spacing.md};
-  
-  a {
-    color: ${props => props.theme.colors.text};
-    font-size: 1.5rem;
-    transition: ${props => props.theme.transitions.fast};
-    
-    &:hover {
-      color: ${props => props.theme.colors.primary};
-      transform: translateY(-2px);
-    }
+`;
+
+const SocialLink = styled.a`
+  color: ${props => props.theme.colors.textLight};
+  font-size: 1.5rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: ${props => props.theme.colors.primary};
+    transform: translateY(-3px);
+  }
+`;
+
+const NewsletterForm = styled.form`
+  display: flex;
+  gap: ${props => props.theme.spacing.sm};
+  margin-top: ${props => props.theme.spacing.sm};
+`;
+
+const NewsletterInput = styled.input`
+  flex: 1;
+  padding: ${props => props.theme.spacing.sm} ${props => props.theme.spacing.md};
+  border: 1px solid ${props => props.theme.colors.backgroundAlt};
+  border-radius: ${props => props.theme.borderRadius.medium};
+  font-family: inherit;
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: ${props => props.theme.colors.primary};
+    box-shadow: 0 0 0 2px ${props => props.theme.colors.primary}20;
+  }
+`;
+
+const SubscribeButton = styled(motion.button)`
+  padding: ${props => props.theme.spacing.sm} ${props => props.theme.spacing.lg};
+  background-color: ${props => props.theme.colors.primary};
+  color: white;
+  border: none;
+  border-radius: ${props => props.theme.borderRadius.medium};
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: ${props => props.theme.colors.primaryDark};
   }
 `;
 
 const Copyright = styled.div`
   text-align: center;
-  padding-top: ${props => props.theme.spacing.xl};
   color: ${props => props.theme.colors.textLight};
-  border-top: 1px solid ${props => props.theme.colors.primary}20;
-  margin-top: ${props => props.theme.spacing.xl};
-  max-width: ${props => props.theme.container.maxWidth};
-  margin: ${props => props.theme.spacing.xl} auto 0;
-  padding: ${props => props.theme.spacing.xl} ${props => props.theme.spacing.md} 0;
+  margin-top: ${props => props.theme.spacing.xxl};
+  padding-top: ${props => props.theme.spacing.xl};
+  border-top: 1px solid ${props => props.theme.colors.backgroundAlt};
+  font-size: 0.9rem;
+
+  a {
+    color: ${props => props.theme.colors.primary};
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
+
+const SuccessMessage = styled(motion.div)`
+  color: ${props => props.theme.colors.success};
+  display: flex;
+  align-items: center;
+  gap: ${props => props.theme.spacing.sm};
+  margin-top: ${props => props.theme.spacing.sm};
 `;
 
 const Footer = () => {
   const [email, setEmail] = useState('');
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: Implémenter l'inscription à la newsletter
-    console.log('Email souscrit:', email);
-    setEmail('');
+    if (email) {
+      // TODO: Implement newsletter subscription
+      setIsSubscribed(true);
+      setEmail('');
+      setTimeout(() => setIsSubscribed(false), 5000);
+    }
   };
 
   return (
-    <FooterContainer>
+    <FooterWrapper>
       <FooterContent>
         <FooterSection>
-          <h3>La Cabane d'Eva</h3>
-          <p>Créations artisanales au crochet par Eva Beguet, artiste passionnée spécialisée dans les amigurumis et décorations au crochet.</p>
+          <SectionTitle>La Cabane d'Eva</SectionTitle>
+          <p style={{ color: props => props.theme.colors.textLight }}>
+            Créations artisanales au crochet, faites avec amour et passion.
+          </p>
           <SocialLinks>
-            <a href="https://www.instagram.com/yunevalden?igsh=dGdyZW8zM2w0dGJo" target="_blank" rel="noopener noreferrer" title="Instagram">📸</a>
-            <a href="https://www.linkedin.com/in/eva-beguet-14841894" target="_blank" rel="noopener noreferrer" title="LinkedIn">💼</a>
+            <SocialLink
+              href="https://www.instagram.com/lacabanedeva/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+            >
+              <FiInstagram />
+            </SocialLink>
           </SocialLinks>
         </FooterSection>
 
         <FooterSection>
-          <h3>Navigation</h3>
-          <FooterLinks>
-            <li><Link to="/">Accueil</Link></li>
-            <li><Link to="/boutique">Boutique</Link></li>
-            <li><Link to="/a-propos">À propos</Link></li>
-            <li><Link to="/contact">Contact</Link></li>
-          </FooterLinks>
+          <SectionTitle>Navigation</SectionTitle>
+          <FooterLink to="/">Accueil</FooterLink>
+          <FooterLink to="/shop">Boutique</FooterLink>
+          <FooterLink to="/contact">Contact</FooterLink>
         </FooterSection>
 
         <FooterSection>
-          <h3>Informations</h3>
-          <FooterLinks>
-            <li><Link to="/livraison">Livraison</Link></li>
-            <li><Link to="/cgv">CGV</Link></li>
-            <li><Link to="/mentions-legales">Mentions légales</Link></li>
-            <li><Link to="/confidentialite">Politique de confidentialité</Link></li>
-          </FooterLinks>
+          <SectionTitle>Contact</SectionTitle>
+          <ContactInfo>
+            <ContactItem href="mailto:contact@lacabanedeva.fr">
+              <FiMail /> contact@lacabanedeva.fr
+            </ContactItem>
+            <ContactItem href="tel:+33600000000">
+              <FiPhone /> +33 6 00 00 00 00
+            </ContactItem>
+            <ContactItem
+              href="https://goo.gl/maps/xxx"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FiMapPin /> Lyon, France
+            </ContactItem>
+          </ContactInfo>
         </FooterSection>
 
         <FooterSection>
-          <h3>Newsletter</h3>
-          <p>Inscrivez-vous pour recevoir nos nouveautés et offres exclusives !</p>
+          <SectionTitle>Newsletter</SectionTitle>
+          <p style={{ color: props => props.theme.colors.textLight }}>
+            Inscrivez-vous pour recevoir nos dernières créations et actualités.
+          </p>
           <NewsletterForm onSubmit={handleSubmit}>
-            <Input
+            <NewsletterInput
               type="email"
               placeholder="Votre email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            <SubscribeButton type="submit">S'inscrire</SubscribeButton>
+            <SubscribeButton
+              type="submit"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              S'inscrire
+            </SubscribeButton>
           </NewsletterForm>
+          <AnimatePresence>
+            {isSubscribed && (
+              <SuccessMessage
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+              >
+                <FiHeart /> Merci pour votre inscription !
+              </SuccessMessage>
+            )}
+          </AnimatePresence>
         </FooterSection>
       </FooterContent>
 
       <Copyright>
-        © {new Date().getFullYear()} La Cabane d'Eva. Tous droits réservés.
+        © {new Date().getFullYear()} La Cabane d'Eva. Fait avec <FiHeart style={{ color: props => props.theme.colors.primary }} /> à Lyon.
+        <br />
+        <Link to="/mentions-legales">Mentions légales</Link> • <Link to="/cgv">CGV</Link>
       </Copyright>
-    </FooterContainer>
+    </FooterWrapper>
   );
 };
 
-export default Footer; 
+export default Footer;

@@ -90,7 +90,7 @@ const AlertTime = styled.div`
   font-size: ${({ theme }) => theme.typography.small};
 `;
 
-const getAlertIcon = (type) => {
+const getAlertIcon = type => {
   switch (type) {
     case 'warning':
       return '⚠️';
@@ -103,12 +103,12 @@ const getAlertIcon = (type) => {
   }
 };
 
-const formatTime = (date) => {
+const formatTime = date => {
   const now = new Date();
   const alertDate = new Date(date);
   const diffInMinutes = Math.floor((now - alertDate) / (1000 * 60));
 
-  if (diffInMinutes < 1) return 'À l\'instant';
+  if (diffInMinutes < 1) return "À l'instant";
   if (diffInMinutes < 60) return `Il y a ${diffInMinutes} min`;
   if (diffInMinutes < 1440) {
     const hours = Math.floor(diffInMinutes / 60);
@@ -124,9 +124,7 @@ const AlertsList = ({ alerts }) => {
       <AlertList>
         {alerts.map((alert, index) => (
           <Alert key={index} type={alert.type}>
-            <AlertIcon type={alert.type}>
-              {getAlertIcon(alert.type)}
-            </AlertIcon>
+            <AlertIcon type={alert.type}>{getAlertIcon(alert.type)}</AlertIcon>
             <AlertContent>
               <AlertMessage>{alert.message}</AlertMessage>
               <AlertTime>{formatTime(alert.time)}</AlertTime>
@@ -138,4 +136,4 @@ const AlertsList = ({ alerts }) => {
   );
 };
 
-export default AlertsList; 
+export default AlertsList;

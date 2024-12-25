@@ -44,7 +44,7 @@ const CloseButton = styled.button`
   cursor: pointer;
   z-index: 2;
   transition: all 0.3s ease;
-  
+
   &:hover {
     background: ${props => props.theme.colors.primary};
     color: ${props => props.theme.colors.white};
@@ -72,7 +72,7 @@ const NavigationButton = styled.button`
   cursor: pointer;
   z-index: 2;
   transition: all 0.3s ease;
-  
+
   &:hover {
     background: ${props => props.theme.colors.primary};
     color: ${props => props.theme.colors.white};
@@ -83,7 +83,7 @@ const NavigationButton = styled.button`
     outline: none;
     box-shadow: 0 0 0 3px ${props => props.theme.colors.primary}40;
   }
-  
+
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -97,7 +97,7 @@ const NavigationButton = styled.button`
   &.prev {
     left: ${props => props.theme.spacing.xl};
   }
-  
+
   &.next {
     right: ${props => props.theme.spacing.xl};
   }
@@ -105,11 +105,11 @@ const NavigationButton = styled.button`
   @media (max-width: ${props => props.theme.breakpoints.mobile}) {
     width: 32px;
     height: 32px;
-    
+
     &.prev {
       left: ${props => props.theme.spacing.md};
     }
-    
+
     &.next {
       right: ${props => props.theme.spacing.md};
     }
@@ -144,23 +144,26 @@ const ImageCounter = styled.div`
   font-size: 0.9rem;
 `;
 
-const ImageModal = ({ 
-  isOpen, 
-  onClose, 
-  images, 
-  currentIndex, 
-  onPrevious, 
-  onNext 
+const ImageModal = ({
+  isOpen,
+  onClose,
+  images,
+  currentIndex,
+  onPrevious,
+  onNext,
 }) => {
-  const handleKeyDown = useCallback((e) => {
-    if (e.key === 'Escape') {
-      onClose();
-    } else if (e.key === 'ArrowLeft') {
-      onPrevious();
-    } else if (e.key === 'ArrowRight') {
-      onNext();
-    }
-  }, [onClose, onPrevious, onNext]);
+  const handleKeyDown = useCallback(
+    e => {
+      if (e.key === 'Escape') {
+        onClose();
+      } else if (e.key === 'ArrowLeft') {
+        onPrevious();
+      } else if (e.key === 'ArrowRight') {
+        onNext();
+      }
+    },
+    [onClose, onPrevious, onNext]
+  );
 
   useEffect(() => {
     if (isOpen) {
@@ -225,9 +228,7 @@ const ImageModal = ({
             <FiChevronRight size={24} />
           </NavigationButton>
 
-          <ImageCaption>
-            {currentImage.alt}
-          </ImageCaption>
+          <ImageCaption>{currentImage.alt}</ImageCaption>
         </ModalContent>
       </ModalOverlay>
     </AnimatePresence>
@@ -240,12 +241,12 @@ ImageModal.propTypes = {
   images: PropTypes.arrayOf(
     PropTypes.shape({
       src: PropTypes.string.isRequired,
-      alt: PropTypes.string.isRequired
+      alt: PropTypes.string.isRequired,
     })
   ).isRequired,
   currentIndex: PropTypes.number.isRequired,
   onPrevious: PropTypes.func.isRequired,
-  onNext: PropTypes.func.isRequired
+  onNext: PropTypes.func.isRequired,
 };
 
-export default ImageModal; 
+export default ImageModal;

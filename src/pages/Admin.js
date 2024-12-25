@@ -11,7 +11,7 @@ const Title = styled.h1`
   text-align: center;
   color: ${props => props.theme.colors.text};
   margin-bottom: ${props => props.theme.spacing.xl};
-  
+
   span {
     color: ${props => props.theme.colors.primary};
   }
@@ -28,4 +28,4 @@ const Admin = () => {
   );
 };
 
-export default Admin; 
+export default Admin;

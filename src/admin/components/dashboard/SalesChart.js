@@ -57,19 +57,21 @@ const BarGroup = styled.div`
 const Bar = styled.div`
   width: 24px;
   height: ${({ height }) => height}%;
-  background-color: ${({ theme, type }) => 
+  background-color: ${({ theme, type }) =>
     type === 'current' ? theme.colors.primary : `${theme.colors.primary}40`};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   transition: ${({ theme }) => theme.transitions.medium};
   position: relative;
 
   &:hover {
-    background-color: ${({ theme, type }) => 
-      type === 'current' ? theme.colors.primaryDark : `${theme.colors.primary}60`};
+    background-color: ${({ theme, type }) =>
+      type === 'current'
+        ? theme.colors.primaryDark
+        : `${theme.colors.primary}60`};
   }
 
   &::after {
-    content: "${({ value }) => value}€";
+    content: '${({ value }) => value}€';
     position: absolute;
     top: -20px;
     left: 50%;
@@ -104,15 +106,15 @@ const LegendItem = styled.div`
     width: 12px;
     height: 12px;
     border-radius: 2px;
-    background-color: ${({ theme, type }) => 
+    background-color: ${({ theme, type }) =>
       type === 'current' ? theme.colors.primary : `${theme.colors.primary}40`};
   }
 `;
 
 const SalesChart = ({ data }) => {
   const maxValue = Math.max(...data.current, ...data.previous) * 1.2;
-  const yAxisValues = Array.from({ length: 5 }, (_, i) => 
-    Math.round(maxValue * (4 - i) / 4)
+  const yAxisValues = Array.from({ length: 5 }, (_, i) =>
+    Math.round((maxValue * (4 - i)) / 4)
   );
 
   return (
@@ -158,4 +160,4 @@ const SalesChart = ({ data }) => {
   );
 };
 
-export default SalesChart; 
+export default SalesChart;

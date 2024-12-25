@@ -19,7 +19,7 @@ const StyledImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: ${props => props.objectFit || 'cover'};
-  opacity: ${props => props.isLoaded ? 1 : 0};
+  opacity: ${props => (props.isLoaded ? 1 : 0)};
   transition: opacity 0.3s ease-in-out;
   animation: ${fadeIn} 0.3s ease-in-out;
 `;
@@ -34,7 +34,7 @@ const Placeholder = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: ${props => props.isLoaded ? 0 : 1};
+  opacity: ${props => (props.isLoaded ? 0 : 1)};
   transition: opacity 0.3s ease-in-out;
 
   &::after {
@@ -85,4 +85,4 @@ const LazyImage = ({ src, alt, height, objectFit, className }) => {
   );
 };
 
-export default LazyImage; 
+export default LazyImage;

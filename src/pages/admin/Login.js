@@ -90,23 +90,23 @@ const ErrorMessage = styled.div`
 const Login = () => {
   const [credentials, setCredentials] = useState({
     email: '',
-    password: ''
+    password: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const { login, error } = useAuth();
   const { showToast } = useToast();
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target;
     setCredentials(prev => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -162,4 +162,4 @@ const Login = () => {
   );
 };
 
-export default Login; 
+export default Login;

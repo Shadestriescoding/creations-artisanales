@@ -5,8 +5,8 @@ const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 const api = axios.create({
   baseURL: API_URL,
   headers: {
-    'Content-Type': 'application/json'
-  }
+    'Content-Type': 'application/json',
+  },
 });
 
 // Services pour les produits
@@ -16,7 +16,7 @@ export const productService = {
     return response.data;
   },
 
-  create: async (productData) => {
+  create: async productData => {
     const formData = new FormData();
     Object.keys(productData).forEach(key => {
       if (key === 'categories') {
@@ -30,8 +30,8 @@ export const productService = {
 
     const response = await api.post('/products', formData, {
       headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+        'Content-Type': 'multipart/form-data',
+      },
     });
     return response.data;
   },
@@ -50,15 +50,15 @@ export const productService = {
 
     const response = await api.put(`/products/${id}`, formData, {
       headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+        'Content-Type': 'multipart/form-data',
+      },
     });
     return response.data;
   },
 
-  delete: async (id) => {
+  delete: async id => {
     await api.delete(`/products/${id}`);
-  }
+  },
 };
 
 // Services pour les catégories
@@ -68,7 +68,7 @@ export const categoryService = {
     return response.data;
   },
 
-  create: async (categoryData) => {
+  create: async categoryData => {
     const response = await api.post('/categories', categoryData);
     return response.data;
   },
@@ -78,7 +78,7 @@ export const categoryService = {
     return response.data;
   },
 
-  delete: async (id) => {
+  delete: async id => {
     await api.delete(`/categories/${id}`);
-  }
-}; 
+  },
+};

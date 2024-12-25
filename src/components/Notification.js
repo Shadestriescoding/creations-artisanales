@@ -30,13 +30,13 @@ const NotificationContainer = styled.div`
   padding: 1rem;
   border-radius: 8px;
   z-index: 1000;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  
+
   ${props => {
-    switch(props.type) {
+    switch (props.type) {
       case 'success':
         return css`
           background-color: ${props.theme.colors.secondary};
@@ -59,16 +59,17 @@ const NotificationContainer = styled.div`
         `;
     }
   }}
-  
-  animation: ${props => props.isLeaving ? slideOut : slideIn} 0.3s ease forwards;
+
+  animation: ${props =>
+    props.isLeaving ? slideOut : slideIn} 0.3s ease forwards;
 `;
 
 const Icon = styled.span`
   font-size: 1.2rem;
 `;
 
-const getIcon = (type) => {
-  switch(type) {
+const getIcon = type => {
+  switch (type) {
     case 'success':
       return '✓';
     case 'error':
@@ -98,4 +99,4 @@ export const Notification = ({ message, type = 'success', onClose }) => {
       {message}
     </NotificationContainer>
   );
-}; 
+};

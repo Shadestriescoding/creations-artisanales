@@ -16,7 +16,9 @@ export const orderService = {
 
   async getMyOrders(params = {}) {
     const queryParams = new URLSearchParams(params);
-    const response = await axios.get(`${API_URL}/orders/my-orders?${queryParams}`);
+    const response = await axios.get(
+      `${API_URL}/orders/my-orders?${queryParams}`
+    );
     return response.data;
   },
 
@@ -43,9 +45,9 @@ export const orderService = {
 
   async downloadInvoice(id) {
     const response = await axios.get(`${API_URL}/orders/${id}/invoice`, {
-      responseType: 'blob'
+      responseType: 'blob',
     });
-    
+
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement('a');
     link.href = url;
@@ -64,7 +66,7 @@ export const orderService = {
       shipped: 'Expédiée',
       delivered: 'Livrée',
       cancelled: 'Annulée',
-      refunded: 'Remboursée'
+      refunded: 'Remboursée',
     };
     return statusLabels[status] || status;
   },
@@ -76,7 +78,7 @@ export const orderService = {
       shipped: 'primary',
       delivered: 'success',
       cancelled: 'error',
-      refunded: 'default'
+      refunded: 'default',
     };
     return statusColors[status] || 'default';
   },
@@ -85,7 +87,7 @@ export const orderService = {
     const methodLabels = {
       card: 'Carte bancaire',
       paypal: 'PayPal',
-      bank_transfer: 'Virement bancaire'
+      bank_transfer: 'Virement bancaire',
     };
     return methodLabels[method] || method;
   },
@@ -93,14 +95,14 @@ export const orderService = {
   formatPrice(amount) {
     return new Intl.NumberFormat('fr-FR', {
       style: 'currency',
-      currency: 'EUR'
+      currency: 'EUR',
     }).format(amount);
   },
 
   formatDate(date) {
     return new Intl.DateTimeFormat('fr-FR', {
       dateStyle: 'long',
-      timeStyle: 'short'
+      timeStyle: 'short',
     }).format(new Date(date));
-  }
-}; 
+  },
+};

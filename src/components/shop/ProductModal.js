@@ -24,7 +24,7 @@ const ModalContent = styled.div`
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
-  
+
   @media (max-width: ${props => props.theme.breakpoints.tablet}) {
     max-width: 95%;
   }
@@ -40,7 +40,7 @@ const CloseButton = styled.button`
   cursor: pointer;
   color: ${props => props.theme.colors.textLight};
   transition: ${props => props.theme.transitions.fast};
-  
+
   &:hover {
     color: ${props => props.theme.colors.primary};
     transform: scale(1.1);
@@ -52,7 +52,7 @@ const ProductDetails = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: ${props => props.theme.spacing.xl};
   padding: ${props => props.theme.spacing.xl};
-  
+
   @media (max-width: ${props => props.theme.breakpoints.tablet}) {
     grid-template-columns: 1fr;
   }
@@ -62,7 +62,7 @@ const ProductImage = styled.div`
   position: relative;
   border-radius: ${props => props.theme.borderRadius.large};
   overflow: hidden;
-  
+
   img {
     width: 100%;
     height: auto;
@@ -76,14 +76,14 @@ const ProductInfo = styled.div`
     margin-bottom: ${props => props.theme.spacing.md};
     font-size: 2rem;
   }
-  
+
   .price {
     font-size: 1.5rem;
     color: ${props => props.theme.colors.primary};
     font-weight: 600;
     margin-bottom: ${props => props.theme.spacing.lg};
   }
-  
+
   .description {
     color: ${props => props.theme.colors.textLight};
     line-height: 1.8;
@@ -105,12 +105,12 @@ const AddToCartButton = styled.button`
   justify-content: center;
   align-items: center;
   gap: ${props => props.theme.spacing.sm};
-  
+
   &:hover {
     background-color: ${props => props.theme.colors.accent};
     transform: translateY(-2px);
   }
-  
+
   &:disabled {
     background-color: ${props => props.theme.colors.textLight};
     cursor: not-allowed;
@@ -121,11 +121,11 @@ const AddToCartButton = styled.button`
 const StockStatus = styled.div`
   margin-bottom: ${props => props.theme.spacing.lg};
   font-weight: 500;
-  
+
   &.in-stock {
     color: ${props => props.theme.colors.success};
   }
-  
+
   &.out-of-stock {
     color: ${props => props.theme.colors.error};
   }
@@ -138,22 +138,24 @@ const ProductModal = ({ product, onClose, onAddToCart }) => {
     <ModalOverlay onClick={onClose}>
       <ModalContent onClick={e => e.stopPropagation()}>
         <CloseButton onClick={onClose}>×</CloseButton>
-        
+
         <ProductDetails>
           <ProductImage>
             <img src={product.image} alt={product.name} />
           </ProductImage>
-          
+
           <ProductInfo>
             <h2>{product.name}</h2>
             <div className="price">{product.price.toFixed(2)} €</div>
-            
-            <StockStatus className={product.inStock ? 'in-stock' : 'out-of-stock'}>
+
+            <StockStatus
+              className={product.inStock ? 'in-stock' : 'out-of-stock'}
+            >
               {product.inStock ? '✓ En stock' : '× Rupture de stock'}
             </StockStatus>
-            
+
             <div className="description">{product.description}</div>
-            
+
             <AddToCartButton
               onClick={() => onAddToCart(product)}
               disabled={!product.inStock}
@@ -167,4 +169,4 @@ const ProductModal = ({ product, onClose, onAddToCart }) => {
   );
 };
 
-export default ProductModal; 
+export default ProductModal;

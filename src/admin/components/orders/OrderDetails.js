@@ -123,7 +123,7 @@ const SummaryRow = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: ${({ theme }) => theme.spacing.sm};
-  
+
   &.total {
     font-weight: 600;
     font-size: 1.1em;
@@ -150,7 +150,7 @@ const StatusSelect = styled.select`
 const OrderDetails = ({ order, onClose, onUpdateStatus }) => {
   const { showToast } = useToast();
 
-  const handleStatusChange = async (e) => {
+  const handleStatusChange = async e => {
     try {
       await onUpdateStatus(order.id, e.target.value);
       showToast('Statut de la commande mis à jour', 'success');
@@ -159,13 +159,13 @@ const OrderDetails = ({ order, onClose, onUpdateStatus }) => {
     }
   };
 
-  const formatDate = (dateString) => {
+  const formatDate = dateString => {
     return new Date(dateString).toLocaleDateString('fr-FR', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
 
@@ -173,7 +173,7 @@ const OrderDetails = ({ order, onClose, onUpdateStatus }) => {
     <Modal onClick={onClose}>
       <ModalContent onClick={e => e.stopPropagation()}>
         <CloseButton onClick={onClose}>×</CloseButton>
-        
+
         <Header>
           <Title>Commande {order.id}</Title>
           <StatusSelect value={order.status} onChange={handleStatusChange}>
@@ -210,7 +210,9 @@ const OrderDetails = ({ order, onClose, onUpdateStatus }) => {
               <ProductImage src={product.image} alt={product.name} />
               <ProductInfo>
                 <h4>{product.name}</h4>
-                <div className="price">{product.price}€ × {product.quantity}</div>
+                <div className="price">
+                  {product.price}€ × {product.quantity}
+                </div>
               </ProductInfo>
               <ProductTotal>
                 {(product.price * product.quantity).toFixed(2)}€
@@ -238,4 +240,4 @@ const OrderDetails = ({ order, onClose, onUpdateStatus }) => {
   );
 };
 
-export default OrderDetails; 
+export default OrderDetails;

@@ -15,7 +15,8 @@ const Dot = styled(motion.button)`
   height: 12px;
   border-radius: 50%;
   border: 2px solid ${props => props.theme.colors.primary};
-  background-color: ${props => props.active ? props.theme.colors.primary : 'transparent'};
+  background-color: ${props =>
+    props.active ? props.theme.colors.primary : 'transparent'};
   cursor: pointer;
   padding: 0;
   transition: all 0.3s ease;
@@ -47,7 +48,7 @@ const ProgressDots = ({ total, current, onChange }) => {
           aria-label={`Aller au témoignage ${index + 1}`}
           whileTap={{ scale: 0.9 }}
           animate={{
-            scale: index === current ? 1.1 : 1
+            scale: index === current ? 1.1 : 1,
           }}
         />
       ))}
@@ -58,7 +59,7 @@ const ProgressDots = ({ total, current, onChange }) => {
 ProgressDots.propTypes = {
   total: PropTypes.number.isRequired,
   current: PropTypes.number.isRequired,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
 };
 
-export default ProgressDots; 
+export default ProgressDots;

@@ -1,14 +1,14 @@
 import React from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { AdminLayout } from './components/AdminLayout';
-import { Dashboard } from './pages/Dashboard';
-import { Products } from './pages/Products';
-import { Categories } from './pages/Categories';
-import { Orders } from './pages/Orders';
-import { Customers } from './pages/Customers';
-import { Stats } from './pages/Stats';
-import { Settings } from './pages/Settings';
+import AdminLayout from './components/AdminLayout';
+import Dashboard from './pages/Dashboard';
+import Products from './pages/Products';
+import Categories from './pages/Categories';
+import Orders from './pages/Orders';
+import Customers from './pages/Customers';
+import Stats from './pages/Stats';
+import Settings from './pages/Settings';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -25,14 +25,17 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-export const AdminRoutes = () => {
+const AdminRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={
-        <ProtectedRoute>
-          <AdminLayout />
-        </ProtectedRoute>
-      }>
+      <Route
+        path="/*"
+        element={
+          <ProtectedRoute>
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
         <Route index element={<Dashboard />} />
         <Route path="products" element={<Products />} />
         <Route path="categories" element={<Categories />} />
@@ -43,4 +46,6 @@ export const AdminRoutes = () => {
       </Route>
     </Routes>
   );
-}; 
+};
+
+export default AdminRoutes;
