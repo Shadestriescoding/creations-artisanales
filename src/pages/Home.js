@@ -16,8 +16,7 @@ const Hero = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url('/images/atelier.jpg') center/cover;
+  background: ${props => props.theme.colors.primary};
   margin-bottom: 4rem;
   border-radius: 1rem;
   overflow: hidden;
@@ -57,17 +56,12 @@ const CategoryCard = styled(Link)`
   overflow: hidden;
   text-decoration: none;
   color: white;
+  background: ${props => props.theme.colors.primary};
   
-  &:hover img {
-    transform: scale(1.05);
+  &:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s ease;
   }
-`;
-
-const CategoryImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
 `;
 
 const CategoryOverlay = styled.div`
@@ -101,10 +95,25 @@ const TestimonialCard = styled.div`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
+const Button = styled.button`
+  background: ${props => props.theme.colors.primary};
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background: ${props => props.theme.colors.primaryDark};
+  }
+`;
+
 const categories = [
-  { id: 1, name: 'Décorations murales', image: '/images/deco-murale.jpg', path: '/shop?category=deco' },
-  { id: 2, name: 'Accessoires de rangement', image: '/images/rangement.jpg', path: '/shop?category=rangement' },
-  { id: 3, name: 'Jouets pour enfants', image: '/images/jouets.jpg', path: '/shop?category=jouets' },
+  { id: 1, name: 'Décorations murales', path: '/shop?category=deco' },
+  { id: 2, name: 'Accessoires de rangement', path: '/shop?category=rangement' },
+  { id: 3, name: 'Jouets pour enfants', path: '/shop?category=jouets' },
 ];
 
 const testimonials = [
@@ -146,7 +155,7 @@ const Home = () => {
         <h2>Envie d'une création sur mesure ?</h2>
         <p>Décrivez votre projet et recevez un devis personnalisé</p>
         <Link to="/custom-order">
-          <button>Créer ma pièce unique</button>
+          <Button>Créer ma pièce unique</Button>
         </Link>
       </CustomOrderSection>
 
@@ -155,7 +164,6 @@ const Home = () => {
         <CategoryGrid>
           {categories.map(category => (
             <CategoryCard key={category.id} to={category.path}>
-              <CategoryImage src={category.image} alt={category.name} />
               <CategoryOverlay>
                 <h3>{category.name}</h3>
               </CategoryOverlay>
